@@ -1,6 +1,17 @@
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
+import { Provider, createStore } from 'jotai'
+import { BrowserRouter } from 'react-router-dom'
+import { globalStyle } from './style/global.ts'
+import { Global } from '@emotion/react'
+
+const myStore = createStore()
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <App />
+  <BrowserRouter basename='/'>
+    <Global styles={globalStyle} />
+    <Provider store={myStore}>
+      <App />
+    </Provider>
+  </BrowserRouter>
 )
