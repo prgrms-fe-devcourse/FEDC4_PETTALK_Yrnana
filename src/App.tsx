@@ -3,7 +3,8 @@ import FriendsRouter from "@/pages/friends"
 import MyProfileRouter from "@/pages/myprofile"
 import ChattingRouter from "@/pages/chatting"
 import ChannelsRouter from "@/pages/channels"
-import LoginPage from "@/pages/Login"
+import LoginPage from "@/pages/login"
+import RegisterRouter from "@/pages/register"
 
 function App() {
 
@@ -16,7 +17,7 @@ function App() {
         <Route path="/chatting" element={<ChattingRouter />}></Route>
       </Route>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={ } />
+      <Route path="/register" element={<RegisterRouter />} />
     </Routes>
   )
 }
