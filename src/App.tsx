@@ -3,14 +3,15 @@ import FriendsRouter from "@/pages/friends"
 import MyProfileRouter from "@/pages/myprofile"
 import ChattingRouter from "@/pages/chatting"
 import ChannelsRouter from "@/pages/channels"
-import LoginPage from "@/pages/login"
 import RegisterRouter from "@/pages/register"
+import LoginPage from "@/pages/login"
+import Layout from "@/components/layouts/Layout"
 
 function App() {
 
   return (
     <Routes>
-      <Route element={ }>
+      <Route element={<Layout />}>
         <Route path="/" element={<ChannelsRouter />} />
         <Route path="/friends" element={<FriendsRouter />}></Route>
         <Route path="/profile" element={<MyProfileRouter />}></Route>
