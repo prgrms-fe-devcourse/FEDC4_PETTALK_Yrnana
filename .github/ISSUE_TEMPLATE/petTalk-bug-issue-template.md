@@ -1,6 +1,6 @@
 ---
-name: PETTALK bug issue template
-about: "about need to fix bug"
+name: PETTALK Bug issue template
+about: "버그를 고쳐봐요"
 title: "🐛 [Bug] "
 labels: Bug
 assignees: ""

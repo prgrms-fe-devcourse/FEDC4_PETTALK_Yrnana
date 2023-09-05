@@ -1,6 +1,6 @@
 ---
-name: PETTALK Feature request template
-about: feature
+name: PETTALK Feature issue template
+about: 새로운 피쳐를 만들어볼까요?
 title: "🚀 [Feature] "
 labels: Feature
 assignees: ""
