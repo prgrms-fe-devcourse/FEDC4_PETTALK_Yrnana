@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { HTMLAttributes, ReactNode } from "react";
+import { ComponentProps, ReactNode } from "react";
 import { css } from "@emotion/react";
-interface PaddingProps extends HTMLAttributes<HTMLDivElement> {
+interface PaddingProps extends ComponentProps<'div'> {
   children: ReactNode;
   size: PaddingSize
   fullWidth?: boolean;
