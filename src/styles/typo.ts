@@ -67,4 +67,4 @@ export const typo = {
     font-size: ${calcRem(9)};
     font-weight: 500;
   `,
-}
+} as const
