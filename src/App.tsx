@@ -6,6 +6,7 @@ import ChannelsRouter from "@/pages/channels"
 import RegisterRouter from "@/pages/register"
 import LoginPage from "@/pages/login"
 import Layout from "@/components/layouts/Layout"
+import ExamplePage from "@/pages/Example"
 
 function App() {
 
@@ -19,7 +20,7 @@ function App() {
       </Route>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterRouter />} />
-      <Route path="/example" element={<Example />} />
+      <Route path="/example" element={<ExamplePage />} />
     </Routes>
   )
 }
