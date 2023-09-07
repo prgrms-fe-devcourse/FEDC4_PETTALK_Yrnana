@@ -34,7 +34,6 @@ const Padding = ({
           : size.length === 2
             ? `${size[0]}px ${size[1]}px` :
             `${size[0]}px ${size[1]}px ${size[2]}px ${size[3]}px`};
-        box-sizing: border-box;
         ${fullWidth && 'width: 100%;'}
       `}
       {...props}>
