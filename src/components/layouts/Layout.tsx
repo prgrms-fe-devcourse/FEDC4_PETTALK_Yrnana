@@ -1,9 +1,8 @@
+import Svg from '@/components/common/svg'
+import Chat from '@/assets/icons/Chat.svg'
+
 const Layout = () => {
-  return (
-    <>
-      레이아웃입니다.
-    </>
-  )
+  return <Svg logo={Chat} />
 }
 
 export default Layout
