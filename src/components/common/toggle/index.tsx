@@ -1,13 +1,13 @@
 import styled from '@emotion/styled'
-import { useCallback, useState } from 'react'
+// import { useCallback, useState } from 'react'
 
 const Toggle = () => {
-  const [state, setState] = useState(true)
-  const onChange = useCallback(() => setState((toggleState) => !toggleState), [])
+  // const [state, setState] = useState(true)
+  // const onChange = useCallback(() => setState((toggleState) => !toggleState), [])
   return (
     <div>
-      <Input type="checkbox" checked={state} onChange={onChange} />
-      <Label htmlFor="darkmode-toggle"></Label>
+      <Input type="checkbox" checked={false} />
+      <Label></Label>
     </div>
   )
 }
@@ -19,7 +19,7 @@ const Input = styled.input`
   &:checked + label {
     background: #242424;
     &:after {
-      left: 50px;
+      left: 47px;
       transform: translateX(-100%);
       background: linear-gradient(180deg, #777, #3a3a3a);
     }
@@ -41,8 +41,8 @@ const Input = styled.input`
 `
 
 const Label = styled.label`
-  width: 55px;
-  height: 25px;
+  width: 50px;
+  height: 21px;
   position: relative;
   display: block;
   background: #ebebeb;
@@ -57,8 +57,8 @@ const Label = styled.label`
     width: 15px;
     height: 15px;
     position: absolute;
-    top: 5px;
-    left: 5px;
+    top: 3px;
+    left: 3px;
     background: linear-gradient(180deg, #ffcc89, #d8860b);
     border-radius: 180px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
