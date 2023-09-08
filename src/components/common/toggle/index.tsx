@@ -1,6 +1,17 @@
 import styled from '@emotion/styled'
 import { useCallback, useState } from 'react'
 
+const Toggle = () => {
+  const [state, setState] = useState(true)
+  const onChange = useCallback(() => setState((toggleState) => !toggleState), [])
+  return (
+    <div>
+      <Input type="checkbox" checked={state} onChange={onChange} />
+      <Label htmlFor="darkmode-toggle"></Label>
+    </div>
+  )
+}
+
 const Input = styled.input`
   width: 0;
   height: 0;
@@ -70,16 +81,5 @@ const Label = styled.label`
     }
   }
 `
-
-const Toggle = () => {
-  const [state, setState] = useState(true)
-  const onChange = useCallback(() => setState((toggleState) => !toggleState), [])
-  return (
-    <div>
-      <Input type="checkbox" checked={state} onChange={onChange} />
-      <Label htmlFor="darkmode-toggle"></Label>
-    </div>
-  )
-}
 
 export default Toggle
