@@ -1,15 +1,15 @@
 import styled from '@emotion/styled'
-import { useRef } from 'react'
+import { forwardRef, MutableRefObject, ComponentPropsWithRef } from 'react'
 import { palette } from '@/styles/palette'
 import { typo } from '@/styles/typo'
 
-interface InputProps {
+type InputProps = ComponentPropsWithRef<'input'> & {
   width: string
   placeholder: string
+  inputRef: MutableRefObject<HTMLInputElement | null>
 }
 
-const input = ({ width, placeholder, ...props }: InputProps) => {
-  const inputRef = useRef<HTMLInputElement>(null)
+const Input = forwardRef(({ width, placeholder, inputRef }: InputProps) => {
   const resetInput = () => {
     if (inputRef.current) inputRef.current.value = ''
   }
@@ -22,7 +22,7 @@ const input = ({ width, placeholder, ...props }: InputProps) => {
       </StyleInputWrapper>
     </>
   )
-}
+})
 
 const StyleInputWrapper = styled.div`
   display: flex;
@@ -46,4 +46,4 @@ const StyleResetIcon = styled.button`
   right: 20px;
 `
 
-export default input
+export default Input
