@@ -1,13 +1,7 @@
-import Svg from '@/components/common/svg'
-import Footprint from '@/assets/icons/Footprint.svg'
-import CommentSvg from '@/assets/icons/Comment.svg'
+import { ReactComponent as BackArrow } from '@/assets/icons/BackArrow.svg'
 
 const Layout = () => {
-  return (
-    <>
-      <CommentSvg />
-    </>
-  )
+  return <BackArrow width={50} height={50} />
 }
 
 export default Layout
