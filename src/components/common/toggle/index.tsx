@@ -1,4 +1,6 @@
 import styled from '@emotion/styled'
+import { theme } from '@/styles/theme'
+import moon from '@/assets/Group 28.svg'
 // import { useCallback, useState } from 'react'
 
 const Toggle = () => {
@@ -7,7 +9,9 @@ const Toggle = () => {
   return (
     <div>
       <Input type="checkbox" checked={false} />
-      <Label></Label>
+      <Label>
+        <Moon src={moon} />
+      </Label>
     </div>
   )
 }
@@ -17,22 +21,11 @@ const Input = styled.input`
   height: 0;
   visibility: hidden;
   &:checked + label {
-    background: #242424;
+    background: #2b2b2b;
     &:after {
       left: 47px;
       transform: translateX(-100%);
       background: linear-gradient(180deg, #777, #3a3a3a);
-    }
-    svg {
-      &.sun {
-        fill: #7e7e7e;
-      }
-      &.moon {
-        fill: #fff;
-      }
-    }
-    + .background {
-      background: #242424;
     }
   }
   &:active:after {
@@ -45,7 +38,7 @@ const Label = styled.label`
   height: 21px;
   position: relative;
   display: block;
-  background: #ebebeb;
+  background: #fff;
   border-radius: 200px;
   box-shadow:
     inset 0px 5px 15px rgba(0, 0, 0, 0.4),
@@ -59,27 +52,18 @@ const Label = styled.label`
     position: absolute;
     top: 3px;
     left: 3px;
-    background: linear-gradient(180deg, #ffcc89, #d8860b);
+    background: linear-gradient(180deg, #fbe7bb, #ffcc89);
     border-radius: 180px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
     transition: 0.3s;
   }
-  svg {
-    position: absolute;
-    width: 120px;
-    top: 40px;
-    z-index: 100;
-    &.sun {
-      left: 40px;
-      fill: #fff;
-      transition: 0.3s;
-    }
-    &.moon {
-      left: 340px;
-      fill: #7e7e7e;
-      transition: 0.3s;
-    }
-  }
+`
+
+const Moon = styled.img`
+  position: relative;
+  top: 2px;
+  right: 2px;
+  transform: translateX(200%);
 `
 
 export default Toggle
