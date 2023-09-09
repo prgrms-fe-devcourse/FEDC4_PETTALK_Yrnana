@@ -4,13 +4,14 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    'standard-with-typescript',
-    '@rushstack/eslint-config/profile/web-app',
-    'prettier',
     'eslint:recommended',
-    'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+    //'@rushstack/eslint-config/profile/web-app',
+    'plugin:react/recommended',
+    'prettier',
   ],
+  plugins: ['react', 'prettier', '@typescript-eslint', 'simple-import-sort'],
   overrides: [
     {
       env: {
@@ -26,15 +27,20 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint', 'simple-import-sort'],
   rules: {
     'react/prop-types': 'off',
     'no-unused-vars': 'warn',
     '@typescript-eslint/no-unused-vars': ['warn'],
+    '@typescript-eslint/no-use-before-define': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
     'react/react-in-jsx-scope': 'off',
-    'react/jsx-curly-brace-presence': ['error', { props: 'always', children: 'always' }],
+    'react/jsx-curly-brace-presence': [
+      'error',
+      { props: 'always', children: 'always' },
+    ],
     'react/function-component-definition': [
       'error',
       {

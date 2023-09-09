@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
-import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { type GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 const Loading = () => {
   const mount = useRef<HTMLDivElement | null>(null)
@@ -14,7 +14,7 @@ const Loading = () => {
     const renderer = new THREE.WebGLRenderer()
     renderer.setClearColor(0x000000, 0)
     renderer.setSize(360, 360)
-    mount.current!.appendChild(renderer.domElement)
+    mount.current?.appendChild(renderer.domElement)
 
     const pointLight = new THREE.PointLight(0xffffff, 1, 0)
     pointLight.position.set(0, 0, 0)
