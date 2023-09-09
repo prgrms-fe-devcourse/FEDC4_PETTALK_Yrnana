@@ -1,8 +1,13 @@
 import Svg from '@/components/common/svg'
-import Chat from '@/assets/icons/Chat.svg'
+import Footprint from '@/assets/icons/Footprint.svg'
+import CommentSvg from '@/assets/icons/Comment.svg'
 
 const Layout = () => {
-  return <Svg logo={Chat} />
+  return (
+    <>
+      <CommentSvg />
+    </>
+  )
 }
 
 export default Layout

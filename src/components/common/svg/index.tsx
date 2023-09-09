@@ -1,5 +1,6 @@
-import logo from '@/assets/icons/Chat.svg'
+import React from 'react'
 import { ReactComponentElement } from 'react'
+import { ReactComponent as Bell } from '@/assets/icons/Bell.svg'
 
 interface SvgProps {
   logo: string
@@ -7,10 +8,11 @@ interface SvgProps {
   height?: number
 }
 
-const Svg = ({ logo, width, height }: SvgProps) => {
+const Svg = ({ logo, width, height = 100 }: SvgProps) => {
   return (
     <>
-      <img src={logo} className="App-logo" alt="logo" />
+      <img height={height} src={logo} className="App-logo" alt="logo" />
+      <Bell />
     </>
   )
 }
