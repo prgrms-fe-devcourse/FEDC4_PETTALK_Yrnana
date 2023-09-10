@@ -1,17 +1,18 @@
 import styled from '@emotion/styled'
 import { theme } from '@/styles/theme'
 import moon from '@/assets/Group 28.svg'
-// import { useCallback, useState } from 'react'
+import sun from '@/assets/SunLight.svg'
+import { useState } from 'react'
 
 const Toggle = () => {
-  // const [state, setState] = useState(true)
-  // const onChange = useCallback(() => setState((toggleState) => !toggleState), [])
+  const [state, setState] = useState(true)
+  const onToggle = () => {
+    setState(!state)
+  }
   return (
     <div>
-      <Input type="checkbox" checked={false} />
-      <Label>
-        <Moon src={moon} />
-      </Label>
+      <Input type="checkbox" readOnly checked={state} />
+      <Label onClick={onToggle}>{state ? <Sun src={sun} /> : <Moon src={moon} />}</Label>
     </div>
   )
 }
@@ -59,11 +60,22 @@ const Label = styled.label`
   }
 `
 
+const Sun = styled.img`
+  position: relative;
+  width: 18px;
+  height: 18px;
+  top: 0;
+  left: 0;
+  transform: translateX(0);
+  user-select: none;
+`
+
 const Moon = styled.img`
   position: relative;
   top: 2px;
   right: 2px;
   transform: translateX(200%);
+  user-select: none;
 `
 
 export default Toggle
