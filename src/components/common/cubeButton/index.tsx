@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
 import { Link } from 'react-router-dom'
 
-interface CubeButtonProps extends ComponentProps<'div'> {
+interface CubeButtonProps extends ComponentProps<'button'> {
   content: string
   path: string
   textTypo?: KeyOfTypo
@@ -43,7 +43,7 @@ const CubeButton = ({
   )
 }
 
-const CubeButtonWrapper = styled.div<{ shadowColor?: KeyOfPalette; backgroundColor?: KeyOfPalette }>`
+const CubeButtonWrapper = styled.button<{ shadowColor?: KeyOfPalette; backgroundColor?: KeyOfPalette }>`
   width: 160px;
   height: 86px;
   border-radius: 10px;
@@ -53,7 +53,10 @@ const CubeButtonWrapper = styled.div<{ shadowColor?: KeyOfPalette; backgroundCol
 `
 
 const TextWrapper = styled.div`
-  padding: 19px 36px 16px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
   height: 100%;
 `
 
