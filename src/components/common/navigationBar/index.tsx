@@ -1,13 +1,16 @@
 import styled from '@emotion/styled'
 import { typo } from '@/styles/typo'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { palette } from '@/styles/palette'
-import { useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 const NavigationBar = () => {
-  const location = useLocation()
   const navigate = useNavigate()
-  let currentPage = ''
+  const location = useLocation()
+  const [clickMenu, setClickMenu] = useState<string | undefined>()
+  useEffect(() => {
+    setClickMenu(location.pathname.slice(1))
+  }, [location])
   const moveFromNavigationBar = (path: string) => {
     navigate(`/${path}`)
   }
@@ -16,16 +19,17 @@ const NavigationBar = () => {
       <StyleWrapper>
         <StyleNavigation>
           <StyleNavigationItem onClick={() => moveFromNavigationBar('chatting')}>
-            <StyleIcon></StyleIcon>
-            <NavigationText>채팅목록</NavigationText>
+            {/* 추후 StyleIcon 위치에 해당 아이콘 넣을 예정입니다. */}
+            <StyleIcon clickMenu={clickMenu == 'chatting'}></StyleIcon>
+            <StyleNavigationText>채팅목록</StyleNavigationText>
           </StyleNavigationItem>
           <StyleNavigationItem onClick={() => moveFromNavigationBar('')}>
-            <StyleIcon></StyleIcon>
-            <NavigationText>채널탐색</NavigationText>
+            <StyleIcon clickMenu={clickMenu == ''}></StyleIcon>
+            <StyleNavigationText>채널탐색</StyleNavigationText>
           </StyleNavigationItem>
           <StyleNavigationItem onClick={() => moveFromNavigationBar('friends')}>
-            <StyleIcon></StyleIcon>
-            <NavigationText>팔로우목록</NavigationText>
+            <StyleIcon clickMenu={clickMenu == 'friends'}></StyleIcon>
+            <StyleNavigationText>팔로우목록</StyleNavigationText>
           </StyleNavigationItem>
         </StyleNavigation>
       </StyleWrapper>
@@ -55,13 +59,13 @@ const StyleNavigationItem = styled.button`
   flex-direction: column;
 `
 
-const NavigationText = styled.span`
+const StyleNavigationText = styled.span`
   font-size: ${typo.Caption_9};
 `
-const StyleIcon = styled.span`
+const StyleIcon = styled.span<{ clickMenu: boolean }>`
   width: 34px;
   height: 34px;
-  background-color: ${palette.CORAL};
+  background-color: ${({ clickMenu }) => (clickMenu ? `${palette.CORAL}` : '')};
   border-radius: 50px;
 `
 export default NavigationBar
