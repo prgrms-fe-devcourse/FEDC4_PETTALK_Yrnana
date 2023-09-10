@@ -1,7 +1,5 @@
-import { ReactComponent as BackArrow } from '@/assets/icons/BackArrow.svg'
-
 const Layout = () => {
-  return <BackArrow width={50} height={50} />
+  return <>레이아웃입니다.</>
 }
 
 export default Layout
