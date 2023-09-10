@@ -1,31 +1,84 @@
 import { palette } from '@/styles/palette'
 import { typo } from '@/styles/typo'
 import styled from '@emotion/styled'
-interface ButtonProps {
+import { ComponentProps } from 'react'
+
+interface ButtonProps extends ComponentProps<'button'> {
   buttonType: 'ExtraLarge' | 'Large' | 'Medium' | 'Small'
   value: string
-  onClick: () => void
+  backgroundColor?: string
 }
 
-const index = ({ buttonType, value, onClick }: ButtonProps) => {
+type ButtonVariantType = {
+  [key in 'ExtraLarge' | 'Large' | 'Medium' | 'Small']: {
+    radius: number
+    typo: string
+    width: number
+    height: number
+    backgroundColor: string
+    color: string
+  }
+}
+
+const Button = ({ buttonType, value, onClick, backgroundColor }: ButtonProps) => {
   return (
     <StyleButtonWrapper>
-      <StyleButton buttonType={buttonType} onClick={onClick}>
+      <StyleButton buttonType={buttonType} onClick={onClick} backgroundColor={backgroundColor}>
         {value}
       </StyleButton>
     </StyleButtonWrapper>
   )
 }
 
+const BUTTON_SHAPE_TYPE: ButtonVariantType = {
+  ExtraLarge: {
+    radius: 24,
+    typo: `${typo.SubHead_18}`,
+    width: 250,
+    height: 50,
+    backgroundColor: palette.WHITE,
+    color: palette.BLACK,
+  },
+  Large: {
+    radius: 24,
+    typo: `${typo.SubHead_14}`,
+    width: 200,
+    height: 37,
+    backgroundColor: palette.BEIGE,
+    color: palette.BLACK,
+  },
+  Medium: {
+    radius: 15,
+    typo: `${typo.Body_12}`,
+    width: 64,
+    height: 28,
+    backgroundColor: palette.SUBBLUE,
+    color: palette.BLACK,
+  },
+  Small: {
+    radius: 15,
+    typo: `${typo.Body_10}`,
+    width: 39,
+    height: 20,
+    backgroundColor: palette.SUBBLUE,
+    color: palette.BLACK,
+  },
+}
 const StyleButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
 `
+// const StyleButton = styled.button<Pick<ButtonProps, 'buttonType' | 'backgroundColor'>>`
+//   width: ${({ buttonType }) => BUTTON_SHAPE_TYPE[buttonType].width};
+//   height: ${({ buttonType }) => BUTTON_SHAPE_TYPE[buttonType].height};
+//   border-radius: ${({ buttonType }) => BUTTON_SHAPE_TYPE[buttonType].radius};
+//   color: ${({ buttonType }) => BUTTON_SHAPE_TYPE[buttonType].color};
+//   font-size: ${({ buttonType }) => BUTTON_SHAPE_TYPE[buttonType].typo};
+//   background-color: ${({ buttonType }) => BUTTON_SHAPE_TYPE[buttonType].backgroundColor};
+// `
 
-const StyleButton = styled.button<{
-  buttonType: 'ExtraLarge' | 'Large' | 'Medium' | 'Small'
-}>`
+const StyleButton = styled.button<Pick<ButtonProps, 'buttonType' | 'backgroundColor'>>`
   width: ${({ buttonType }) => {
     if (buttonType == 'ExtraLarge') return '250px'
     else if (buttonType == 'Large') return '200px'
@@ -45,6 +98,7 @@ const StyleButton = styled.button<{
     else if (buttonType == 'Medium') return `${palette.SUBBLUE}`
     else return `${palette.SUBBLUE}`
   }};
+  background-color: ${({ backgroundColor }) => backgroundColor};
   color: ${palette.BLACK};
   font-size: ${({ buttonType }) => {
     if (buttonType == 'ExtraLarge') return `${typo.SubHead_18}`
@@ -54,4 +108,4 @@ const StyleButton = styled.button<{
   }};
 `
 
-export default index
+export default Button
