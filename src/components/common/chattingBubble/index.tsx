@@ -53,7 +53,7 @@ const ChattingBubble = ({
 const BubbleContainer = styled.div<{ isMyChat: boolean }>`
   display: flex;
   align-items: center;
-  justify-content: ${(props) => props.isMyChat || 'flex-end'};
+  justify-content: ${(props) => props.isMyChat && 'flex-end'};
   gap: 10px;
 `
 
@@ -64,7 +64,7 @@ const StyledText = styled.div<{
   background-color: ${palette.WHITE};
   padding: 7px 12px;
   word-wrap: break-word;
-  order: ${(props) => (props.isMyChat ? '1' : '2')};
+  order: ${(props) => (props.isMyChat ? '2' : '1')};
 `
 
 const TimeText = styled(Text)`
