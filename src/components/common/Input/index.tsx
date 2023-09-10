@@ -4,19 +4,20 @@ import { palette } from '@/styles/palette'
 import { typo } from '@/styles/typo'
 
 type InputProps = ComponentPropsWithRef<'input'> & {
-  width: string
+  width?: string
+  height?: string
   placeholder: string
   inputRef: MutableRefObject<HTMLInputElement | null>
 }
 
-const Input = forwardRef(({ width, placeholder, inputRef }: InputProps) => {
+const Input = forwardRef(({ width = '100%', height = '39px', placeholder, inputRef }: InputProps) => {
   const resetInput = () => {
     if (inputRef.current) inputRef.current.value = ''
   }
   return (
     <>
       <StyleInputWrapper>
-        <StyleInput widthProps={width} ref={inputRef} placeholder={placeholder} width={width} />
+        <StyleInput widthProps={width} ref={inputRef} placeholder={placeholder} width={width} height={height} />
         {/* 이 버튼 자리에 x표시 아이콘 넣을 예정 */}
         <StyleResetIcon onClick={resetInput}>x</StyleResetIcon>
       </StyleInputWrapper>
@@ -31,7 +32,7 @@ const StyleInputWrapper = styled.div`
 `
 const StyleInput = styled.input<{ widthProps: string }>`
   background-color: ${palette.GRAY100};
-  height: 39px;
+  height: ${(widthProps) => widthProps.height};
   border: 1px solid ${palette.GRAY300};
   border-radius: 24px;
   width: ${(widthProps) => widthProps.width};
