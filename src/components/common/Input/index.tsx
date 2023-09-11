@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { ComponentPropsWithRef, forwardRef, MutableRefObject } from 'react'
 
+import InputValueDelete from '@/assets/icons/InputValueDelete'
 import { palette } from '@/styles/palette'
 import { typo } from '@/styles/typo'
 
@@ -23,8 +24,9 @@ const Input = forwardRef(function Input({ width, height = 39, placeholder, input
         ref={inputRef}
         placeholder={placeholder}
       />
-      {/* 이 버튼 자리에 x표시 아이콘 넣을 예정 */}
-      <StyleResetIcon onClick={resetInput}>{'x'}</StyleResetIcon>
+      <StyleResetIcon onClick={resetInput}>
+        <InputValueDelete></InputValueDelete>
+      </StyleResetIcon>
     </StyleInputWrapper>
   )
 })
@@ -49,7 +51,8 @@ const StyleInput = styled.input<{ widthProps?: number; heightProps?: number }>`
 `
 const StyleResetIcon = styled.button`
   position: relative;
-  right: 20px;
+  top: 2px;
+  right: 25px;
 `
 
 export default Input
