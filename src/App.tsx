@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom'
-
 import Layout from '@/components/layouts/Layout'
 import ChannelsRouter from '@/pages/channels'
 import ChattingRouter from '@/pages/chatting'
