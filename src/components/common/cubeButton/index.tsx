@@ -55,7 +55,7 @@ const CubeButtonWrapper = styled.button<{ shadowColor?: KeyOfPalette; background
 const TextWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  text-align: start;
   padding: 10px;
   height: 100%;
 `
