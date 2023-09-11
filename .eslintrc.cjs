@@ -4,89 +4,71 @@ module.exports = {
     es2021: true,
   },
   extends: [
-    "standard-with-typescript",
-    "@rushstack/eslint-config/profile/web-app",
-    "prettier",
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:@typescript-eslint/recommended",
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+    //'@rushstack/eslint-config/profile/web-app',
+    'plugin:react/recommended',
+    'prettier',
   ],
+  plugins: ['react', 'prettier', '@typescript-eslint', 'simple-import-sort'],
   overrides: [
     {
       env: {
         node: true,
       },
-      files: [".eslintrc.{js,cjs}"],
+      files: ['.eslintrc.{js,cjs}'],
       parserOptions: {
-        sourceType: "script",
+        sourceType: 'script',
       },
     },
   ],
   parserOptions: {
-    ecmaVersion: "latest",
-    sourceType: "module",
+    ecmaVersion: 'latest',
+    sourceType: 'module',
   },
-  plugins: ["react", "import", "@typescript-eslint", "simple-import-sort"],
   rules: {
-    "react/prop-types": "off",
-    "no-unused-vars": "warn",
-    "@typescript-eslint/no-unused-vars": ["warn"],
-    "simple-import-sort/imports": "error",
-    "simple-import-sort/exports": "error",
-    "react/react-in-jsx-scope": "off",
-    "react/jsx-curly-brace-presence": [
-      "error",
-      { props: "always", children: "always" },
+    'react/no-unknown-property': ['error', { ignore: ['css'] }],
+    'react/prop-types': 'off',
+    'no-unused-vars': 'warn',
+    '@typescript-eslint/no-unused-vars': ['warn'],
+    '@typescript-eslint/no-use-before-define': 'off',
+    '@typescript-eslint/strict-boolean-expressions': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-curly-brace-presence': [
+      'error',
+      { props: 'always', children: 'always' },
     ],
-    "react/function-component-definition": [
-      "error",
+    'react/function-component-definition': [
+      'error',
       {
-        namedComponents: "arrow-function",
-        unnamedComponents: "arrow-function",
-      },
-    ],
-    "@typescript-eslint/naming-convention": [
-      "error",
-      {
-        format: ["camelCase", "UPPER_CASE", "PascalCase"],
-        selector: "variable",
-        leadingUnderscore: "allow",
-      },
-      {
-        format: ["camelCase", "PascalCase"],
-        selector: "function",
-      },
-      {
-        format: ["PascalCase"],
-        selector: "interface",
-      },
-      {
-        format: ["PascalCase"],
-        selector: "typeAlias",
+        namedComponents: 'arrow-function',
+        unnamedComponents: 'arrow-function',
       },
     ],
-    "import/order": [
-      "error",
+    '@typescript-eslint/naming-convention': [
+      'error',
       {
-        groups: ["builtin", "external", ["parent", "sibling"], "index"],
-        pathGroups: [
-          {
-            pattern: "react",
-            group: "builtin",
-          },
-          {
-            pattern: "@/**",
-            group: "external",
-            position: "after",
-          },
-        ],
-        alphabetize: {
-          order: "asc",
-          caseInsensitive: true,
-        },
-        "newlines-between": "always",
+        format: ['camelCase', 'UPPER_CASE', 'PascalCase'],
+        selector: 'variable',
+        leadingUnderscore: 'allow',
+      },
+      {
+        format: ['camelCase', 'PascalCase'],
+        selector: 'function',
+      },
+      {
+        format: ['PascalCase'],
+        selector: 'interface',
+      },
+      {
+        format: ['PascalCase'],
+        selector: 'typeAlias',
       },
     ],
   },
-  parser: "@typescript-eslint/parser",
-};
+  parser: '@typescript-eslint/parser',
+}

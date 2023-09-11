@@ -1,26 +1,27 @@
-import { KeyOfTypo, KeyOfPalette } from "@/styles/theme";
-import styled from "@emotion/styled";
-import { ComponentProps, ReactNode } from "react"
-import { Text } from "@/components/common/Text";
+import styled from '@emotion/styled'
+import { type ComponentProps, type ReactNode } from 'react'
+
+import { Text } from '@/components/common/text'
+import { type KeyOfPalette, type KeyOfTypo } from '@/styles/theme'
 
 interface ListRowProps extends ComponentProps<'div'> {
-  rightElement: ReactNode;
-  leftImage: JSX.Element;
-  mainText: ReactNode;
-  textTypo?: KeyOfTypo;
-  textColor?: KeyOfPalette;
-  imageGap?: number;
-  gap?: number;
-  subElement?: ReactNode;
-  fullWidth?: boolean;
+  rightElement: ReactNode
+  leftImage: JSX.Element
+  mainText: ReactNode
+  textTypo?: KeyOfTypo
+  textColor?: KeyOfPalette
+  imageGap?: number
+  gap?: number
+  subElement?: ReactNode
+  fullWidth?: boolean
 }
 
 /**
  * @param rightElement : 오른쪽에 위치시킬 React Element
- * @param leftImage : 왼쪽에 위치시킬 Image 컴포넌트 
- * @param mainText: 왼쪽에 위치시킬 main Text 
+ * @param leftImage : 왼쪽에 위치시킬 Image 컴포넌트
+ * @param mainText: 왼쪽에 위치시킬 main Text
  * @param textTypo : main Text에 적용할 typo
- * @param textColor: main Text에 적용시킬 color 
+ * @param textColor: main Text에 적용시킬 color
  * @param imageGap : image와 Text 사이의 gap
  * @param gap : text와 subText 사이의 gap 결정
  * @param subElement: main Text 아래에 위치할 React Element
@@ -40,7 +41,7 @@ const ListRow = ({
   ...props
 }: ListRowProps) => {
   return (
-    //TODO: Padding 컴포넌트 생성되면 추후 Padding도 추가할 예정입니다. 
+    // TODO: Padding 컴포넌트 생성되면 추후 Padding도 추가할 예정입니다.
     <MainFlexBox fullWidth={fullWidth} {...props}>
       <SubFlexBox gap={imageGap}>
         {leftImage}
@@ -50,7 +51,7 @@ const ListRow = ({
         </TextFlexBox>
       </SubFlexBox>
       {rightElement}
-    </MainFlexBox >
+    </MainFlexBox>
   )
 }
 
@@ -58,7 +59,7 @@ const MainFlexBox = styled.div<{ fullWidth: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: ${({ fullWidth }) => fullWidth ? '100%' : undefined};
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : undefined)};
 `
 
 const SubFlexBox = styled.div<{ gap: number }>`
@@ -82,9 +83,9 @@ const StyledText = ({
   color,
   ...props
 }: {
-  text: ReactNode;
-  typo: KeyOfTypo;
-  color: KeyOfPalette;
+  text: ReactNode
+  typo: KeyOfTypo
+  color: KeyOfPalette
 } & ComponentProps<'div'>) => {
   return (
     <>
@@ -96,6 +97,6 @@ const StyledText = ({
         <div {...props}>{text}</div>
       )}
     </>
-  );
-};
+  )
+}
 export default ListRow
