@@ -1,20 +1,19 @@
-import FriendsRouter from "@/pages/friends"
-import MyProfileRouter from "@/pages/myprofile"
-import ChattingRouter from "@/pages/chatting"
-import ChannelsRouter from "@/pages/channels"
-import RegisterRouter from "@/pages/register"
-import LoginPage from "@/pages/login"
-import Layout from "@/components/layouts/Layout"
-import ExamplePage from "@/pages/Example"
-
 import { Route, Routes } from 'react-router-dom'
 
 import Layout from '@/components/layouts/Layout'
+import Layout from '@/components/layouts/Layout'
+import ChannelsRouter from '@/pages/channels'
 import ChannelsRouter from '@/pages/channels'
 import ChattingRouter from '@/pages/chatting'
+import ChattingRouter from '@/pages/chatting'
+import ExamplePage from '@/pages/Example'
+import FriendsRouter from '@/pages/friends'
 import FriendsRouter from '@/pages/friends'
 import LoginPage from '@/pages/login'
+import LoginPage from '@/pages/login'
 import MyProfileRouter from '@/pages/myprofile'
+import MyProfileRouter from '@/pages/myprofile'
+import RegisterRouter from '@/pages/register'
 import RegisterRouter from '@/pages/register'
 
 const App = () => {
