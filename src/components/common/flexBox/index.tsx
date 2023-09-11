@@ -3,7 +3,12 @@ import { HTMLAttributes, ReactNode } from 'react'
 
 export interface FlexBoxProps extends HTMLAttributes<HTMLDivElement> {
   direction?: 'row' | 'column'
-  justify?: 'flex-start' | 'flex-end' | 'center' | 'space-between' | 'space-around'
+  justify?:
+    | 'flex-start'
+    | 'flex-end'
+    | 'center'
+    | 'space-between'
+    | 'space-around'
   align?: 'flex-start' | 'flex-end' | 'center' | 'baseline' | 'stretch'
   gap?: number
   fullWidth?: boolean
@@ -29,7 +34,14 @@ export const FlexBox = ({
   ...props
 }: FlexBoxProps) => {
   return (
-    <StyledFlexBox direction={direction} justify={justify} align={align} gap={gap} fullWidth={fullWidth} {...props}>
+    <StyledFlexBox
+      direction={direction}
+      justify={justify}
+      align={align}
+      gap={gap}
+      fullWidth={fullWidth}
+      {...props}
+    >
       {children}
     </StyledFlexBox>
   )

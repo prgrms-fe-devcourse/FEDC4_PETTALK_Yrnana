@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { ComponentProps, ReactNode } from "react";
-import { css } from "@emotion/react";
+import { css } from '@emotion/react'
+import { ComponentProps, ReactNode } from 'react'
 interface PaddingProps extends ComponentProps<'div'> {
-  children: ReactNode;
+  children: ReactNode
   size: PaddingSize
-  fullWidth?: boolean;
+  fullWidth?: boolean
 }
 
 export type PaddingSize =
@@ -29,14 +29,15 @@ const Padding = ({
   return (
     <div
       css={css`
-        padding: ${typeof size === 'number' ?
-          `${size}px`
+        padding: ${typeof size === 'number'
+          ? `${size}px`
           : size.length === 2
-            ? `${size[0]}px ${size[1]}px` :
-            `${size[0]}px ${size[1]}px ${size[2]}px ${size[3]}px`};
+          ? `${size[0]}px ${size[1]}px`
+          : `${size[0]}px ${size[1]}px ${size[2]}px ${size[3]}px`};
         ${fullWidth && 'width: 100%;'}
       `}
-      {...props}>
+      {...props}
+    >
       {children}
     </div>
   )

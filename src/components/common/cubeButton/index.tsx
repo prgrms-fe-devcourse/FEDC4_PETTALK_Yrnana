@@ -1,8 +1,9 @@
-import { Text } from '@/components/common/Text'
-import { KeyOfPalette, KeyOfTypo, theme } from '@/styles/theme'
 import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
 import { Link } from 'react-router-dom'
+
+import { Text } from '@/components/common/Text'
+import { KeyOfPalette, KeyOfTypo, theme } from '@/styles/theme'
 
 interface CubeButtonProps extends ComponentProps<'button'> {
   content: string
@@ -31,7 +32,11 @@ const CubeButton = ({
   shadowColor = 'GRAY400',
 }: CubeButtonProps) => {
   return (
-    <CubeButtonWrapper content={content} backgroundColor={backgroundColor} shadowColor={shadowColor}>
+    <CubeButtonWrapper
+      content={content}
+      backgroundColor={backgroundColor}
+      shadowColor={shadowColor}
+    >
       <Link to={path} style={{ textDecoration: 'none' }}>
         <TextWrapper>
           <Text typo={textTypo} color={textColor}>
@@ -43,12 +48,17 @@ const CubeButton = ({
   )
 }
 
-const CubeButtonWrapper = styled.button<{ shadowColor?: KeyOfPalette; backgroundColor?: KeyOfPalette }>`
+const CubeButtonWrapper = styled.button<{
+  shadowColor?: KeyOfPalette
+  backgroundColor?: KeyOfPalette
+}>`
   width: 160px;
   height: 86px;
   border-radius: 10px;
-  background-color: ${({ backgroundColor }) => backgroundColor && theme.palette[backgroundColor]};
-  box-shadow: ${({ shadowColor }) => shadowColor && `0px 4px 4px 0px rgba(0, 0, 0, 0.24)`};
+  background-color: ${({ backgroundColor }) =>
+    backgroundColor && theme.palette[backgroundColor]};
+  box-shadow: ${({ shadowColor }) =>
+    shadowColor && `0px 4px 4px 0px rgba(0, 0, 0, 0.24)`};
   word-break: keep-all;
 `
 

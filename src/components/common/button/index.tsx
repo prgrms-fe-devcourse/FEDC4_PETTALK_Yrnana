@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
+
 import { Text } from '@/components/common/Text'
 import { KeyOfPalette, KeyOfTypo, theme } from '@/styles/theme'
 
@@ -22,13 +23,20 @@ type ButtonVariantType = {
   }
 }
 
-const Button = ({ buttonType, value, onClick, backgroundColor = 'BEIGE' }: ButtonProps) => {
+const Button = ({
+  buttonType,
+  value,
+  onClick,
+  backgroundColor = 'BEIGE',
+}: ButtonProps) => {
   return (
     <StyleButtonWrapper>
-      <StyleButton buttonType={buttonType} onClick={onClick} backgroundColor={backgroundColor}>
-        <Text typo={`${BUTTON_SHAPE_TYPE[buttonType].typo}`}>
-          {value}
-        </Text>
+      <StyleButton
+        buttonType={buttonType}
+        onClick={onClick}
+        backgroundColor={backgroundColor}
+      >
+        <Text typo={`${BUTTON_SHAPE_TYPE[buttonType].typo}`}>{value}</Text>
       </StyleButton>
     </StyleButtonWrapper>
   )
@@ -49,7 +57,7 @@ const BUTTON_SHAPE_TYPE: ButtonVariantType = {
     width: 200,
     height: 37,
     backgroundColor: `${theme.palette.BEIGE}`,
-    color: `${theme.palette.BLACK}`
+    color: `${theme.palette.BLACK}`,
   },
   Medium: {
     radius: 15,
@@ -74,14 +82,18 @@ const StyleButtonWrapper = styled.div`
   justify-content: center;
 `
 const StyleButton = styled.button<{
-  buttonType: ButtonType,
+  buttonType: ButtonType
   backgroundColor: KeyOfPalette
 }>`
   width: ${({ buttonType }) => `${BUTTON_SHAPE_TYPE[buttonType].width}px`};
   height: ${({ buttonType }) => `${BUTTON_SHAPE_TYPE[buttonType].height}px`};
-  border-radius: ${({ buttonType }) => `${BUTTON_SHAPE_TYPE[buttonType].radius}px`};
+  border-radius: ${({ buttonType }) =>
+    `${BUTTON_SHAPE_TYPE[buttonType].radius}px`};
   ${({ buttonType }) => BUTTON_SHAPE_TYPE[buttonType].color};
-  background-color: ${({ buttonType, backgroundColor }) => backgroundColor ? `${theme.palette[backgroundColor]}` : BUTTON_SHAPE_TYPE[buttonType].backgroundColor};
+  background-color: ${({ buttonType, backgroundColor }) =>
+    backgroundColor
+      ? `${theme.palette[backgroundColor]}`
+      : BUTTON_SHAPE_TYPE[buttonType].backgroundColor};
 `
 
 export default Button

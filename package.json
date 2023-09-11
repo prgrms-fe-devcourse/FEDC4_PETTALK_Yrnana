@@ -26,11 +26,12 @@
     "three-gltf-loader": "^1.111.0"
   },
   "devDependencies": {
+    "@emotion/css": "^11.11.2",
     "@rushstack/eslint-config": "^3.3.3",
     "@types/node": "^20.5.9",
     "@types/react": "^18.2.15",
-    "@types/three": "^0.155.1",
     "@types/react-dom": "^18.2.7",
+    "@types/three": "^0.155.1",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.6.0",
     "@vitejs/plugin-react-swc": "^3.3.2",

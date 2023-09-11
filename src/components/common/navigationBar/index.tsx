@@ -1,8 +1,9 @@
 import styled from '@emotion/styled'
-import { typo } from '@/styles/typo'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { palette } from '@/styles/palette'
 import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+
+import { palette } from '@/styles/palette'
+import { typo } from '@/styles/typo'
 
 const NavigationBar = () => {
   const navigate = useNavigate()
@@ -18,18 +19,20 @@ const NavigationBar = () => {
     <>
       <StyleWrapper>
         <StyleNavigation>
-          <StyleNavigationItem onClick={() => moveFromNavigationBar('chatting')}>
+          <StyleNavigationItem
+            onClick={() => moveFromNavigationBar('chatting')}
+          >
             {/* 추후 StyleIcon 위치에 해당 아이콘 넣을 예정입니다. */}
             <StyleIcon clickMenu={clickMenu == 'chatting'}></StyleIcon>
-            <StyleNavigationText>채팅목록</StyleNavigationText>
+            <StyleNavigationText>{'채팅목록'}</StyleNavigationText>
           </StyleNavigationItem>
           <StyleNavigationItem onClick={() => moveFromNavigationBar('')}>
             <StyleIcon clickMenu={clickMenu == ''}></StyleIcon>
-            <StyleNavigationText>채널탐색</StyleNavigationText>
+            <StyleNavigationText>{'채널탐색'}</StyleNavigationText>
           </StyleNavigationItem>
           <StyleNavigationItem onClick={() => moveFromNavigationBar('friends')}>
             <StyleIcon clickMenu={clickMenu == 'friends'}></StyleIcon>
-            <StyleNavigationText>팔로우목록</StyleNavigationText>
+            <StyleNavigationText>{'팔로우목록'}</StyleNavigationText>
           </StyleNavigationItem>
         </StyleNavigation>
       </StyleWrapper>

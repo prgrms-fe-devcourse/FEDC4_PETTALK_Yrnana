@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
-import { forwardRef, MutableRefObject, ComponentPropsWithRef } from 'react'
+import { ComponentPropsWithRef, forwardRef, MutableRefObject } from 'react'
+
 import { palette } from '@/styles/palette'
 import { typo } from '@/styles/typo'
 
@@ -10,15 +11,25 @@ type InputProps = ComponentPropsWithRef<'input'> & {
   inputRef: MutableRefObject<HTMLInputElement | null>
 }
 
-const Input = forwardRef(({ width, height = 39, placeholder, inputRef }: InputProps) => {
+const Input = forwardRef(function Input({
+  width,
+  height = 39,
+  placeholder,
+  inputRef,
+}: InputProps) {
   const resetInput = () => {
     if (inputRef.current) inputRef.current.value = ''
   }
   return (
     <StyleInputWrapper>
-      <StyleInput widthProps={width} heightProps={height} ref={inputRef} placeholder={placeholder} />
+      <StyleInput
+        widthProps={width}
+        heightProps={height}
+        ref={inputRef}
+        placeholder={placeholder}
+      />
       {/* 이 버튼 자리에 x표시 아이콘 넣을 예정 */}
-      <StyleResetIcon onClick={resetInput}>x</StyleResetIcon>
+      <StyleResetIcon onClick={resetInput}>{'x'}</StyleResetIcon>
     </StyleInputWrapper>
   )
 })

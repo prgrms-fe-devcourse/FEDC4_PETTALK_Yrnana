@@ -1,8 +1,9 @@
 import styled from '@emotion/styled'
-import { theme } from '@/styles/theme'
+import { useState } from 'react'
+
 import moon from '@/assets/Group 28.svg'
 import sun from '@/assets/SunLight.svg'
-import { useState } from 'react'
+import { theme } from '@/styles/theme'
 
 const Toggle = () => {
   const [state, setState] = useState(true)
@@ -11,8 +12,10 @@ const Toggle = () => {
   }
   return (
     <div>
-      <Input type="checkbox" readOnly checked={state} />
-      <Label onClick={onToggle}>{state ? <Sun src={sun} /> : <Moon src={moon} />}</Label>
+      <Input type={'checkbox'} readOnly checked={state} />
+      <Label onClick={onToggle}>
+        {state ? <Sun src={sun} /> : <Moon src={moon} />}
+      </Label>
     </div>
   )
 }

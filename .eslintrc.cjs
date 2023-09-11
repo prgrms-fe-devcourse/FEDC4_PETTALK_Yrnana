@@ -28,6 +28,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'react/no-unknown-property': ['error', { ignore: ['css'] }],
     'react/prop-types': 'off',
     'no-unused-vars': 'warn',
     '@typescript-eslint/no-unused-vars': ['warn'],
