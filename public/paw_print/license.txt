@@ -1,0 +1,11 @@
+Model Information:
+* title:	Paw Print
+* source:	https://sketchfab.com/3d-models/paw-print-0a016074e83e42e59319b9c1493e6963
+* author:	Sir Swaghorse (https://sketchfab.com/andrewoesterling)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Paw Print" (https://sketchfab.com/3d-models/paw-print-0a016074e83e42e59319b9c1493e6963) by Sir Swaghorse (https://sketchfab.com/andrewoesterling) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
