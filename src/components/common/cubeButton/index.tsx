@@ -48,7 +48,7 @@ const CubeButtonWrapper = styled.button<{ shadowColor?: KeyOfPalette; background
   height: 86px;
   border-radius: 10px;
   background-color: ${({ backgroundColor }) => backgroundColor && theme.palette[backgroundColor]};
-  box-shadow: ${({ shadowColor }) => shadowColor && `0px 4px 4px 0px ${theme.palette[shadowColor]}`};
+  box-shadow: ${({ shadowColor }) => shadowColor && `0px 4px 4px 0px rgba(0, 0, 0, 0.24)`};
   word-break: keep-all;
 `
 
