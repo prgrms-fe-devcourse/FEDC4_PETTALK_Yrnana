@@ -44,4 +44,25 @@ export const globalStyle = css`
   textarea:focus {
     outline: none;
   }
+  .wave {
+    animation: complete 2s;
+    opacity: 0;
+  }
+
+  @keyframes complete {
+    0% {
+      opacity: 1;
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    100% {
+      opacity: 0;
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
 `
