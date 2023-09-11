@@ -4,13 +4,13 @@ import { palette } from '@/styles/palette'
 import { typo } from '@/styles/typo'
 
 type InputProps = ComponentPropsWithRef<'input'> & {
-  width?: string
-  height?: string
+  width?: number
+  height?: number
   placeholder: string
   inputRef: MutableRefObject<HTMLInputElement | null>
 }
 
-const Input = forwardRef(({ width = '100%', height = '39px', placeholder, inputRef }: InputProps) => {
+const Input = forwardRef(({ width = 100, height = 39, placeholder, inputRef }: InputProps) => {
   const resetInput = () => {
     if (inputRef.current) inputRef.current.value = ''
   }
@@ -30,12 +30,12 @@ const StyleInputWrapper = styled.div`
   justify-content: center;
   align-items: center;
 `
-const StyleInput = styled.input<{ widthProps: string }>`
+const StyleInput = styled.input<{ widthProps: number }>`
   background-color: ${palette.GRAY100};
-  height: ${(widthProps) => widthProps.height};
+  height: ${(widthProps) => `${widthProps.height}px`};
   border: 1px solid ${palette.GRAY300};
   border-radius: 24px;
-  width: ${(widthProps) => widthProps.width};
+  width: ${(widthProps) => `${widthProps.width}%`};
   font-size: ${typo.Body_13};
   box-shadow: 3px 3px 1px ${palette.GRAY200};
   padding-left: 10px;
