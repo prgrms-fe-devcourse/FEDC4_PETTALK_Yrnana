@@ -16,34 +16,37 @@ const NavigationBar = () => {
     navigate(`/${path}`)
   }
   return (
-    <>
-      <StyleWrapper>
-        <StyleNavigation>
-          <StyleNavigationItem onClick={() => moveFromNavigationBar('chatting')}>
-            {/* 추후 StyleIcon 위치에 해당 아이콘 넣을 예정입니다. */}
-            <StyleIcon clickMenu={clickMenu == 'chatting'}></StyleIcon>
-            <StyleNavigationText>{'채팅목록'}</StyleNavigationText>
-          </StyleNavigationItem>
-          <StyleNavigationItem onClick={() => moveFromNavigationBar('')}>
-            <StyleIcon clickMenu={clickMenu == ''}></StyleIcon>
-            <StyleNavigationText>{'채널탐색'}</StyleNavigationText>
-          </StyleNavigationItem>
-          <StyleNavigationItem onClick={() => moveFromNavigationBar('friends')}>
-            <StyleIcon clickMenu={clickMenu == 'friends'}></StyleIcon>
-            <StyleNavigationText>{'팔로우목록'}</StyleNavigationText>
-          </StyleNavigationItem>
-        </StyleNavigation>
-      </StyleWrapper>
-    </>
+    <StyleWrapper>
+      <StyleNavigation>
+        <StyleNavigationItem onClick={() => moveFromNavigationBar('chatting')}>
+          {/* 추후 StyleIcon 위치에 해당 아이콘 넣을 예정입니다. */}
+          <StyleIcon clickMenu={clickMenu == 'chatting'}></StyleIcon>
+          <StyleNavigationText>{'채팅목록'}</StyleNavigationText>
+        </StyleNavigationItem>
+        <StyleNavigationItem onClick={() => moveFromNavigationBar('')}>
+          <StyleIcon clickMenu={clickMenu == ''}></StyleIcon>
+          <StyleNavigationText>{'채널탐색'}</StyleNavigationText>
+        </StyleNavigationItem>
+        <StyleNavigationItem onClick={() => moveFromNavigationBar('friends')}>
+          <StyleIcon clickMenu={clickMenu == 'friends'}></StyleIcon>
+          <StyleNavigationText>{'팔로우목록'}</StyleNavigationText>
+        </StyleNavigationItem>
+      </StyleNavigation>
+    </StyleWrapper>
   )
 }
 const StyleWrapper = styled.div`
   display: flex;
   justify-content: center;
+  position: absolute;
+  bottom: 30px;
+  width: 100%;
+  margin: auto 0;
 `
 const StyleNavigation = styled.div`
   width: 225px;
   height: 59px;
+  background-color: white;
   display: flex;
   align-items: center;
   justify-content: space-around;
