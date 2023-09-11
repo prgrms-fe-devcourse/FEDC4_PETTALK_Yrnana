@@ -1,10 +1,6 @@
 import Button from "@/components/common/button"
 const Layout = () => {
-  return (
-    <>
-      <Button value={'하이루 '} buttonType="ExtraLarge" backgroundColor="PINK"> </Button>
-    </>
-  )
+  return <>{'레이아웃입니다.'}</>
 }
 
 export default Layout
