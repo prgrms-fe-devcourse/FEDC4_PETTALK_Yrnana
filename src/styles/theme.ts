@@ -21,8 +21,7 @@ export interface TextType {
   color: KeyOfPalette
 }
 
-export const customMediaQuery = (minWidth: number): string =>
-  `@media (min-width: ${minWidth}px)`
+export const customMediaQuery = (minWidth: number): string => `@media (min-width: ${minWidth}px)`
 
 export const media = {
   custom: customMediaQuery,

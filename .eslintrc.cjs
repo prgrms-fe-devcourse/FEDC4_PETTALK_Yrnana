@@ -1,6 +1,4 @@
 module.exports = {
-  'linebreak-style': ['error', require('os').EOL === '\r\n' ? 'windows' : 'unix'],
-  'prettier/prettier': ['error', { endOfLine: 'auto' }],
   env: {
     browser: true,
     es2021: true,
@@ -30,6 +28,9 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    'linebreak-style': ['error', require('os').EOL === '\r\n' ? 'windows' : 'unix'],
+    'prettier/prettier': ['error', { endOfLine: 'auto' }],
     'react/no-unknown-property': ['error', { ignore: ['css'] }],
     'react/prop-types': 'off',
     'no-unused-vars': 'warn',
@@ -40,10 +41,7 @@ module.exports = {
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
     'react/react-in-jsx-scope': 'off',
-    'react/jsx-curly-brace-presence': [
-      'error',
-      { props: 'always', children: 'always' },
-    ],
+    'react/jsx-curly-brace-presence': ['error', { props: 'always', children: 'always' }],
     'react/function-component-definition': [
       'error',
       {

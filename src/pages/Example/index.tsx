@@ -1,8 +1,5 @@
 const ExamplePage = () => {
-  return (
-    <>
-    </>
-  )
+  return <></>
 }
 
 export default ExamplePage
