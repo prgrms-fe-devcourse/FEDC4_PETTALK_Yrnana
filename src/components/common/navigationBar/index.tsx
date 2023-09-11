@@ -47,10 +47,11 @@ const StyleNavigation = styled.div`
   align-items: center;
   justify-content: space-around;
   border-radius: 30px;
-  border: 1px solid grey;
   padding-left: 15px;
   padding-right: 15px;
-  box-shadow: 2px 3px 5px 1px black;
+  box-shadow:
+    0px 0px 2px 0px rgba(0, 0, 0, 0.24),
+    0px 4px 4px 0px rgba(0, 0, 0, 0.14);
 `
 const StyleNavigationItem = styled.button`
   display: flex;
