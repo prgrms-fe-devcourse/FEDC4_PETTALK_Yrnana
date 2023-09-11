@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 
 import { FlexBox } from '@/components/common/flexBox'
-import ListRow from '@/components/common/listRow'
+import ListRow from '@/components/common/ListRow'
 import { Text } from '@/components/common/Text'
 import { theme } from '@/styles/theme'
 
