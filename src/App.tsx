@@ -1,3 +1,12 @@
+import FriendsRouter from "@/pages/friends"
+import MyProfileRouter from "@/pages/myprofile"
+import ChattingRouter from "@/pages/chatting"
+import ChannelsRouter from "@/pages/channels"
+import RegisterRouter from "@/pages/register"
+import LoginPage from "@/pages/login"
+import Layout from "@/components/layouts/Layout"
+import ExamplePage from "@/pages/Example"
+
 import { Route, Routes } from 'react-router-dom'
 
 import Layout from '@/components/layouts/Layout'
