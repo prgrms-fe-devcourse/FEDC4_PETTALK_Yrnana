@@ -19,9 +19,7 @@ const NavigationBar = () => {
     <>
       <StyleWrapper>
         <StyleNavigation>
-          <StyleNavigationItem
-            onClick={() => moveFromNavigationBar('chatting')}
-          >
+          <StyleNavigationItem onClick={() => moveFromNavigationBar('chatting')}>
             {/* 추후 StyleIcon 위치에 해당 아이콘 넣을 예정입니다. */}
             <StyleIcon clickMenu={clickMenu == 'chatting'}></StyleIcon>
             <StyleNavigationText>{'채팅목록'}</StyleNavigationText>

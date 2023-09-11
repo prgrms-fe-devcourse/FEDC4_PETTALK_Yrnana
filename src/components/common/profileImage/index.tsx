@@ -14,11 +14,7 @@ interface ImageProps {
   size: number
 }
 
-const ProfileImage = ({
-  size,
-  image = defaultImage,
-  updatable = true,
-}: ProfileImageProps) => {
+const ProfileImage = ({ size, image = defaultImage, updatable = true }: ProfileImageProps) => {
   const [loadable, setLoadable] = useState(false)
   const [selectedImage, setSelectedImage] = useState(image)
 

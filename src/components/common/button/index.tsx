@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
 
-import { Text } from '@/components/common/Text'
+import { Text } from '@/components/common/text'
 import { KeyOfPalette, KeyOfTypo, theme } from '@/styles/theme'
 
 type ButtonType = 'ExtraLarge' | 'Large' | 'Medium' | 'Small'
@@ -23,19 +23,10 @@ type ButtonVariantType = {
   }
 }
 
-const Button = ({
-  buttonType,
-  value,
-  onClick,
-  backgroundColor = 'BEIGE',
-}: ButtonProps) => {
+const Button = ({ buttonType, value, onClick, backgroundColor = 'BEIGE' }: ButtonProps) => {
   return (
     <StyleButtonWrapper>
-      <StyleButton
-        buttonType={buttonType}
-        onClick={onClick}
-        backgroundColor={backgroundColor}
-      >
+      <StyleButton buttonType={buttonType} onClick={onClick} backgroundColor={backgroundColor}>
         <Text typo={`${BUTTON_SHAPE_TYPE[buttonType].typo}`}>{value}</Text>
       </StyleButton>
     </StyleButtonWrapper>
@@ -87,8 +78,7 @@ const StyleButton = styled.button<{
 }>`
   width: ${({ buttonType }) => `${BUTTON_SHAPE_TYPE[buttonType].width}px`};
   height: ${({ buttonType }) => `${BUTTON_SHAPE_TYPE[buttonType].height}px`};
-  border-radius: ${({ buttonType }) =>
-    `${BUTTON_SHAPE_TYPE[buttonType].radius}px`};
+  border-radius: ${({ buttonType }) => `${BUTTON_SHAPE_TYPE[buttonType].radius}px`};
   ${({ buttonType }) => BUTTON_SHAPE_TYPE[buttonType].color};
   background-color: ${({ buttonType, backgroundColor }) =>
     backgroundColor

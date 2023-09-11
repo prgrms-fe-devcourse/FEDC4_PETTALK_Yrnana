@@ -11,12 +11,7 @@ type InputProps = ComponentPropsWithRef<'input'> & {
   inputRef: MutableRefObject<HTMLInputElement | null>
 }
 
-const Input = forwardRef(function Input({
-  width,
-  height = 39,
-  placeholder,
-  inputRef,
-}: InputProps) {
+const Input = forwardRef(function Input({ width, height = 39, placeholder, inputRef }: InputProps) {
   const resetInput = () => {
     if (inputRef.current) inputRef.current.value = ''
   }

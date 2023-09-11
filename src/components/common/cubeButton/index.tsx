@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Text } from '@/components/common/Text'
+import { Text } from '@/components/common/text'
 import { KeyOfPalette, KeyOfTypo, theme } from '@/styles/theme'
 
 interface CubeButtonProps extends ComponentProps<'button'> {
@@ -55,10 +55,8 @@ const CubeButtonWrapper = styled.button<{
   width: 160px;
   height: 86px;
   border-radius: 10px;
-  background-color: ${({ backgroundColor }) =>
-    backgroundColor && theme.palette[backgroundColor]};
-  box-shadow: ${({ shadowColor }) =>
-    shadowColor && `0px 4px 4px 0px rgba(0, 0, 0, 0.24)`};
+  background-color: ${({ backgroundColor }) => backgroundColor && theme.palette[backgroundColor]};
+  box-shadow: ${({ shadowColor }) => shadowColor && `0px 4px 4px 0px rgba(0, 0, 0, 0.24)`};
   word-break: keep-all;
 `
 

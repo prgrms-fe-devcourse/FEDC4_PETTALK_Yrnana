@@ -17,13 +17,7 @@ export interface TextProps extends HTMLAttributes<HTMLDivElement> {
 
 export type TextPropsKey = 'typo' | 'color'
 
-export const Text = ({
-  typo = 'Body_16',
-  as = 'h1',
-  color,
-  children,
-  ...props
-}: TextProps) => {
+export const Text = ({ typo = 'Body_16', as = 'h1', color, children, ...props }: TextProps) => {
   return (
     <StyledText typoKey={typo} as={as} colorKey={color} {...props}>
       {children}

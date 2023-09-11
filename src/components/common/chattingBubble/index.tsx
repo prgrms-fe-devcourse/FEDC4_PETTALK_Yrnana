@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
 
-import { Text } from '@/components/common/Text'
+import { Text } from '@/components/common/text'
 import { palette } from '@/styles/palette'
 import { type KeyOfPalette, type KeyOfTypo } from '@/styles/theme'
 

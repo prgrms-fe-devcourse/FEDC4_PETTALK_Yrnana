@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 
 import { FlexBox } from '@/components/common/flexBox'
-import ListRow from '@/components/common/ListRow'
-import { Text } from '@/components/common/Text'
+import ListRow from '@/components/common/listRow'
+import { Text } from '@/components/common/text'
 import { theme } from '@/styles/theme'
 
 interface PostCardProps {

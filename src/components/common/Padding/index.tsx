@@ -7,10 +7,7 @@ interface PaddingProps extends ComponentProps<'div'> {
   fullWidth?: boolean
 }
 
-export type PaddingSize =
-  | number
-  | [number, number]
-  | [number, number, number, number]
+export type PaddingSize = number | [number, number] | [number, number, number, number]
 
 /**
  * @param size
@@ -20,12 +17,7 @@ export type PaddingSize =
  * @param fullWidth true로 설정할 경우, width가 100%로 설정됩니다.
  */
 
-const Padding = ({
-  children,
-  size = [12, 24],
-  fullWidth = false,
-  ...props
-}: PaddingProps) => {
+const Padding = ({ children, size = [12, 24], fullWidth = false, ...props }: PaddingProps) => {
   return (
     <div
       css={css`

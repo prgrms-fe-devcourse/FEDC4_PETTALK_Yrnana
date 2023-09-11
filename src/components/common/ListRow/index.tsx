@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { type ComponentProps, type ReactNode } from 'react'
 
-import { Text } from '@/components/common/Text'
+import { Text } from '@/components/common/text'
 import { type KeyOfPalette, type KeyOfTypo } from '@/styles/theme'
 
 interface ListRowProps extends ComponentProps<'div'> {
