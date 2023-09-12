@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 import Button from '@/components/common/button'
 import Input from '@/components/common/input'
-import Spacing from '@/components/common/Spacing'
+import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
 import { theme } from '@/styles/theme'
@@ -43,11 +43,11 @@ const Login = () => {
       <StyleRegisterWrapper>
         <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
         <Spacing size={50} />
-        <Input width={200} inputRef={emailInputRef} placeholder={'email'}></Input>
+        <Input width={200} ref={emailInputRef} placeholder={'email'}></Input>
         <Spacing size={22} />
         <Input
           width={200}
-          inputRef={passwordInputRef}
+          ref={passwordInputRef}
           placeholder={'password'}
           type={'password'}
         ></Input>

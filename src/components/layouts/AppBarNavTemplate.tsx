@@ -4,15 +4,18 @@ import { useLocation } from 'react-router-dom'
 
 import AppBar from '@/components/common/appBar'
 import NavigationBar from '@/components/common/navigationBar'
+import Spacing from '@/components/common/spacing'
 interface AppBarTemplateProps {
   children: ReactNode
   hasNav: boolean
+  title?: string
 }
-const AppBarNavTemplate = ({ children, hasNav }: AppBarTemplateProps) => {
+const AppBarNavTemplate = ({ children, hasNav, title }: AppBarTemplateProps) => {
   const location = useLocation()
   return (
     <AppBarNavTemplateWrapper>
-      <AppBar mainPage={location.pathname === '/' ? true : false} />
+      <AppBar mainPage={location.pathname === '/' ? true : false} title={title} />
+      <Spacing size={30} />
       {children}
       {hasNav && <NavigationBar />}
     </AppBarNavTemplateWrapper>
