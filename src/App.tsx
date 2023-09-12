@@ -13,7 +13,7 @@ const App = () => {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path={'/'} element={<ChannelsRouter />} />
+        <Route path={'*'} element={<ChannelsRouter />} />
         <Route path={'/posts'} element={<PostRouter />} />
         <Route path={'/friends'} element={<FriendsRouter />}></Route>
         <Route path={'/myprofile'} element={<MyProfileRouter />}></Route>

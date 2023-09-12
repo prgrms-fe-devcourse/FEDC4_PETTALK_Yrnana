@@ -32,6 +32,7 @@ const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
         <Toggle />
         <Bell style={{ cursor: 'pointer' }} onClick={() => navigate('/notification')} />
         <ProfileImage
+          image={'https://picsum.photos/200/300'}
           size={40}
           updatable={false}
           style={{ cursor: 'pointer' }}

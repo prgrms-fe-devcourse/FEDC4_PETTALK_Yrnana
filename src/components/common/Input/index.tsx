@@ -1,28 +1,28 @@
 import styled from '@emotion/styled'
-import { ComponentPropsWithRef, forwardRef, MutableRefObject } from 'react'
+import { ComponentProps, forwardRef, MutableRefObject } from 'react'
 
 import InputValueDelete from '@/assets/icons/InputValueDelete'
 import { palette } from '@/styles/palette'
 import { typo } from '@/styles/typo'
 
-type InputProps = ComponentPropsWithRef<'input'> & {
+interface InputProps extends ComponentProps<'input'> {
   width?: number
   height?: number
   placeholder: string
   type?: string
-  inputRef: MutableRefObject<HTMLInputElement | null>
+  //inputRef: MutableRefObject<HTMLInputElement | null>
 }
 
-const Input = forwardRef(function Input({
-  width,
-  height = 39,
-  type = 'text',
-  placeholder,
+const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  { width, height = 39, type = 'text', placeholder }: InputProps,
   inputRef,
-}: InputProps) {
+) {
   const resetInput = () => {
-    if (inputRef.current) inputRef.current.value = ''
+    if (inputRef && typeof inputRef !== 'function') {
+      inputRef.current && (inputRef.current.value = '')
+    }
   }
+
   return (
     <StyleInputWrapper>
       <StyleInput
