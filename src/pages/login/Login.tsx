@@ -38,26 +38,18 @@ const Login = () => {
   const goRegisterPage = () => {
     navigate('/register')
   }
+
   return (
-    <>
-      <StyleRegisterWrapper>
-        <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
-        <Spacing size={50} />
-        <Input width={200} ref={emailInputRef} placeholder={'email'}></Input>
-        <Spacing size={22} />
-        <Input
-          width={200}
-          ref={passwordInputRef}
-          placeholder={'password'}
-          type={'password'}
-        ></Input>
-        <Spacing size={50} />
-        <Button buttonType={'Large'} value={'로그인'} onClick={goLogin}></Button>
-        <StyleMoveToRegisterPage onClick={goRegisterPage}>
-          {'회원가입'}
-        </StyleMoveToRegisterPage>{' '}
-      </StyleRegisterWrapper>
-    </>
+    <StyleRegisterWrapper>
+      <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
+      <Spacing size={50} />
+      <Input width={200} ref={emailInputRef} placeholder={'email'}></Input>
+      <Spacing size={22} />
+      <Input width={200} ref={passwordInputRef} placeholder={'password'} type={'password'}></Input>
+      <Spacing size={50} />
+      <Button buttonType={'Large'} value={'로그인'} onClick={goLogin}></Button>
+      <StyleMoveToRegisterPage onClick={goRegisterPage}>{'회원가입'}</StyleMoveToRegisterPage>{' '}
+    </StyleRegisterWrapper>
   )
 }
 
