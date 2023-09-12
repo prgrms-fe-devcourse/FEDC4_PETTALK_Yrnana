@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import BackArrow from '@/assets/icons/BackArrow'
 import Bell from '@/assets/icons/Bell'
 import ProfileImage from '@/components/common/profileImage'
-import { Text } from '@/components/common/Text'
+import { Text } from '@/components/common/text'
 import Toggle from '@/components/common/toggle'
 import { theme } from '@/styles/theme'
 
