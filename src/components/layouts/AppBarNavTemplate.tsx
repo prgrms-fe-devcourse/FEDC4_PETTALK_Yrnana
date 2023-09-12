@@ -12,7 +12,7 @@ const AppBarNavTemplate = ({ children, hasNav }: AppBarTemplateProps) => {
   const location = useLocation()
   return (
     <AppBarNavTemplateWrapper>
-      <AppBar mainPage={location.pathname === '/' ? true : false} title={'시험 페이지'} />
+      <AppBar mainPage={location.pathname === '/' ? true : false} />
       {children}
       {hasNav && <NavigationBar />}
     </AppBarNavTemplateWrapper>
