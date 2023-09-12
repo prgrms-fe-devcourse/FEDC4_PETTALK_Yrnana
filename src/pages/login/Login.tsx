@@ -6,16 +6,34 @@ import Button from '@/components/common/button'
 import Input from '@/components/common/input'
 import Spacing from '@/components/common/Spacing'
 import { Text } from '@/components/common/text'
+import { axiosAPI } from '@/libs/apis/axios'
 import { theme } from '@/styles/theme'
 
 const Login = () => {
   const navigate = useNavigate()
-  const emailInputRef = useRef(null)
-  const passwordInputRef = useRef(null)
+  const emailInputRef = useRef<HTMLInputElement>(null)
+  const passwordInputRef = useRef<HTMLInputElement>(null)
 
   const goLogin = () => {
     alert('로그인 성공')
-    navigate('/')
+    if (emailInputRef.current && passwordInputRef.current) {
+      const body = {
+        email: emailInputRef.current.value,
+        password: passwordInputRef.current.value,
+      }
+      axiosAPI
+        .post('/login', body)
+        .then((response) => {
+          console.log(response)
+          localStorage.setItem('token', response.data.token)
+          localStorage.setItem('isLogin', 'true')
+        })
+        .catch((err) => {
+          if (err.message === 'Request failed with status code 400')
+            alert('아이디와 비밀번호를 확인해주세요!')
+        })
+      navigate('/')
+    }
   }
   const goRegisterPage = () => {
     navigate('/register')

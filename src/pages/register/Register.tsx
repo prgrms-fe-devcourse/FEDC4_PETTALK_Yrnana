@@ -38,8 +38,6 @@ const Register = () => {
         await axiosAPI
           .post('/signup', body)
           .then((response) => {
-            localStorage.setItem('token', response.data.token)
-            localStorage.setItem('isLogin', 'true')
             console.log(response)
             alert('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.')
             navigate('/login')
@@ -51,6 +49,9 @@ const Register = () => {
       }
     }
   }
+  // jdh0805@naver.com
+  // qwer1234!
+  // 주다현
   const formValidation = () => {
     if (emailInputRef.current && emailInputRef.current.value == '') {
       alert('이메일을 입력하세요')
