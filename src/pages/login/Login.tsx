@@ -1,8 +1,9 @@
 import styled from '@emotion/styled'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Button from '@/components/common/button'
+import Greetings from '@/components/common/greetings'
 import Input from '@/components/common/input'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
@@ -40,8 +41,20 @@ const Login = () => {
     navigate('/register')
   }
 
+  const [loading, setLoading] = useState(true)
+  const [animation, setAnimation] = useState(true)
+
+  setTimeout(() => {
+    setLoading(false)
+  }, 12000)
+
+  setTimeout(() => {
+    setAnimation(false)
+  }, 11000)
+
   return (
     <StyleRegisterWrapper>
+      {loading ? <Greetings className={animation ? '' : 'fade-out'} /> : ''}
       <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
       <Spacing size={50} />
       <Input width={200} ref={emailInputRef} placeholder={'email'}></Input>

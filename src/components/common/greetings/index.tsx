@@ -8,11 +8,9 @@ import { Text } from '@/components/common/text'
 
 interface ClassName {
   className: string
-  width: number
-  height: number
 }
 
-const Greetings = ({ className, width, height }: ClassName) => {
+const Greetings = ({ className }: ClassName) => {
   const mount = useRef<HTMLDivElement | null>(null)
   const [progressLoading, setProgressLoading] = useState(true)
 
@@ -26,7 +24,12 @@ const Greetings = ({ className, width, height }: ClassName) => {
     const renderer = new THREE.WebGLRenderer()
 
     renderer.setClearColor(0x000000, 0)
-    renderer.setSize(width, height)
+
+    if (window.innerWidth > 480) {
+      renderer.setSize(480, 480)
+    } else {
+      renderer.setSize(window.innerWidth, window.innerWidth)
+    }
     mount.current.appendChild(renderer.domElement)
 
     camera.position.x = 2
