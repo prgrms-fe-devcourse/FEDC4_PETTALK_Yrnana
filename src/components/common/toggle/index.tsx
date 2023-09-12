@@ -6,15 +6,15 @@ import sun from '@/assets/SunLight.svg'
 import { theme } from '@/styles/theme'
 
 const Toggle = () => {
-  const [state, setState] = useState(true)
+  const [state, setState] = useState(false)
   const onToggle = () => {
     setState(!state)
   }
   return (
-    <div>
+    <>
       <Input type={'checkbox'} readOnly checked={state} />
       <Label onClick={onToggle}>{state ? <Sun src={sun} /> : <Moon src={moon} />}</Label>
-    </div>
+    </>
   )
 }
 
