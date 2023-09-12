@@ -1,5 +1,11 @@
+import Greetings from '@/components/common/greetings'
+
 const LoginPage = () => {
-  return <div></div>
+  return (
+    <>
+      <Greetings />
+    </>
+  )
 }
 
 export default LoginPage

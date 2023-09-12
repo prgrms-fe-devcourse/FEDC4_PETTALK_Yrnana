@@ -1,13 +1,15 @@
 import styled from '@emotion/styled'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
+import { Text } from '@/components/common/Text'
+
 import Progress from './Progress'
 
-const Greetings: React.FC<Props> = () => {
+const Greetings = () => {
   const mount = useRef<HTMLDivElement | null>(null)
-  const [textMovement, setTextMovement] = useState(false)
+  const [progressLoading, setProgressLoading] = useState(true)
 
   let loading = true
 
@@ -45,6 +47,7 @@ const Greetings: React.FC<Props> = () => {
 
       setTimeout(() => {
         loading = false
+        setProgressLoading(false)
       }, 6200)
 
       const animate = () => {
@@ -60,13 +63,12 @@ const Greetings: React.FC<Props> = () => {
     })
   }, [])
 
-  setTimeout(() => {
-    setTextMovement(true)
-  }, 9000)
-
   return (
     <Container ref={mount}>
-      <Progress />
+      <Text typo={'LogoFont_30'} style={{ position: 'absolute', fontSize: '70px' }}>
+        {'Pet Talk'}
+      </Text>
+      <Progress loading={progressLoading} />
     </Container>
   )
 }
@@ -77,6 +79,11 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  height: 100%;
+  background-image: url('./src/assets/images/Background.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `
 
 export default Greetings

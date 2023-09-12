@@ -31,16 +31,18 @@ const Track = styled.div`
   transition: width 0.5s linear;
 `
 
-const Progress = () => {
+interface LoadingProp {
+  loading: boolean
+}
+
+const Progress = ({ loading }: LoadingProp) => {
   const [value, setValue] = useState(0)
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (value < 100) {
         setValue((prevValue) => prevValue + 10)
       } else {
-        setLoading(false)
         clearInterval(interval)
       }
     }, 500)
