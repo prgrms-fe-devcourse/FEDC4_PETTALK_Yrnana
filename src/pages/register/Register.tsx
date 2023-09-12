@@ -49,9 +49,6 @@ const Register = () => {
       }
     }
   }
-  // jdh0805@naver.com
-  // qwer1234!
-  // 주다현
   const formValidation = () => {
     if (emailInputRef.current && emailInputRef.current.value == '') {
       alert('이메일을 입력하세요')
