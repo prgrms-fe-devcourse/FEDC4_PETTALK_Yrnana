@@ -71,6 +71,7 @@ const StyleButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `
 const StyleButton = styled.button<{
   buttonType: ButtonType
