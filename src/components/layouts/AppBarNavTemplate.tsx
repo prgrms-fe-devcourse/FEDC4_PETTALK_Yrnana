@@ -1,15 +1,18 @@
 import styled from '@emotion/styled'
 import { ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
 
+import AppBar from '@/components/common/appBar'
 import NavigationBar from '@/components/common/navigationBar'
 interface AppBarTemplateProps {
   children: ReactNode
   hasNav: boolean
 }
 const AppBarNavTemplate = ({ children, hasNav }: AppBarTemplateProps) => {
+  const location = useLocation()
   return (
     <AppBarNavTemplateWrapper>
-      {/*AppBar 추가 예정*/}
+      <AppBar mainPage={location.pathname === '/' ? true : false} title={'시험 페이지'} />
       {children}
       {hasNav && <NavigationBar />}
     </AppBarNavTemplateWrapper>

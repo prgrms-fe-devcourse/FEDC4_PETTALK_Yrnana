@@ -1,11 +1,5 @@
-import AppBar from '@/components/common/appBar'
-
 const LoginPage = () => {
-  return (
-    <div>
-      <AppBar />
-    </div>
-  )
+  return <div></div>
 }
 
 export default LoginPage
