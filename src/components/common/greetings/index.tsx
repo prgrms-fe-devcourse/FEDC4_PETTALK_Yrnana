@@ -3,11 +3,14 @@ import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
-import { Text } from '@/components/common/Text'
+import Progress from '@/components/common/greetings/progress'
+import { Text } from '@/components/common/text'
 
-import Progress from './Progress'
+interface ClassName {
+  className: string
+}
 
-const Greetings = () => {
+const Greetings = ({ className }: ClassName) => {
   const mount = useRef<HTMLDivElement | null>(null)
   const [progressLoading, setProgressLoading] = useState(true)
 
@@ -64,7 +67,7 @@ const Greetings = () => {
   }, [])
 
   return (
-    <Container ref={mount}>
+    <Container className={className} ref={mount}>
       <Text typo={'LogoFont_30'} style={{ position: 'absolute', fontSize: '70px' }}>
         {'Pet Talk'}
       </Text>
@@ -78,7 +81,10 @@ const Container = styled.div`
   flex-direction: column-reverse;
   justify-content: center;
   align-items: center;
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
   height: 100%;
   background-image: url('./src/assets/images/Background.svg');
   background-position: center;

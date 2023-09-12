@@ -65,4 +65,9 @@ export const globalStyle = css`
       transform: translate(-50%, -50%);
     }
   }
+
+  .disappear {
+    opacity: 0;
+    transition: opacity 1s;
+  }
 `
