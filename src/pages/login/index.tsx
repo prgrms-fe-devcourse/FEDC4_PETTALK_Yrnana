@@ -1,5 +1,13 @@
+import { Route, Routes } from 'react-router-dom'
+
+import Login from '@/pages/login/Login'
+
 const LoginPage = () => {
-  return <div>{'로그인페이지입니다.'}</div>
+  return (
+    <Routes>
+      <Route path={'/'} element={<Login />}></Route>
+    </Routes>
+  )
 }
 
 export default LoginPage

@@ -13,10 +13,10 @@ const App = () => {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path={'/'} element={<ChannelsRouter />} />
+        <Route path={'*'} element={<ChannelsRouter />} />
         <Route path={'/posts'} element={<PostRouter />} />
         <Route path={'/friends'} element={<FriendsRouter />}></Route>
-        <Route path={'/profile'} element={<MyProfileRouter />}></Route>
+        <Route path={'/myprofile'} element={<MyProfileRouter />}></Route>
         <Route path={'/chatting'} element={<ChattingRouter />}></Route>
         <Route path={'/login'} element={<LoginPage />} />
         <Route path={'/register'} element={<RegisterRouter />} />

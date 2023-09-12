@@ -1,20 +1,28 @@
 import styled from '@emotion/styled'
-import { ComponentPropsWithRef, forwardRef, MutableRefObject } from 'react'
+import { ComponentProps, forwardRef, MutableRefObject } from 'react'
 
+import InputValueDelete from '@/assets/icons/InputValueDelete'
 import { palette } from '@/styles/palette'
 import { typo } from '@/styles/typo'
 
-type InputProps = ComponentPropsWithRef<'input'> & {
+interface InputProps extends ComponentProps<'input'> {
   width?: number
   height?: number
   placeholder: string
-  inputRef: MutableRefObject<HTMLInputElement | null>
+  type?: string
+  //inputRef: MutableRefObject<HTMLInputElement | null>
 }
 
-const Input = forwardRef(function Input({ width, height = 39, placeholder, inputRef }: InputProps) {
+const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
+  { width, height = 39, type = 'text', placeholder }: InputProps,
+  inputRef,
+) {
   const resetInput = () => {
-    if (inputRef.current) inputRef.current.value = ''
+    if (inputRef && typeof inputRef !== 'function') {
+      inputRef.current && (inputRef.current.value = '')
+    }
   }
+
   return (
     <StyleInputWrapper>
       <StyleInput
@@ -22,14 +30,16 @@ const Input = forwardRef(function Input({ width, height = 39, placeholder, input
         heightProps={height}
         ref={inputRef}
         placeholder={placeholder}
+        type={type}
       />
-      {/* 이 버튼 자리에 x표시 아이콘 넣을 예정 */}
-      <StyleResetIcon onClick={resetInput}>{'x'}</StyleResetIcon>
+      <StyleResetIcon onClick={resetInput}>
+        <InputValueDelete></InputValueDelete>
+      </StyleResetIcon>
     </StyleInputWrapper>
   )
 })
 
-const StyleInputWrapper = styled.div`
+const StyleInputWrapper = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -49,7 +59,8 @@ const StyleInput = styled.input<{ widthProps?: number; heightProps?: number }>`
 `
 const StyleResetIcon = styled.button`
   position: relative;
-  right: 20px;
+  top: 2px;
+  right: 25px;
 `
 
 export default Input
