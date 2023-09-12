@@ -26,6 +26,7 @@ const Login = () => {
         .then((response) => {
           console.log(response)
           localStorage.setItem('token', response.data.token)
+          localStorage.setItem('role', response.data.user.role)
           localStorage.setItem('isLogin', 'true')
         })
         .catch((err) => {

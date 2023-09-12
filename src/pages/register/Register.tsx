@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import BackgroundImage from '@/assets/images/Background-nofootPrint.svg'
 import Button from '@/components/common/button'
 import Input from '@/components/common/input'
-import Spacing from '@/components/common/Spacing'
+import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
 import { theme } from '@/styles/theme'
@@ -79,16 +79,11 @@ const Register = () => {
     <StyleRegisterWrapper image={BackgroundImage}>
       <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
       <Spacing size={50} />
-      <Input width={200} inputRef={emailInputRef} placeholder={'email'}></Input>
+      <Input width={200} ref={emailInputRef} placeholder={'email'}></Input>
       <Spacing size={15} />
-      <Input
-        width={200}
-        inputRef={passwordInputRef}
-        placeholder={'password'}
-        type={'password'}
-      ></Input>
+      <Input width={200} ref={passwordInputRef} placeholder={'password'} type={'password'}></Input>
       <Spacing size={15} />
-      <Input width={200} inputRef={userNameInputRef} placeholder={'user name'}></Input>
+      <Input width={200} ref={userNameInputRef} placeholder={'user name'}></Input>
       <Spacing size={15} />
       <StyleAreement>
         <StyleLabel>
