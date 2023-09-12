@@ -15,6 +15,7 @@ const Login = () => {
 
   const goLogin = () => {
     alert('로그인 성공')
+    navigate('/')
   }
   const goRegisterPage = () => {
     navigate('/register')
@@ -22,12 +23,16 @@ const Login = () => {
   return (
     <>
       <StyleRegisterWrapper>
-        <Spacing size={50} />
         <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
         <Spacing size={50} />
         <Input width={200} inputRef={emailInputRef} placeholder={'email'}></Input>
         <Spacing size={22} />
-        <Input width={200} inputRef={passwordInputRef} placeholder={'password'}></Input>
+        <Input
+          width={200}
+          inputRef={passwordInputRef}
+          placeholder={'password'}
+          type={'password'}
+        ></Input>
         <Spacing size={50} />
         <Button buttonType={'Large'} value={'로그인'} onClick={goLogin}></Button>
         <StyleMoveToRegisterPage onClick={goRegisterPage}>
@@ -43,6 +48,7 @@ const StyleRegisterWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  height: 90%;
 `
 const StyleMoveToRegisterPage = styled.button`
   display: flex;

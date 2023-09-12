@@ -1,9 +1,9 @@
 import styled from '@emotion/styled'
-import { useEffect, useState } from 'react'
+import { ComponentProps, useEffect, useState } from 'react'
 
 import defaultImage from '@/assets/images/profile.png'
 
-interface ProfileImageProps {
+interface ProfileImageProps extends ComponentProps<'div'> {
   size: number
   image: string
   updatable: boolean
@@ -14,7 +14,12 @@ interface ImageProps {
   size: number
 }
 
-const ProfileImage = ({ size, image = defaultImage, updatable = true }: ProfileImageProps) => {
+const ProfileImage = ({
+  size,
+  image = defaultImage,
+  updatable = true,
+  ...props
+}: ProfileImageProps) => {
   const [loadable, setLoadable] = useState(false)
   const [selectedImage, setSelectedImage] = useState(image)
 
@@ -39,7 +44,7 @@ const ProfileImage = ({ size, image = defaultImage, updatable = true }: ProfileI
   //   const base64ImageData = btoa(String.fromCharCode(...updateImage))
   //   const dataUrl = `data:${mimeType};base64,${base64ImageData}`
   return (
-    <div>
+    <span {...props}>
       <label htmlFor={'fileInput'}>
         <Image src={selectedImage} size={size} alt={''} />
       </label>
@@ -52,7 +57,7 @@ const ProfileImage = ({ size, image = defaultImage, updatable = true }: ProfileI
           onChange={handleFileChange}
         />
       ) : null}
-    </div>
+    </span>
   )
 }
 
