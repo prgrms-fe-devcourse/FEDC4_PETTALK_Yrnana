@@ -15,11 +15,9 @@ const AppBarNavTemplate = ({ children, hasNav, title }: AppBarTemplateProps) => 
   return (
     <AppBarNavTemplateWrapper>
       <AppBar mainPage={location.pathname === '/' ? true : false} title={title} />
-      <ChildrenWrapper>
-        <Spacing size={30} />
-        {children}
-        {hasNav && <NavigationBar />}
-      </ChildrenWrapper>
+      <Spacing size={30} />
+      <ChildrenWrapper>{children}</ChildrenWrapper>
+      {hasNav && <NavigationBar />}
     </AppBarNavTemplateWrapper>
   )
 }
@@ -33,5 +31,5 @@ const AppBarNavTemplateWrapper = styled.div`
 
 const ChildrenWrapper = styled.div`
   padding: 0px 10px;
-  width: 100%;
+  box-sizing: border-box;
 `
