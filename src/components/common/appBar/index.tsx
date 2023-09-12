@@ -30,7 +30,7 @@ const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
       )}
       <Functions>
         <Toggle />
-        <Bell />
+        <Bell style={{ cursor: 'pointer' }} onClick={() => navigate('/notification')} />
         <ProfileImage
           size={40}
           updatable={false}
