@@ -11,23 +11,24 @@ import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
 import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
 const CreateChannel = () => {
-  const [openChannel, setOpenChannel] = useState(true)
+  const [openChannel, setOpenChannel] = useState(false)
   const navigate = useNavigate()
+  const ouathRegisterMutation = useMutation(ChannelApi.CREATE_CHANNEL, {
+    onSuccess: (data: number) => {
+      alert('채널 생성이 완료되었습니다!')
+    },
+  })
+  const channelTitleRef = useRef<HTMLInputElement>(null)
+  const channelDesRef = useRef<HTMLInputElement>(null)
+
   useEffect(() => {
     if (localStorage.getItem('role') === 'SuperAdmin') {
       axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     } else {
       alert('관리자의 권한이 필요합니다!')
-      navigate('/login')
+      navigate('/')
     }
   }, [])
-  const ouathRegisterMutation = useMutation(ChannelApi.CREATE_CHANNEL, {
-    onSuccess: (data: number) => {
-      console.log(data)
-    },
-  })
-  const channelTitleRef = useRef<HTMLInputElement>(null)
-  const channelDesRef = useRef<HTMLInputElement>(null)
   const handleCreateChannel = () => {
     if (channelTitleRef.current && channelDesRef.current) {
       if (channelTitleRef?.current.value === '') {
@@ -38,6 +39,8 @@ const CreateChannel = () => {
         description: channelDesRef?.current.value,
         name: channelTitleRef?.current.value,
       })
+      channelDesRef.current.value = ''
+      channelTitleRef.current.value = ''
     }
   }
   return (
