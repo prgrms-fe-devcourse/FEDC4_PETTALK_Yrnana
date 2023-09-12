@@ -9,10 +9,17 @@ type InputProps = ComponentPropsWithRef<'input'> & {
   width?: number
   height?: number
   placeholder: string
+  type?: string
   inputRef: MutableRefObject<HTMLInputElement | null>
 }
 
-const Input = forwardRef(function Input({ width, height = 39, placeholder, inputRef }: InputProps) {
+const Input = forwardRef(function Input({
+  width,
+  height = 39,
+  type = 'text',
+  placeholder,
+  inputRef,
+}: InputProps) {
   const resetInput = () => {
     if (inputRef.current) inputRef.current.value = ''
   }
@@ -23,6 +30,7 @@ const Input = forwardRef(function Input({ width, height = 39, placeholder, input
         heightProps={height}
         ref={inputRef}
         placeholder={placeholder}
+        type={type}
       />
       <StyleResetIcon onClick={resetInput}>
         <InputValueDelete></InputValueDelete>
@@ -31,7 +39,7 @@ const Input = forwardRef(function Input({ width, height = 39, placeholder, input
   )
 })
 
-const StyleInputWrapper = styled.div`
+const StyleInputWrapper = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
