@@ -8,6 +8,8 @@ import { Text } from '@/components/common/text'
 import Carousel from '@/pages/home/carousel'
 import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'
 
+import { channelMock } from '../../mock/channel.ts'
+
 interface MainPageProps extends ComponentProps<'div'> {
   TodayChannelTypo?: KeyOfTypo
   TodayChannelColor?: KeyOfPalette
@@ -46,15 +48,29 @@ const MainPage = ({
         </Text>
         <Spacing size={30}></Spacing>
         <ChannelWrapper>
-          <FlexBox gap={13}>
-            <CubeButton content={'안녕하세요~'} path={'/123'}></CubeButton>
-            <CubeButton content={'안녕하세요~'} path={'/123'}></CubeButton>
-          </FlexBox>
-          <Spacing size={13}></Spacing>
-          <FlexBox gap={13}>
-            <CubeButton content={'안녕하세요~'} path={'/123'}></CubeButton>
-            <CubeButton content={'안녕하세요~'} path={'/123'}></CubeButton>
-          </FlexBox>
+          {channelMock &&
+            channelMock.map((channel, index) => {
+              if (index % 2 === 0) {
+                const nextChannel = channelMock[index + 1]
+
+                return (
+                  <div key={channel._id}>
+                    <FlexBox gap={13}>
+                      <CubeButton content={channel.name} path={`/${channel._id}`}></CubeButton>
+                      {nextChannel && (
+                        <CubeButton
+                          content={nextChannel.name}
+                          path={`/${nextChannel._id}`}
+                        ></CubeButton>
+                      )}
+                    </FlexBox>
+                    <Spacing size={13}></Spacing>
+                  </div>
+                )
+              }
+
+              return null
+            })}
         </ChannelWrapper>
       </InterestingChannel>
     </>
