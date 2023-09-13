@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Button from '@/components/common/button'
@@ -44,13 +44,20 @@ const Login = () => {
   const [loading, setLoading] = useState(true)
   const [animation, setAnimation] = useState(true)
 
-  setTimeout(() => {
-    setLoading(false)
-  }, 12000)
+  useEffect(() => {
+    if (sessionStorage.getItem('visited')) {
+      setLoading(false)
+    } else {
+      sessionStorage.setItem('visited', 'true')
+      setTimeout(() => {
+        setLoading(false)
+      }, 12000)
 
-  setTimeout(() => {
-    setAnimation(false)
-  }, 11000)
+      setTimeout(() => {
+        setAnimation(false)
+      }, 11000)
+    }
+  }, [])
 
   return (
     <StyleRegisterWrapper>
