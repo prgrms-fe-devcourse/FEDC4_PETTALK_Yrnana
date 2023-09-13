@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import Layout from '@/components/layouts/Layout'
 import ChattingRouter from '@/pages/chatting'
+import ExamplePage from '@/pages/Example'
 import FriendsRouter from '@/pages/friends'
 import ChannelsRouter from '@/pages/home'
 import LoginPage from '@/pages/login'
