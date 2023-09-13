@@ -9,23 +9,23 @@ import InterestHeader from '@/pages/home/interestHeader/index.tsx'
 import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'
 
 interface MainPageProps extends ComponentProps<'div'> {
-  TodayChannelTypo?: KeyOfTypo
-  TodayChannelColor?: KeyOfPalette
-  InterestingChannelTypo?: KeyOfTypo
-  InterestingChannelColor?: KeyOfPalette
+  todayChannelTypo?: KeyOfTypo
+  todayChannelColor?: KeyOfPalette
+  interestChannelTypo?: KeyOfTypo
+  interestChannelColor?: KeyOfPalette
 }
 
 const MainPage = ({
-  TodayChannelTypo = 'Headline_23',
-  TodayChannelColor = 'BLACK',
-  InterestingChannelTypo = 'Headline_20',
-  InterestingChannelColor = 'BLACK',
+  todayChannelTypo = 'Headline_23',
+  todayChannelColor = 'BLACK',
+  interestChannelTypo = 'Headline_20',
+  interestChannelColor = 'BLACK',
   ...props
 }: MainPageProps) => {
   return (
     <MainPageWrapper {...props}>
       <TodayChannel>
-        <Text typo={TodayChannelTypo} color={TodayChannelColor}>
+        <Text typo={todayChannelTypo} color={todayChannelColor}>
           {'오늘의 채널'}
         </Text>
         <Spacing size={15}></Spacing>
@@ -33,7 +33,7 @@ const MainPage = ({
       </TodayChannel>
       <Spacing size={40}></Spacing>
       <InterestChannel>
-        <InterestHeader typo={InterestingChannelTypo} color={InterestingChannelColor} />
+        <InterestHeader typo={interestChannelTypo} color={interestChannelColor} />
         <Spacing size={30}></Spacing>
         <ChannelList />
       </InterestChannel>
