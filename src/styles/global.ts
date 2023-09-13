@@ -66,8 +66,8 @@ export const globalStyle = css`
     }
   }
 
-  .disappear {
+  .fade-out {
     opacity: 0;
-    transition: opacity 1s;
+    transition: opacity 1s ease-in-out;
   }
 `

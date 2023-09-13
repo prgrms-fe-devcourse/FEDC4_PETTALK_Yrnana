@@ -122,6 +122,10 @@ const StyleRegisterWrapper = styled.div<{ image: string }>`
   align-items: center;
   flex-direction: column;
   height: 100%;
+  background-image: url('./src/assets/images/Background-nofootPrint.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   /* background-image: url(${(props) => props.image});
   background-repeat: no-repeat;
   width: 100%;

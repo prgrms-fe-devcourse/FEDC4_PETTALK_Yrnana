@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
+import { useQuery } from '@tanstack/react-query'
 import { ComponentProps } from 'react'
 
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
+import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
 import ChannelList from '@/pages/home/channelList/index.tsx'
 import TodayChannelSlider from '@/pages/home/channelSlider'
 import InterestHeader from '@/pages/home/interestHeader/index.tsx'
@@ -22,6 +24,10 @@ const MainPage = ({
   interestChannelColor = 'BLACK',
   ...props
 }: MainPageProps) => {
+  const { data, isLoading } = useQuery(['channels'], () => ChannelApi.GET_CHANNEL())
+
+  //TODO: 로딩 컴포넌트 추가 시 리팩토링 가능성 있음
+  if (isLoading) return <h2>{'Loading중...'}</h2>
   return (
     <MainPageWrapper {...props}>
       <TodayChannel>

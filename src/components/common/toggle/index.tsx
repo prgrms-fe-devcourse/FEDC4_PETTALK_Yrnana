@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { useState } from 'react'
 
 import moon from '@/assets/Group 28.svg'
-import sun from '@/assets/SunLight.svg'
+import Sun from '@/assets/icons/Sun'
 import { theme } from '@/styles/theme'
 
 const Toggle = () => {
@@ -13,7 +13,9 @@ const Toggle = () => {
   return (
     <>
       <Input type={'checkbox'} readOnly checked={state} />
-      <Label onClick={onToggle}>{state ? <Sun src={sun} /> : <Moon src={moon} />}</Label>
+      <Label onClick={onToggle}>
+        {state ? <Sun width={21} height={21} /> : <Moon src={moon} />}
+      </Label>
     </>
   )
 }
@@ -59,16 +61,6 @@ const Label = styled.label`
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
     transition: 0.3s;
   }
-`
-
-const Sun = styled.img`
-  position: relative;
-  width: 18px;
-  height: 18px;
-  top: 0;
-  left: 0;
-  transform: translateX(0);
-  user-select: none;
 `
 
 const Moon = styled.img`
