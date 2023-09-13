@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
 
+import Footprint from '@/assets/icons/Footprint.tsx'
 import CubeButton from '@/components/common/cubeButton'
 import { FlexBox } from '@/components/common/flexBox'
 import Spacing from '@/components/common/spacing'
@@ -43,9 +44,19 @@ const MainPage = ({
       </TodayChannel>
       <Spacing size={40}></Spacing>
       <InterestingChannel>
-        <Text typo={InterestingChannelTypo} color={InterestingChannelColor}>
-          {'관심사에 맞는 채널을 탐색해보세요.'}
-        </Text>
+        <FlexBox justify={'flex-start'} gap={10}>
+          <StyledHeader typo={InterestingChannelTypo} color={InterestingChannelColor}>
+            {'관심사에 맞는 채널을 탐색해보세요.'}
+          </StyledHeader>
+          <IconWrapper>
+            <FirstIcon>
+              <Footprint />
+            </FirstIcon>
+            <SecondIcon>
+              <Footprint />
+            </SecondIcon>
+          </IconWrapper>
+        </FlexBox>
         <Spacing size={30}></Spacing>
         <ChannelWrapper>
           {channelMock &&
@@ -85,5 +96,25 @@ const TodayChannelSlider = styled.div`
   overflow: hidden; /* 슬라이딩 영역 내에서만 보이게 함 */
 `
 const ChannelWrapper = styled.div``
+
+const StyledHeader = styled(Text)`
+  width: 55%;
+  line-height: 1.3;
+  word-break: keep-all;
+`
+
+const IconWrapper = styled.div`
+  position: relative;
+`
+const FirstIcon = styled.div`
+  position: absolute;
+  bottom: 2px;
+`
+
+const SecondIcon = styled.div`
+  position: absolute;
+  left: 20px;
+  top: 2px;
+`
 
 export default MainPage
