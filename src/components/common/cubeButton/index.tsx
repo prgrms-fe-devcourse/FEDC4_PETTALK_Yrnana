@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
 import { Link } from 'react-router-dom'
 
+import { FlexBox } from '@/components/common/flexBox'
 import { Text } from '@/components/common/text'
 import { KeyOfPalette, KeyOfTypo, theme } from '@/styles/theme'
 
@@ -38,15 +39,30 @@ const CubeButton = ({
       shadowColor={shadowColor}
     >
       <Link to={path} style={{ textDecoration: 'none' }}>
-        <TextWrapper>
-          <Text typo={textTypo} color={textColor}>
+        <TextWrapper justify={'flex-start'}>
+          <StyledText typo={textTypo} color={textColor}>
             {content}
-          </Text>
+          </StyledText>
         </TextWrapper>
       </Link>
     </CubeButtonWrapper>
   )
 }
+
+const TextWrapper = styled(FlexBox)`
+  text-align: start;
+  padding: 10px;
+  height: 100%;
+`
+
+const StyledText = styled(Text)`
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+`
 
 const CubeButtonWrapper = styled.button<{
   shadowColor?: KeyOfPalette
@@ -58,15 +74,6 @@ const CubeButtonWrapper = styled.button<{
   border-radius: 10px;
   background-color: ${({ backgroundColor }) => backgroundColor && theme.palette[backgroundColor]};
   box-shadow: ${({ shadowColor }) => shadowColor && `0px 4px 4px 0px rgba(0, 0, 0, 0.24)`};
-  word-break: keep-all;
-`
-
-const TextWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: start;
-  padding: 10px;
-  height: 100%;
 `
 
 export default CubeButton
