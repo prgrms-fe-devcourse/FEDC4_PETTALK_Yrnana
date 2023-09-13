@@ -26,10 +26,10 @@ const MainPage = ({
   ...props
 }: MainPageProps) => {
   const carouselItems = [
-    'https://picsum.photos/390/190/?random',
-    'https://picsum.photos/390/190/?random',
-    'https://picsum.photos/390/190/?random',
-    'https://picsum.photos/390/190/?random',
+    'https://picsum.photos/480/190/?random',
+    'https://picsum.photos/400/190/?random',
+    'https://picsum.photos/350/190/?random',
+    'https://picsum.photos/380/190/?random',
   ]
   return (
     <>
@@ -93,8 +93,8 @@ const InterestingChannel = styled.div``
 const TodayChannelSlider = styled.div`
   width: 100%; /* 너비를 100%로 설정하여 부모 요소에 맞게 확장됩니다. */
   height: 190px;
-  background-color: aliceblue;
   overflow: hidden;
+  border-radius: 10px;
 `
 const ChannelWrapper = styled.div``
 
