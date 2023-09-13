@@ -19,12 +19,12 @@ const Modal = ({ modalText, time }: ModalProps) => {
   return (
     <>
       <StyleModal
-        position={'top-center'} // 알람 위치 지정
-        autoClose={time} // 자동 off 시간
-        hideProgressBar={true} // 진행시간바 숨김
-        closeOnClick // 클릭으로 알람 닫기
+        position={'top-center'}
+        autoClose={time}
+        hideProgressBar={true}
+        closeOnClick
         pauseOnHover={false}
-        limit={1} // 알람 개수 제한
+        limit={1}
       />
     </>
   )
