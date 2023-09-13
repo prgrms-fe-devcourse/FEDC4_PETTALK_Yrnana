@@ -72,7 +72,11 @@ const StyleRegisterWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 90%;
+  height: 100%;
+  background-image: url('./src/assets/images/Background.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `
 const StyleMoveToRegisterPage = styled.button`
   display: flex;
