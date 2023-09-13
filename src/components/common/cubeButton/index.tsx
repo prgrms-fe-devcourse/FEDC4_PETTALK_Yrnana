@@ -52,7 +52,8 @@ const CubeButtonWrapper = styled.button<{
   shadowColor?: KeyOfPalette
   backgroundColor?: KeyOfPalette
 }>`
-  width: 160px;
+  width: 100%;
+  max-width: 210px;
   height: 86px;
   border-radius: 10px;
   background-color: ${({ backgroundColor }) => backgroundColor && theme.palette[backgroundColor]};
