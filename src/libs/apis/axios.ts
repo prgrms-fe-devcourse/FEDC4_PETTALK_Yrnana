@@ -10,10 +10,10 @@ export const axiosAPI = axios.create({
 // Response interceptor
 function interceptorResponseFulfilled(res: AxiosResponse) {
   if (200 <= res.status && res.status < 300) {
-    return res.data
+    return res
   }
 
-  return Promise.reject(res.data)
+  return Promise.reject(res)
 }
 
 function interceptorResponseRejected(error: AxiosError<ApiErrorScheme>) {
