@@ -9,9 +9,9 @@ import { theme } from '@/styles/theme'
 
 interface ModalProps {
   modalText: string
-  time: number
+  time?: number
 }
-const Modal = ({ modalText, time }: ModalProps) => {
+const Modal = ({ modalText, time = 3000 }: ModalProps) => {
   const notify = () => toast(modalText)
   useEffect(() => {
     notify()
