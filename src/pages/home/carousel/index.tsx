@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const CarouselContainer = styled.div`
   display: flex;
@@ -10,9 +10,9 @@ const CarouselContainer = styled.div`
 `
 
 const CarouselItem = styled.div`
-  flex: 0 0 480px; /* 수정된 부분 */
+  flex: 0 0 auto;
   transition: transform 0.3s ease-in-out;
-  margin: 0 auto; /* 이미지를 가로 중앙으로 정렬합니다. */
+  width: 100%; /* 이미지 너비를 100%로 설정 */
 `
 
 const CarouselButton = styled.button`
@@ -37,6 +37,7 @@ const NextButton = styled(CarouselButton)`
 
 const Carousel: React.FC<{ images: string[] }> = ({ images }) => {
   const [activeIndex, setActiveIndex] = useState(0)
+  const sliderRef = useRef<HTMLDivElement>(null)
 
   const handleNext = () => {
     setActiveIndex((prevIndex) => (prevIndex + 1) % images.length)
@@ -56,13 +57,20 @@ const Carousel: React.FC<{ images: string[] }> = ({ images }) => {
     }
   }, [activeIndex])
 
+  useEffect(() => {
+    if (sliderRef.current) {
+      const imageWidth = sliderRef.current.offsetWidth // 이미지 너비를 캐러셀 컨테이너의 너비로 설정
+      sliderRef.current.style.transform = `translateX(-${activeIndex * imageWidth}px)`
+    }
+  }, [activeIndex])
+
   return (
     <CarouselContainer>
       <PrevButton onClick={handlePrev}>{'이전'}</PrevButton>
       <div
+        ref={sliderRef}
         style={{
           display: 'flex',
-          transform: `translateX(-${activeIndex * 480}px)` /* 수정된 부분 */,
           transition: 'transform 0.3s ease-in-out',
         }}
       >
