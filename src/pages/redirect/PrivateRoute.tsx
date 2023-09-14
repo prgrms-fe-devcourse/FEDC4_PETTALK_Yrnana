@@ -1,15 +1,16 @@
 import { Navigate, Outlet } from 'react-router-dom'
 type PrivateRouteProps = {
   auth: boolean
+  superAuth?: boolean
 }
 
-const PrivateRoute = ({ auth }: PrivateRouteProps) => {
-  const isLogined = localStorage.getItem('loginState')
+const PrivateRoute = ({ auth, superAuth }: PrivateRouteProps) => {
+  const isLogin = localStorage.getItem('isLogin')
 
   if (auth) {
-    return isLogined === null || isLogined == 'false' ? <Navigate to={'/login'} /> : <Outlet />
+    return isLogin === null || isLogin == 'false' ? <Navigate to={'/login'} /> : <Outlet />
   } else {
-    return isLogined === null || isLogined == 'false' ? <Outlet /> : <Navigate to={'/'} />
+    return isLogin === null || isLogin == 'false' ? <Outlet /> : <Navigate to={'/'} />
   }
 }
 

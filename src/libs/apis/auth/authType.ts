@@ -19,3 +19,7 @@ export type User = {
   createdAt: string
   updatedAt: string
 }
+export type SignUpResponse = {
+  user: User
+  token: string
+}
