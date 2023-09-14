@@ -1,12 +1,15 @@
 import styled from '@emotion/styled'
-import { useRef, useState } from 'react'
+import { useMutation } from '@tanstack/react-query'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import BackgroundImage from '@/assets/images/Background-nofootPrint.svg'
 import Button from '@/components/common/button'
 import Input from '@/components/common/input'
+import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
+import { SignUpResponse } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
 import { theme } from '@/styles/theme'
 
@@ -17,38 +20,10 @@ const Register = () => {
   const userNameInputRef = useRef<HTMLInputElement>(null)
   const [checkBox1, setCheckBox1] = useState(false)
   const [checkBox2, setCheckBox2] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const goRegister = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!formValidation()) {
-      alert('입력이 올바르지 않습니다.')
-      return
-    }
-    if (!(checkBox1 && checkBox2)) {
-      alert('약관 동의에 체크해주세요.')
-      return
-    }
-    if (formValidation()) {
-      if (emailInputRef.current && passwordInputRef.current && userNameInputRef.current) {
-        const body = {
-          email: emailInputRef.current.value,
-          fullName: userNameInputRef.current.value,
-          password: passwordInputRef.current.value,
-        }
-        await axiosAPI
-          .post('/signup', body)
-          .then((response) => {
-            console.log(response)
-            alert('회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.')
-            navigate('/login')
-          })
-          .catch((err) => {
-            if (err.message === 'Request failed with status code 400')
-              alert('이미 있는 계정입니다!')
-          })
-      }
-    }
-  }
+  useEffect(() => {}, [checkBox1, checkBox2])
+
   const formValidation = () => {
     if (emailInputRef.current && emailInputRef.current.value == '') {
       alert('이메일을 입력하세요')
@@ -69,50 +44,103 @@ const Register = () => {
     if (regexpPassword.test(passwordValue)) return true
     return false
   }
+
+  const submitRegister = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!formValidation()) {
+      alert('입력이 올바르지 않습니다.')
+      return
+    }
+
+    if (checkBox1 == false || checkBox2 == false) {
+      alert('약관 동의에 체크해주세요.')
+      return
+    }
+    setIsLoading(true)
+    if (formValidation()) {
+      if (emailInputRef.current && passwordInputRef.current && userNameInputRef.current) {
+        const body = {
+          email: emailInputRef.current.value,
+          fullName: userNameInputRef.current.value,
+          password: passwordInputRef.current.value,
+        }
+        registerMutation.mutate(body)
+      }
+    }
+  }
+  const registerPost = async (body: object): Promise<SignUpResponse | undefined> => {
+    return await axiosAPI.post('/signup', body)
+  }
+  const registerMutation = useMutation((body: object) => registerPost(body), {
+    onSuccess: (data) => {
+      console.log(data)
+      setIsLoading(false)
+      alert('회원가입 성공!')
+      navigate('/login')
+    },
+    onError: () => {
+      alert('회원가입 실패! 이미 있는 계정입니다.')
+      setIsLoading(false)
+    },
+  })
+
   const goLoginPage = () => {
     navigate('/login')
   }
-  const checkHandler = (index: number) => {
-    index == 1 ? setCheckBox1(!checkBox1) : setCheckBox2(!checkBox2)
+  const checkHandler1 = (checked: boolean) => {
+    checked ? setCheckBox1(true) : setCheckBox1(false)
   }
-  return (
-    <StyleRegisterWrapper image={BackgroundImage}>
-      <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
-      <Spacing size={50} />
-      <Input width={200} ref={emailInputRef} placeholder={'email'}></Input>
-      <Spacing size={15} />
-      <Input width={200} ref={passwordInputRef} placeholder={'password'} type={'password'}></Input>
-      <Spacing size={15} />
-      <Input width={200} ref={userNameInputRef} placeholder={'user name'}></Input>
-      <Spacing size={15} />
-      <StyleAreement>
-        <StyleLabel>
-          <StyledInput
-            type={'checkbox'}
-            onChange={() => {
-              checkHandler(1)
-            }}
-          ></StyledInput>
-          <StyleText>{'서비스 이용약관 동의'}</StyleText>
-        </StyleLabel>
-      </StyleAreement>
-      <StyleAreement>
-        <StyleLabel>
-          <StyledInput
-            type={'checkbox'}
-            onChange={() => {
-              checkHandler(2)
-            }}
-          ></StyledInput>
-          <StyleText>{'개인정보 수집 및 활용 동의'}</StyleText>
-        </StyleLabel>
-      </StyleAreement>
-      <Spacing size={22} />
-      <Button buttonType={'Large'} value={'회원가입'} onClick={(e) => goRegister(e)}></Button>
-      <StyleMoveToRegisterPage onClick={goLoginPage}>
-        {'계정이 이미 있으신가요?'}
-      </StyleMoveToRegisterPage>{' '}
-    </StyleRegisterWrapper>
+
+  const checkHandler2 = (checked: boolean) => {
+    checked ? setCheckBox2(true) : setCheckBox2(false)
+  }
+  return isLoading ? (
+    <Loading />
+  ) : (
+    <>
+      <StyleRegisterWrapper image={BackgroundImage}>
+        <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
+        <Spacing size={50} />
+        <Input width={200} ref={emailInputRef} placeholder={'email'}></Input>
+        <Spacing size={15} />
+        <Input
+          width={200}
+          ref={passwordInputRef}
+          placeholder={'password'}
+          type={'password'}
+        ></Input>
+        <Spacing size={15} />
+        <Input width={200} ref={userNameInputRef} placeholder={'user name'}></Input>
+        <Spacing size={15} />
+        <StyleAreement>
+          <StyleLabel>
+            <StyledInput
+              type={'checkbox'}
+              onChange={(e) => {
+                checkHandler1(e.target.checked)
+              }}
+            ></StyledInput>
+            <StyleText>{'서비스 이용약관 동의'}</StyleText>
+          </StyleLabel>
+        </StyleAreement>
+        <StyleAreement>
+          <StyleLabel>
+            <StyledInput
+              type={'checkbox'}
+              onChange={(e) => {
+                checkHandler2(e.target.checked)
+              }}
+            ></StyledInput>
+            <StyleText>{'개인정보 수집 및 활용 동의'}</StyleText>
+          </StyleLabel>
+        </StyleAreement>
+        <Spacing size={22} />
+        <Button buttonType={'Large'} value={'회원가입'} onClick={(e) => submitRegister(e)}></Button>
+        <StyleMoveToRegisterPage onClick={goLoginPage}>
+          {'계정이 이미 있으신가요?'}
+        </StyleMoveToRegisterPage>{' '}
+      </StyleRegisterWrapper>
+    </>
   )
 }
 
@@ -126,11 +154,6 @@ const StyleRegisterWrapper = styled.div<{ image: string }>`
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  /* background-image: url(${(props) => props.image});
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 100%;
-  background-size: 100% 100%; */
 `
 
 const StyleMoveToRegisterPage = styled.button`
