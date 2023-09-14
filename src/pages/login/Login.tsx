@@ -1,10 +1,12 @@
 import styled from '@emotion/styled'
+import { useMutation } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Button from '@/components/common/button'
 import Greetings from '@/components/common/greetings'
 import Input from '@/components/common/input'
+import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
@@ -14,29 +16,39 @@ const Login = () => {
   const navigate = useNavigate()
   const emailInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const goLogin = () => {
-    alert('로그인 성공')
+  const submitLogin = () => {
     if (emailInputRef.current && passwordInputRef.current) {
-      const body = {
-        email: emailInputRef.current.value,
-        password: passwordInputRef.current.value,
-      }
-      axiosAPI
-        .post('/login', body)
-        .then((response) => {
-          console.log(response)
-          localStorage.setItem('token', response.data.token)
-          localStorage.setItem('role', response.data.user.role)
-          localStorage.setItem('isLogin', 'true')
-        })
-        .catch((err) => {
-          if (err.message === 'Request failed with status code 400')
-            alert('아이디와 비밀번호를 확인해주세요!')
-        })
-      navigate('/')
+      setIsLoading(true)
+      loginMutation.mutate()
     }
   }
+
+  const loginPost = async () => {
+    const { data } = await axiosAPI.post('/login', {
+      email: emailInputRef.current?.value,
+      password: passwordInputRef.current?.value,
+    })
+    return data
+  }
+  const loginMutation = useMutation(loginPost, {
+    onSuccess: (data) => {
+      console.log(data)
+      setIsLoading(false)
+      localStorage.setItem('token', data.token)
+      localStorage.setItem('role', data.user.role)
+      localStorage.setItem('isLogin', 'true')
+      alert('로그인 성공')
+      navigate('/')
+    },
+    onError: () => {
+      // if (err.message === 'Request failed with status code 400')
+      setIsLoading(false)
+      alert('아이디와 비밀번호를 확인해주세요!')
+    },
+  })
+
   const goRegisterPage = () => {
     navigate('/register')
   }
@@ -59,18 +71,30 @@ const Login = () => {
     }
   }, [])
 
-  return (
-    <StyleRegisterWrapper>
-      {loading ? <Greetings className={animation ? '' : 'fade-out'} /> : ''}
-      <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
-      <Spacing size={50} />
-      <Input width={200} ref={emailInputRef} placeholder={'email'}></Input>
-      <Spacing size={22} />
-      <Input width={200} ref={passwordInputRef} placeholder={'password'} type={'password'}></Input>
-      <Spacing size={50} />
-      <Button buttonType={'Large'} value={'로그인'} onClick={goLogin}></Button>
-      <StyleMoveToRegisterPage onClick={goRegisterPage}>{'회원가입'}</StyleMoveToRegisterPage>{' '}
-    </StyleRegisterWrapper>
+  return isLoading ? (
+    <Loading />
+  ) : (
+    <>
+      {' '}
+      <StyleRegisterWrapper>
+        {loading ? <Greetings className={animation ? '' : 'fade-out'} /> : ''}
+        <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
+        <Spacing size={50} />
+        <Input width={200} ref={emailInputRef} placeholder={'email'}></Input>
+        <Spacing size={22} />
+        <Input
+          width={200}
+          ref={passwordInputRef}
+          placeholder={'password'}
+          type={'password'}
+        ></Input>
+        <Spacing size={50} />
+        <Button buttonType={'Large'} value={'로그인'} onClick={submitLogin}></Button>
+        <StyleMoveToRegisterPage onClick={goRegisterPage}>
+          {'회원가입'}
+        </StyleMoveToRegisterPage>{' '}
+      </StyleRegisterWrapper>
+    </>
   )
 }
 
