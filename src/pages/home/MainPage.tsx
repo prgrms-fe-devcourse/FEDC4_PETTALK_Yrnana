@@ -29,8 +29,6 @@ const MainPage = ({
     ChannelApi.GET_CHANNEL(),
   )
 
-  console.log(channelListData)
-
   if (isLoading) return <h2>{'로딩 중...'}</h2>
 
   return (
@@ -42,7 +40,6 @@ const MainPage = ({
         <Spacing size={15}></Spacing>
         <ChannelSlider data={channelListData as Channel[]} />
       </TodayChannel>
-      <Spacing size={40}></Spacing>
       <InterestChannel>
         <InterestHeader typo={interestChannelTypo} color={interestChannelColor} />
         <Spacing size={30}></Spacing>
@@ -52,7 +49,15 @@ const MainPage = ({
   )
 }
 
-const MainPageWrapper = styled.div``
+const MainPageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 25%;
+`
 const TodayChannel = styled.div``
 const InterestChannel = styled.div``
 

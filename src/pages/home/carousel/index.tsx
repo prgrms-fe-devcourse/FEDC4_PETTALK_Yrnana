@@ -47,7 +47,6 @@ const Carousel = ({
     return shuffledData
   })
 
-  console.log(randomData)
   return (
     <CarouselContainer justify={'flex-start'} direction={'column'}>
       <ImageSlider ref={sliderRef}>
