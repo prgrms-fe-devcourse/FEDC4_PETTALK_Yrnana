@@ -10,13 +10,16 @@ import { FlexBox } from '@/components/common/flexBox'
 import { Text } from '@/components/common/text'
 import ImageUploader from '@/components/posts/ImageUploader'
 import PostApi from '@/libs/apis/post/postApi'
+import { Post } from '@/libs/apis/post/postType'
+import { queryClient } from '@/libs/apis/queryClient'
 import encodeFileToBase64 from '@/libs/utils/encodeFileToBase64'
 import { theme } from '@/styles/theme'
 
 const NewPostPage = () => {
   const postMutation = useMutation(PostApi.CREATE_POST, {
-    onSuccess: () => {
-      navigate(`/posts/${channelID}`)
+    onSuccess: (newPost: Post) => {
+      queryClient.setQueryData(['posts', newPost._id], newPost)
+      navigate(`/posts/${channelID}/${newPost._id}`)
     },
   })
   const navigate = useNavigate()
@@ -37,12 +40,29 @@ const NewPostPage = () => {
   }
 
   const handleCreatePost = () => {
-    if (title && curImage) {
-      postMutation.mutate({
-        title: title,
-        image: btoa(curImage),
-        channelId: channelID,
-      })
+    if (title && contents) {
+      if (contents.length > 0) {
+        postMutation.mutate({
+          title: {
+            title: title,
+            body: contents,
+          },
+          image: null,
+          channelId: channelID,
+        })
+      }
+      if (curImage && contents.length > 0) {
+        postMutation.mutate({
+          title: {
+            title: title,
+            body: contents,
+          },
+          image: btoa(curImage),
+          channelId: channelID,
+        })
+      }
+    } else {
+      alert('게시글 내용이 비었습니다!')
     }
   }
   return (
