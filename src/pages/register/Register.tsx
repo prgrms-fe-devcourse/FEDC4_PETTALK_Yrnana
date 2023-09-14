@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { useMutation } from '@tanstack/react-query'
-import { useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import BackgroundImage from '@/assets/images/Background-nofootPrint.svg'
@@ -20,7 +20,9 @@ const Register = () => {
   const [checkBox1, setCheckBox1] = useState(false)
   const [checkBox2, setCheckBox2] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
+  useEffect(() => {
+    console.log(checkBox1, checkBox2)
+  }, [checkBox1, checkBox2])
   const formValidation = () => {
     if (emailInputRef.current && emailInputRef.current.value == '') {
       alert('이메일을 입력하세요')
@@ -47,7 +49,8 @@ const Register = () => {
       alert('입력이 올바르지 않습니다.')
       return
     }
-    if (!(checkBox1 && checkBox2)) {
+
+    if (checkBox1 == false || checkBox2 == false) {
       alert('약관 동의에 체크해주세요.')
       return
     }
@@ -82,8 +85,12 @@ const Register = () => {
   const goLoginPage = () => {
     navigate('/login')
   }
-  const checkHandler = (index: number) => {
-    index == 1 ? setCheckBox1(!checkBox1) : setCheckBox2(!checkBox2)
+  const checkHandler1 = (checked: boolean) => {
+    checked ? setCheckBox1(true) : setCheckBox1(false)
+  }
+
+  const checkHandler2 = (checked: boolean) => {
+    checked ? setCheckBox2(true) : setCheckBox2(false)
   }
   return isLoading ? (
     <Loading />
@@ -107,8 +114,8 @@ const Register = () => {
           <StyleLabel>
             <StyledInput
               type={'checkbox'}
-              onChange={() => {
-                checkHandler(1)
+              onChange={(e) => {
+                checkHandler1(e.target.checked)
               }}
             ></StyledInput>
             <StyleText>{'서비스 이용약관 동의'}</StyleText>
@@ -118,8 +125,8 @@ const Register = () => {
           <StyleLabel>
             <StyledInput
               type={'checkbox'}
-              onChange={() => {
-                checkHandler(2)
+              onChange={(e) => {
+                checkHandler2(e.target.checked)
               }}
             ></StyledInput>
             <StyleText>{'개인정보 수집 및 활용 동의'}</StyleText>
