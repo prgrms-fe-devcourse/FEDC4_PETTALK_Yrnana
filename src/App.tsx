@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import Layout from '@/components/layouts/Layout'
 import ChattingRouter from '@/pages/chatting'
+import ExamplePage from '@/pages/Example'
 import FriendsRouter from '@/pages/friends'
 import ChannelsRouter from '@/pages/home'
 import LoginPage from '@/pages/login'
@@ -14,7 +15,7 @@ const App = () => {
     <Routes>
       <Route element={<Layout />}>
         <Route path={'*'} element={<ChannelsRouter />} />
-        <Route path={'/posts'} element={<PostRouter />} />
+        <Route path={'/posts/*'} element={<PostRouter />} />
         <Route path={'/friends'} element={<FriendsRouter />}></Route>
         <Route path={'/myprofile'} element={<MyProfileRouter />}></Route>
         <Route path={'/chatting'} element={<ChattingRouter />}></Route>

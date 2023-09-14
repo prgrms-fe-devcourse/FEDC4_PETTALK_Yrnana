@@ -32,4 +32,5 @@ const AppBarNavTemplateWrapper = styled.div`
 const ChildrenWrapper = styled.div`
   padding: 0px 10px;
   box-sizing: border-box;
+  height: calc(var(--vh, 1vh) * 100 - 120px);
 `
