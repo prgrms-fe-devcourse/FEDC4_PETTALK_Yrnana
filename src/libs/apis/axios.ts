@@ -8,18 +8,18 @@ export const axiosAPI = axios.create({
 })
 
 // Response interceptor
-function interceptorResponseFulfilled(res: AxiosResponse) {
-  if (200 <= res.status && res.status < 300) {
-    return res
-  }
+// function interceptorResponseFulfilled(res: AxiosResponse) {
+//   if (200 <= res.status && res.status < 300) {
+//     return res
+//   }
 
-  return Promise.reject(res)
-}
+//   return Promise.reject(res)
+// }
 
-function interceptorResponseRejected(error: AxiosError<ApiErrorScheme>) {
-  if (error.response?.data?.message) {
-    return Promise.reject(new ApiException(error.response.data, error.response.status))
-  }
-}
+// function interceptorResponseRejected(error: AxiosError<ApiErrorScheme>) {
+//   if (error.response?.data?.message) {
+//     return Promise.reject(new ApiException(error.response.data, error.response.status))
+//   }
+// }
 
-axiosAPI.interceptors.response.use(interceptorResponseFulfilled, interceptorResponseRejected)
+// axiosAPI.interceptors.response.use(interceptorResponseFulfilled, interceptorResponseRejected)

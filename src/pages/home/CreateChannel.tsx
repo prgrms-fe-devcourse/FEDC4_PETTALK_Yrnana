@@ -13,11 +13,7 @@ import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
 const CreateChannel = () => {
   const [openChannel, setOpenChannel] = useState(false)
   const navigate = useNavigate()
-  const ouathRegisterMutation = useMutation(ChannelApi.CREATE_CHANNEL, {
-    onSuccess: (data: number) => {
-      alert('채널 생성이 완료되었습니다!')
-    },
-  })
+  const ouathRegisterMutation = useMutation(ChannelApi.CREATE_CHANNEL)
   const channelTitleRef = useRef<HTMLInputElement>(null)
   const channelDesRef = useRef<HTMLInputElement>(null)
 

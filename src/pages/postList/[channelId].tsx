@@ -11,15 +11,11 @@ const PostListPage = () => {
   const navigate = useNavigate()
   return (
     <FlexBox direction={'column'} align={'center'}>
-      <FlexBox direction={'row'} gap={10}>
-        <Input width={300} placeholder={'작성자/글 제목으로 검색 가능합니다.'} />
+      <FlexBox direction={'row'} gap={10} fullWidth={true}>
+        <Input placeholder={'작성자/글 제목으로 검색 가능합니다.'} />
         <Search />
-        <NewPostButton>
-          <Text
-            typo={'Headline_20'}
-            as={'span'}
-            onClick={() => navigate(`/posts/${channelID}/create`)}
-          >
+        <NewPostButton onClick={() => navigate(`/posts/${channelID}/create`)}>
+          <Text typo={'Headline_20'} as={'span'}>
             {'＋'}
           </Text>
         </NewPostButton>
@@ -33,10 +29,6 @@ export default PostListPage
 const NewPostButton = styled.button`
   width: 50px;
   height: 30px;
-  margin-left: 10px;
   border-radius: 10px;
   background-color: ${theme.palette.CORAL};
-  display: flex;
-  align-items: center;
-  justify-content: center;
 `
