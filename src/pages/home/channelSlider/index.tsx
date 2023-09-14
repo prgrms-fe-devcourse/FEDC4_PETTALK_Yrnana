@@ -1,13 +1,14 @@
 import styled from '@emotion/styled'
+import { ComponentProps } from 'react'
 
 import { Channel } from '@/libs/apis/channel/channelType'
 import Carousel from '@/pages/home/carousel'
 
-type ChannelSliderProps = {
+interface ChannelSliderProps extends ComponentProps<'div'> {
   data: Channel[]
 }
 
-const ChannelSlider = ({ data }: ChannelSliderProps) => {
+const ChannelSlider = ({ data: channelListData }: ChannelSliderProps) => {
   const carouselItems = [
     'https://picsum.photos/480/190/?random',
     'https://picsum.photos/400/190/?random',
@@ -17,7 +18,7 @@ const ChannelSlider = ({ data }: ChannelSliderProps) => {
 
   return (
     <CarouselWrapper>
-      <Carousel images={carouselItems} />
+      <Carousel images={carouselItems} data={channelListData} />
     </CarouselWrapper>
   )
 }

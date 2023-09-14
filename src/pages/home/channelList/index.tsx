@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { ComponentProps } from 'react'
 
 import CubeButton from '@/components/common/cubeButton'
 import { FlexBox } from '@/components/common/flexBox'
@@ -6,7 +7,7 @@ import { Channel } from '@/libs/apis/channel/channelType'
 
 import { channelMock } from '../../../mock/channel'
 
-type ChannelListProps = {
+interface ChannelListProps extends ComponentProps<'div'> {
   data: Channel[]
 }
 

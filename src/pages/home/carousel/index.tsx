@@ -1,10 +1,25 @@
 import styled from '@emotion/styled'
-import { useEffect, useRef, useState } from 'react'
+import { ComponentProps, useEffect, useRef, useState } from 'react'
 
 import { FlexBox } from '@/components/common/flexBox'
+import { Text } from '@/components/common/text'
+import { Channel } from '@/libs/apis/channel/channelType'
 import { palette } from '@/styles/palette'
+import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'
 
-const Carousel = ({ images }: { images: string[] }) => {
+interface CarouselProps extends ComponentProps<'div'> {
+  images: string[]
+  data: Channel[]
+  channelTypo?: KeyOfTypo
+  channelColor?: KeyOfPalette
+}
+
+const Carousel = ({
+  images,
+  data: channelListData,
+  channelTypo = 'Headline_20',
+  channelColor = 'BLACK',
+}: CarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(0)
   const sliderRef = useRef<HTMLDivElement>(null)
 
@@ -27,12 +42,23 @@ const Carousel = ({ images }: { images: string[] }) => {
     }
   }, [activeIndex])
 
+  const [randomData] = useState<Channel[]>(() => {
+    const shuffledData = [...channelListData].sort(() => Math.random() - 0.5).slice(0, 4)
+    return shuffledData
+  })
+
+  console.log(randomData)
   return (
     <CarouselContainer justify={'flex-start'} direction={'column'}>
       <ImageSlider ref={sliderRef}>
-        {images.map((image, index) => (
-          <CarouselItem key={index}>
-            <Image src={image} alt={`Image ${index}`} />
+        {randomData.map((channel, index) => (
+          <CarouselItem key={channel._id}>
+            <Image src={images[index]} alt={`Image ${index}`} />
+            <SpanWrapper>
+              <Text typo={channelTypo} color={channelColor}>
+                {channel.name}
+              </Text>
+            </SpanWrapper>
           </CarouselItem>
         ))}
       </ImageSlider>
@@ -61,6 +87,12 @@ const CarouselItem = styled.div`
   flex: 0 0 auto;
   width: 100%;
   transition: transform 0.3s ease-in-out;
+  position: relative;
+`
+const SpanWrapper = styled.div`
+  position: absolute;
+  bottom: 50px;
+  right: 20px;
 `
 
 const ImageSlider = styled.div`
