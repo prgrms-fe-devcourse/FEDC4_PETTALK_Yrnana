@@ -14,7 +14,7 @@ const App = () => {
     <Routes>
       <Route element={<Layout />}>
         <Route path={'*'} element={<ChannelsRouter />} />
-        <Route path={'/posts'} element={<PostRouter />} />
+        <Route path={'/posts/*'} element={<PostRouter />} />
         <Route path={'/friends'} element={<FriendsRouter />}></Route>
         <Route path={'/myprofile'} element={<MyProfileRouter />}></Route>
         <Route path={'/chatting'} element={<ChattingRouter />}></Route>
