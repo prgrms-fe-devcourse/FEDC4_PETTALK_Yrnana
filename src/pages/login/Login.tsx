@@ -21,29 +21,30 @@ const Login = () => {
   const submitLogin = () => {
     if (emailInputRef.current && passwordInputRef.current) {
       setIsLoading(true)
-      loginMutation.mutate()
+      const body = {
+        email: emailInputRef.current.value,
+        password: passwordInputRef.current.value,
+      }
+      console.log(body)
+      loginMutation.mutate(body)
     }
   }
 
-  const loginPost = async () => {
-    const { data } = await axiosAPI.post('/login', {
-      email: emailInputRef.current?.value,
-      password: passwordInputRef.current?.value,
-    })
-    return data
+  const loginPost = async (body: object) => {
+    return await axiosAPI.post('/login', body)
   }
-  const loginMutation = useMutation(loginPost, {
+
+  const loginMutation = useMutation((body: object) => loginPost(body), {
     onSuccess: (data) => {
       console.log(data)
       setIsLoading(false)
-      localStorage.setItem('token', data.token)
-      localStorage.setItem('role', data.user.role)
+      localStorage.setItem('token', data.data.token)
+      localStorage.setItem('role', data.data.user.role)
       localStorage.setItem('isLogin', 'true')
       alert('로그인 성공')
       navigate('/')
     },
     onError: () => {
-      // if (err.message === 'Request failed with status code 400')
       setIsLoading(false)
       alert('아이디와 비밀번호를 확인해주세요!')
     },

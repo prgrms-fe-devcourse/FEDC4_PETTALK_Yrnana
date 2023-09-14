@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { useMutation } from '@tanstack/react-query'
+import { AxiosResponse } from 'axios'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,6 +10,7 @@ import Input from '@/components/common/input'
 import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
+import { SignUpResponse, User } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
 import { theme } from '@/styles/theme'
 
@@ -20,9 +22,9 @@ const Register = () => {
   const [checkBox1, setCheckBox1] = useState(false)
   const [checkBox2, setCheckBox2] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  useEffect(() => {
-    console.log(checkBox1, checkBox2)
-  }, [checkBox1, checkBox2])
+
+  useEffect(() => {}, [checkBox1, checkBox2])
+
   const formValidation = () => {
     if (emailInputRef.current && emailInputRef.current.value == '') {
       alert('이메일을 입력하세요')
@@ -45,6 +47,7 @@ const Register = () => {
   }
 
   const submitRegister = async (e: React.FormEvent) => {
+    e.preventDefault()
     if (!formValidation()) {
       alert('입력이 올바르지 않습니다.')
       return
@@ -57,24 +60,24 @@ const Register = () => {
     setIsLoading(true)
     if (formValidation()) {
       if (emailInputRef.current && passwordInputRef.current && userNameInputRef.current) {
-        registerMutation.mutate()
+        const body = {
+          email: emailInputRef.current.value,
+          fullName: userNameInputRef.current.value,
+          password: passwordInputRef.current.value,
+        }
+        registerMutation.mutate(body)
       }
     }
   }
-  const registerPost = async () => {
-    const { data } = await axiosAPI.post('/signup', {
-      email: emailInputRef.current?.value,
-      fullName: userNameInputRef.current?.value,
-      password: passwordInputRef.current?.value,
-    })
-    return data
+  const registerPost = async (body: object): Promise<SignUpResponse | undefined> => {
+    return await axiosAPI.post('/signup', body)
   }
-  const registerMutation = useMutation(registerPost, {
+  const registerMutation = useMutation((body: object) => registerPost(body), {
     onSuccess: (data) => {
       console.log(data)
       setIsLoading(false)
       alert('회원가입 성공!')
-      // navigate('/login')
+      navigate('/login')
     },
     onError: () => {
       alert('회원가입 실패! 이미 있는 계정입니다.')
