@@ -23,10 +23,21 @@ type ButtonVariantType = {
   }
 }
 
-const Button = ({ buttonType, value, onClick, backgroundColor = 'BEIGE' }: ButtonProps) => {
+const Button = ({
+  buttonType,
+  value,
+  onClick,
+  backgroundColor = 'BEIGE',
+  ...props
+}: ButtonProps) => {
   return (
     <StyleButtonWrapper>
-      <StyleButton buttonType={buttonType} onClick={onClick} backgroundColor={backgroundColor}>
+      <StyleButton
+        buttonType={buttonType}
+        onClick={onClick}
+        backgroundColor={backgroundColor}
+        {...props}
+      >
         <Text typo={`${BUTTON_SHAPE_TYPE[buttonType].typo}`}>{value}</Text>
       </StyleButton>
     </StyleButtonWrapper>
