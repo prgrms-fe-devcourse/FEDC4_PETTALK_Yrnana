@@ -1,19 +1,16 @@
 import styled from '@emotion/styled'
-import { useQuery } from '@tanstack/react-query'
 
 import CubeButton from '@/components/common/cubeButton'
 import { FlexBox } from '@/components/common/flexBox'
-import Spacing from '@/components/common/spacing'
-import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
+import { Channel } from '@/libs/apis/channel/channelType'
 
 import { channelMock } from '../../../mock/channel'
 
-const ChannelList = () => {
-  const { data, isLoading } = useQuery(['channels'], () => ChannelApi.GET_CHANNEL())
+type ChannelListProps = {
+  data: Channel[]
+}
 
-  console.log(data)
-  if (isLoading) return <h2>{'로딩 중...'}</h2>
-
+const ChannelList = ({ data }: ChannelListProps) => {
   return (
     <ChannelWrapper>
       {data &&

@@ -5,8 +5,9 @@ import { ComponentProps } from 'react'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
+import { Channel } from '@/libs/apis/channel/channelType'
 import ChannelList from '@/pages/home/channelList/index.tsx'
-import TodayChannelSlider from '@/pages/home/channelSlider'
+import ChannelSlider from '@/pages/home/channelSlider'
 import InterestHeader from '@/pages/home/interestHeader/index.tsx'
 import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'
 
@@ -24,6 +25,14 @@ const MainPage = ({
   interestChannelColor = 'BLACK',
   ...props
 }: MainPageProps) => {
+  const { data: channelListData, isLoading } = useQuery(['channels'], () =>
+    ChannelApi.GET_CHANNEL(),
+  )
+
+  console.log(channelListData)
+
+  if (isLoading) return <h2>{'로딩 중...'}</h2>
+
   return (
     <MainPageWrapper {...props}>
       <TodayChannel>
@@ -31,13 +40,13 @@ const MainPage = ({
           {'오늘의 채널'}
         </Text>
         <Spacing size={15}></Spacing>
-        <TodayChannelSlider />
+        <ChannelSlider data={channelListData as Channel[]} />
       </TodayChannel>
       <Spacing size={40}></Spacing>
       <InterestChannel>
         <InterestHeader typo={interestChannelTypo} color={interestChannelColor} />
         <Spacing size={30}></Spacing>
-        <ChannelList />
+        <ChannelList data={channelListData as Channel[]} />
       </InterestChannel>
     </MainPageWrapper>
   )

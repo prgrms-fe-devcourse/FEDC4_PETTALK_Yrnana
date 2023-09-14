@@ -1,8 +1,13 @@
 import styled from '@emotion/styled'
 
+import { Channel } from '@/libs/apis/channel/channelType'
 import Carousel from '@/pages/home/carousel'
 
-const ChannelSlider = () => {
+type ChannelSliderProps = {
+  data: Channel[]
+}
+
+const ChannelSlider = ({ data }: ChannelSliderProps) => {
   const carouselItems = [
     'https://picsum.photos/480/190/?random',
     'https://picsum.photos/400/190/?random',
