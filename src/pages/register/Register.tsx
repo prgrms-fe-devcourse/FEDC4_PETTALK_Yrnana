@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { useMutation } from '@tanstack/react-query'
-import { AxiosResponse } from 'axios'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import BackgroundImage from '@/assets/images/Background-nofootPrint.svg'
@@ -10,7 +9,7 @@ import Input from '@/components/common/input'
 import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
-import { SignUpResponse, User } from '@/libs/apis/auth/authType'
+import { SignUpResponse } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
 import { theme } from '@/styles/theme'
 

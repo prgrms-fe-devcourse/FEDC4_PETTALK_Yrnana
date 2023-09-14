@@ -42,6 +42,11 @@ const Login = () => {
       localStorage.setItem('role', data.data.user.role)
       localStorage.setItem('isLogin', 'true')
       alert('로그인 성공')
+      if (localStorage.getItem('token')) {
+        axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem(
+          'token',
+        )}`
+      }
       navigate('/')
     },
     onError: () => {
