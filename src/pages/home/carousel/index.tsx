@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { ComponentProps, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 
 import { FlexBox } from '@/components/common/flexBox'
 import { Text } from '@/components/common/text'
@@ -52,12 +53,14 @@ const Carousel = ({
       <ImageSlider ref={sliderRef}>
         {randomData.map((channel, index) => (
           <CarouselItem key={channel._id}>
-            <Image src={images[index]} alt={`Image ${index}`} />
-            <SpanWrapper>
-              <Text typo={channelTypo} color={channelColor}>
-                {channel.name}
-              </Text>
-            </SpanWrapper>
+            <Link to={`/post/${channel._id}`} style={{ textDecoration: 'none' }}>
+              <Image src={images[index]} alt={`Image ${index}`} />
+              <SpanWrapper>
+                <Text typo={channelTypo} color={channelColor}>
+                  {channel.name}
+                </Text>
+              </SpanWrapper>
+            </Link>
           </CarouselItem>
         ))}
       </ImageSlider>
