@@ -30,3 +30,12 @@ export type Comment = {
   createdAt: string
   updatedAt: string
 }
+
+export type CreatePostRequest = {
+  title: {
+    title: string
+    body: string
+  }
+  image: string | null
+  channelId: string
+}
