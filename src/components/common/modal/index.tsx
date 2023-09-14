@@ -7,12 +7,14 @@ import { toast, ToastContainer } from 'react-toastify'
 import { palette } from '@/styles/palette'
 import { theme } from '@/styles/theme'
 
+type ToastType = 'info' | 'success' | 'warning' | 'error'
 interface ModalProps {
   modalText: string
   time?: number
+  type?: ToastType
 }
-const Modal = ({ modalText, time = 3000 }: ModalProps) => {
-  const notify = () => toast(modalText)
+const Modal = ({ modalText, time = 3000, type = 'info' }: ModalProps) => {
+  const notify = () => toast(modalText, { type })
   useEffect(() => {
     notify()
   }, [])
