@@ -33,6 +33,6 @@ export type Comment = {
 
 export type CreatePostRequest = {
   title: string
-  image: BinaryData | null
+  image: string | null
   channelId: string
 }

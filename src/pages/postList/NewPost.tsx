@@ -10,17 +10,17 @@ import { FlexBox } from '@/components/common/flexBox'
 import { Text } from '@/components/common/text'
 import ImageUploader from '@/components/posts/ImageUploader'
 import PostApi from '@/libs/apis/post/postApi'
-import { queryClient } from '@/libs/apis/queryClient'
 import encodeFileToBase64 from '@/libs/utils/encodeFileToBase64'
 import { theme } from '@/styles/theme'
+
 const NewPostPage = () => {
-  const { mutate } = useMutation(PostApi.CREATE_POST, {
-    onSuccess: (newPost) => {
+  const postMutation = useMutation(PostApi.CREATE_POST, {
+    onSuccess: () => {
       navigate(`/posts/${channelID}`)
     },
   })
   const navigate = useNavigate()
-  const channelID = useLocation().pathname.split('/')[1]
+  const channelID = useLocation().pathname.split('/')[2]
   const [curImage, setCurImage] = useState<string | null>(null)
   const [title, setTitle] = useState<string | undefined>('')
   const [contents, setContents] = useState<string | undefined>('')
@@ -34,6 +34,16 @@ const NewPostPage = () => {
 
   const deleteImageHandler = () => {
     setCurImage(null)
+  }
+
+  const handleCreatePost = () => {
+    if (title && curImage) {
+      postMutation.mutate({
+        title: title,
+        image: btoa(curImage),
+        channelId: channelID,
+      })
+    }
   }
   return (
     <NewPostContainer>
@@ -78,7 +88,7 @@ const NewPostPage = () => {
         />
       </form>
       <ButtonContainer>
-        <Button buttonType={'ExtraLarge'} value={'글 작성하기'} />
+        <Button buttonType={'ExtraLarge'} value={'글 작성하기'} onClick={handleCreatePost} />
       </ButtonContainer>
     </NewPostContainer>
   )
