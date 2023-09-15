@@ -2,13 +2,13 @@ import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
 import { ComponentProps } from 'react'
 
+import ChannelList from '@/components/channel/channelList'
+import ChannelSlider from '@/components/channel/channelSlider'
+import InterestHeader from '@/components/channel/interestHeader'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
 import { Channel } from '@/libs/apis/channel/channelType'
-import ChannelList from '@/pages/home/channelList/index.tsx'
-import ChannelSlider from '@/pages/home/channelSlider'
-import InterestHeader from '@/pages/home/interestHeader/index.tsx'
 import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'
 
 interface MainPageProps extends ComponentProps<'div'> {

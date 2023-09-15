@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
 
+import Carousel from '@/components/channel/carousel'
 import { Channel } from '@/libs/apis/channel/channelType'
-import Carousel from '@/pages/home/carousel'
 
 interface ChannelSliderProps extends ComponentProps<'div'> {
   data: Channel[]
