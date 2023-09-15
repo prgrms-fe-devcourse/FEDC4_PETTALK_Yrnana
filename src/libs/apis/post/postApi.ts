@@ -12,6 +12,10 @@ const PostApi = {
     const response = await axiosAPI.get(`/posts/${postId}`)
     return response.data
   },
+  GET_POSTS: async (channelId: string): Promise<Post[]> => {
+    const response = await axiosAPI.get(`/posts/channel/${channelId}`)
+    return response.data
+  },
 }
 
 export default PostApi
