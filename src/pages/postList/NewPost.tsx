@@ -43,20 +43,16 @@ const NewPostPage = () => {
     if (title && contents) {
       if (contents.length > 0) {
         postMutation.mutate({
-          title: {
-            title: title,
-            body: contents,
-          },
+          title: title,
+          body: contents,
           image: null,
           channelId: channelID,
         })
       }
       if (curImage && contents.length > 0) {
         postMutation.mutate({
-          title: {
-            title: title,
-            body: contents,
-          },
+          title: title,
+          body: contents,
           image: btoa(curImage),
           channelId: channelID,
         })

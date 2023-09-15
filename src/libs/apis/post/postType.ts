@@ -32,10 +32,8 @@ export type Comment = {
 }
 
 export type CreatePostRequest = {
-  title: {
-    title: string
-    body: string
-  }
+  title: string
+  body: string
   image: string | null
   channelId: string
 }
