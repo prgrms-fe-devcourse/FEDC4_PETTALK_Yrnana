@@ -18,7 +18,7 @@ const App = () => {
       <Route element={<Layout />}>
         <Route element={<PrivateRoute auth={true} />}>
           <Route path={'*'} element={<ChannelsRouter />} />
-          <Route path={'/posts'} element={<PostRouter />} />
+          <Route path={'/posts/*'} element={<PostRouter />} />
           <Route path={'/friends'} element={<FriendsRouter />}></Route>
           <Route path={'/myprofile'} element={<MyProfileRouter />}></Route>
           <Route path={'/chatting'} element={<ChattingRouter />}></Route>
