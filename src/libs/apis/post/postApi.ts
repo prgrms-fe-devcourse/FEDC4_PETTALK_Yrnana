@@ -8,6 +8,10 @@ const PostApi = {
     const response = await axiosAPI.post('posts/create', payload)
     return response.data
   },
+  DETAIL_POST: async (postId: string): Promise<Post> => {
+    const response = await axiosAPI.get(`/posts/${postId}`)
+    return response.data
+  },
 }
 
 export default PostApi
