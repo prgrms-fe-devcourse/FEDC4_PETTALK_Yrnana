@@ -53,7 +53,7 @@ const Carousel = ({
       <ImageSlider ref={sliderRef}>
         {randomData.map((channel, index) => (
           <CarouselItem key={channel._id}>
-            <Link to={`/post/${channel._id}`} style={{ textDecoration: 'none' }}>
+            <Link to={`/posts/${channel._id}`} style={{ textDecoration: 'none' }}>
               <Image src={images[index]} alt={`Image ${index}`} />
               <SpanWrapper>
                 <Text typo={channelTypo} color={channelColor}>
