@@ -12,6 +12,7 @@ import { theme } from '@/styles/theme'
 const PostListPage = () => {
   const channelID = useLocation().pathname.split('/')[2]
   const { data, isLoading } = useQuery(['posts'], () => PostApi.GET_POSTS(channelID))
+  console.log(data)
   const navigate = useNavigate()
   return (
     <PostListPageWrapper>
