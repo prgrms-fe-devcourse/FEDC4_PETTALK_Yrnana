@@ -29,8 +29,16 @@ const PostListPage = () => {
       ) : (
         <FlexBox gap={20} direction={'column'}>
           {data?.map((post, index) => (
-            // eslint-disable-next-line prettier/prettier
-            <PostCard commentsNum={post.comments.length} likesNum={post.likes.length} key={index} title={post.title} author={post.author} content={'크하하하'} createdAt={post.createdAt} />
+            <PostCard
+              onClick={() => navigate(`/posts/${channelID}/${post._id}`)}
+              commentsNum={post.comments.length}
+              likesNum={post.likes.length}
+              key={index}
+              title={post.title}
+              author={post.author}
+              content={'크하하하'}
+              createdAt={post.createdAt}
+            />
           ))}
         </FlexBox>
       )}

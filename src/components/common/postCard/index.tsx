@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { ComponentProps } from 'react'
 
 import { FlexBox } from '@/components/common/flexBox'
 import ListRow from '@/components/common/listRow'
@@ -6,7 +7,7 @@ import { Text } from '@/components/common/text'
 import { User } from '@/libs/apis/auth/authType'
 import { theme } from '@/styles/theme'
 
-interface PostCardProps {
+interface PostCardProps extends ComponentProps<'div'> {
   likesNum: number
   commentsNum: number
   image?: string
@@ -28,9 +29,10 @@ const PostCard = ({
   content = '내용을 입력합니다 내용내용',
   author,
   createdAt = '2023.03.03',
+  ...props
 }: PostCardProps) => {
   return (
-    <PostCardWrapper>
+    <PostCardWrapper {...props}>
       <ListRow
         leftImage={<img src={'https://loremflickr.com/30/30/dog​​'} alt={'profileImage'} />}
         mainText={
@@ -71,6 +73,7 @@ export default PostCard
 
 const PostCardWrapper = styled.div`
   display: flex;
+  cursor: pointer;
   flex-direction: column;
   width: 331px;
   padding: 10px;
