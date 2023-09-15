@@ -18,7 +18,7 @@ const ChannelList = ({ data }: ChannelListProps) => {
         data.map((channel) => {
           return (
             <FlexBox key={channel._id}>
-              <CubeButton content={channel.name} path={`/post/${channel._id}`}></CubeButton>
+              <CubeButton content={channel.name} path={`/posts/${channel._id}`}></CubeButton>
             </FlexBox>
           )
         })}

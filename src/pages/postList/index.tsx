@@ -9,7 +9,7 @@ const PostRouter = () => {
   return (
     <Routes>
       <Route
-        path={'/:channelId/*'}
+        path={':channelId/*'}
         element={
           <AppBarNavTemplate hasNav={true}>
             <PostListPage />
@@ -24,14 +24,14 @@ const PostRouter = () => {
           </AppBarNavTemplate>
         }
       />
-      <Route
+      {/* <Route
         path={'/:channeId/create/:postId/*'}
         element={
           <AppBarNavTemplate hasNav={false} title={'게시글 상세보기'}>
             <PostDetailPage />
           </AppBarNavTemplate>
         }
-      ></Route>
+      ></Route> */}
     </Routes>
   )
 }

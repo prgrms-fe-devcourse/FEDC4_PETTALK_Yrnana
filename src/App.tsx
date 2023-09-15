@@ -16,10 +16,9 @@ const App = () => {
   return (
     <Routes>
       <Route element={<Layout />}>
-
         <Route element={<PrivateRoute auth={true} />}>
           <Route path={'*'} element={<ChannelsRouter />} />
-          <Route path={'/posts'} element={<PostRouter />} />
+          <Route path={'/posts/*'} element={<PostRouter />} />
           <Route path={'/friends'} element={<FriendsRouter />}></Route>
           <Route path={'/myprofile'} element={<MyProfileRouter />}></Route>
           <Route path={'/chatting'} element={<ChattingRouter />}></Route>
@@ -31,7 +30,6 @@ const App = () => {
         <Route element={<PrivateRoute auth={true} superAuth={true} />}>
           <Route path={'/create'} element={<CreateChannel />} />
         </Route>
-
       </Route>
     </Routes>
   )
