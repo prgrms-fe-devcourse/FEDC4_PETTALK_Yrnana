@@ -24,27 +24,43 @@ const PostDetailPage = () => {
     <DetailContainer>
       <Title>
         <Text typo={'Headline_25'}>{postData.title}</Text>
-        <Date>{data?.createdAt}</Date>
+        <Text typo={'Caption_11'} color={'GRAY500'}>
+          {data?.createdAt.slice(0, 10)}
+        </Text>
       </Title>
       <Image src={data?.image} />
       <ContentContainer>
-        <Content>{postData.body}</Content>
+        <Content>
+          <Text typo={'Body_16'} color={'BLACK'}>
+            {postData.body}
+          </Text>
+        </Content>
         <Info>
-          <Favorite />
-          {data?.likes.length}
-          <Comment />
-          {data?.comments.length}
+          <Interaction>
+            <Favorite />
+            <Text typo={'Caption_11'} color={'GRAY500'}>
+              {data?.likes.length}
+            </Text>
+            <Comment />
+            <Text typo={'Caption_11'} color={'GRAY500'}>
+              {data?.comments.length}
+            </Text>
+          </Interaction>
           <User>
             <ProfileImage size={50} />
-            <Author>{data?.author.fullName}</Author>
-            <Button buttonType={'Small'} value={'팔로우'} />
+            <UserDetail>
+              <Text typo={'Caption_11'} color={'GRAY600'}>
+                {data?.author.fullName}
+              </Text>
+              <Button buttonType={'Small'} value={'팔로우'} />
+            </UserDetail>
           </User>
         </Info>
         <Comments></Comments>
-        <WriteComments>
-          <textarea></textarea>
+        <WriteComment>
+          <StyledTextArea placeholder={'댓글을 입력해주세요.'} />
           <Button buttonType={'Medium'} value={'작성하기'} />
-        </WriteComments>
+        </WriteComment>
       </ContentContainer>
     </DetailContainer>
   )
@@ -52,40 +68,92 @@ const PostDetailPage = () => {
 
 const DetailContainer = styled.div`
   width: 100%;
+  background-color: #f6f6f6;
+  border-radius: 20px;
 `
 
 const Title = styled.div`
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px;
 `
-
-const Date = styled.div``
 
 const Image = styled.img`
   width: 100%;
+  border-radius: 20px;
 `
 
 const ContentContainer = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
 `
 
 const Content = styled.div`
   width: 100%;
+  padding: 20px;
 `
 
 const Info = styled.div`
   width: 100%;
+  display: flex;
+  padding: 20px;
+  justify-content: space-between;
 `
 
-const User = styled.div``
+const Interaction = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: flex-end;
+  gap: 2px;
+`
 
-const Author = styled.div``
+const User = styled.div`
+  display: flex;
+  gap: 5px;
+`
+
+const UserDetail = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+`
 
 const Comments = styled.div`
   width: 100%;
+  height: 100px;
 `
 
-const WriteComments = styled.form`
+const WriteComment = styled.form`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin: 10px;
+`
+
+const StyledTextArea = styled.textarea`
+  box-sizing: border-box;
+  border: none;
+  resize: none;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
   width: 100%;
+  height: 100px;
+  line-height: 100%;
+
+  ${({ theme }) => theme.typo.Body_16};
+  color: ${({ theme }) => theme.palette.GRAY700};
+
+  ::placeholder {
+    ${({ theme }) => theme.typo.Body_16}
+    color: ${({ theme }) => theme.palette.GRAY400};
+  }
 `
 
 export default PostDetailPage
