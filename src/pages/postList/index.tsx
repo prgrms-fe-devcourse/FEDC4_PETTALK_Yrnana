@@ -25,7 +25,7 @@ const PostRouter = () => {
         }
       />
       <Route
-        path={'/:channeId/create/:postId/*'}
+        path={'/:channeId/:postId/*'}
         element={
           <AppBarNavTemplate hasNav={false} title={'게시글 상세보기'}>
             <PostDetailPage />
