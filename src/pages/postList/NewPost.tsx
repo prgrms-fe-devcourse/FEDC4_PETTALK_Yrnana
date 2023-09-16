@@ -22,6 +22,7 @@ const NewPostPage = () => {
       navigate(`/posts/${channelID}/${newPost._id}`)
     },
   })
+  const [uploadFile, setUploadFile] = useState<File | null>(null)
   const navigate = useNavigate()
   const channelID = useLocation().pathname.split('/')[2]
   const [curImage, setCurImage] = useState<string | null>(null)
@@ -32,6 +33,7 @@ const NewPostPage = () => {
   }
 
   const uploadHandler = (image: File) => {
+    setUploadFile(image)
     encodeFileToBase64(image, setCurImage)
   }
 
@@ -40,23 +42,16 @@ const NewPostPage = () => {
   }
 
   const handleCreatePost = () => {
+    const formData = new FormData()
     if (title && contents) {
-      if (contents.length > 0) {
-        postMutation.mutate({
-          title: title,
-          body: contents,
-          image: null,
-          channelId: channelID,
-        })
+      const json = {
+        title: title,
+        body: contents,
       }
-      if (curImage && contents.length > 0) {
-        postMutation.mutate({
-          title: title,
-          body: contents,
-          image: btoa(curImage),
-          channelId: channelID,
-        })
-      }
+      formData.append('title', JSON.stringify(json))
+      formData.append('channelId', channelID)
+      if (uploadFile) formData.append('image', uploadFile, 'myfile')
+      postMutation.mutate(formData)
     } else {
       alert('게시글 내용이 비었습니다!')
     }
