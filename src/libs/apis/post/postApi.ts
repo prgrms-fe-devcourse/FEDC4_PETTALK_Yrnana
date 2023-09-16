@@ -1,10 +1,8 @@
 import { axiosAPI } from '@/libs/apis/axios'
-//import { CreatePostRequest } from '@/libs/apis/post/postType'
 import { Post } from '@/libs/apis/post/postType'
 
 const PostApi = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  CREATE_POST: async (payload: any): Promise<Post> => {
+  CREATE_POST: async (payload: FormData): Promise<Post> => {
     axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     const response = await axiosAPI.post('posts/create', payload)
     return response.data

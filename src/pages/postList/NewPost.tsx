@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useMutation } from '@tanstack/react-query'
@@ -10,7 +9,6 @@ import Button from '@/components/common/button'
 import { FlexBox } from '@/components/common/flexBox'
 import { Text } from '@/components/common/text'
 import ImageUploader from '@/components/posts/ImageUploader'
-import { axiosAPI } from '@/libs/apis/axios'
 import PostApi from '@/libs/apis/post/postApi'
 import { Post } from '@/libs/apis/post/postType'
 import { queryClient } from '@/libs/apis/queryClient'
@@ -28,8 +26,6 @@ const NewPostPage = () => {
   const navigate = useNavigate()
   const channelID = useLocation().pathname.split('/')[2]
   const [curImage, setCurImage] = useState<string | null>(null)
-  // console.log(curImage)
-  // console.log(curImage?.split(',')[1])
   const [title, setTitle] = useState<string | undefined>('')
   const [contents, setContents] = useState<string | undefined>('')
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -46,45 +42,16 @@ const NewPostPage = () => {
   }
 
   const handleCreatePost = () => {
-    console.log(uploadFile)
+    const formData = new FormData()
     if (title && contents) {
-      axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-      axiosAPI
-        .post('posts/create', {
-          title: title,
-          body: contents,
-          image: uploadFile,
-          channelId: channelID,
-        })
-        .then((response) => {
-          console.log(response)
-        })
-      // postMutation.mutate({
-      //   title: title,
-      //   body: contents,
-      //   image: uploadFile,
-      //   channelId: channelID,
-      // })
-    }
-    if (title && contents) {
-      // if (contents.length > 0) {
-      //   postMutation.mutate({
-      //     title: title,
-      //     body: contents,
-      //     image: null,
-      //     channelId: channelID,
-      //   })
-      // }
-      // console.log(curImage)
-      // console.log(curImage?.split(',')[1])
-      // if (contents.length > 0) {
-      //   postMutation.mutate({
-      //     title: title,
-      //     body: contents,
-      //     image: imageBase,
-      //     channelId: channelID,
-      //   })
-      // }
+      const json = {
+        title: title,
+        body: contents,
+      }
+      formData.append('title', JSON.stringify(json))
+      formData.append('channelId', channelID)
+      if (uploadFile) formData.append('image', uploadFile, 'myfile')
+      postMutation.mutate(formData)
     } else {
       alert('게시글 내용이 비었습니다!')
     }
