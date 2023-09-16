@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom'
 import Comment from '@/assets/icons/Comment'
 import Favorite from '@/assets/icons/Favorite'
 import Button from '@/components/common/button'
+import Loading from '@/components/common/loading'
 import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import PostApi from '@/libs/apis/post/postApi'
@@ -12,15 +13,22 @@ import PostApi from '@/libs/apis/post/postApi'
 const PostDetailPage = () => {
   const postId = useLocation().pathname.split('/')[3]
   const { data, isLoading } = useQuery(['posts', postId], () => PostApi.DETAIL_POST(postId))
+
+  if (isLoading) {
+    return <Loading />
+  }
+
+  const postData = JSON.parse(data?.title as string)
+
   return (
     <DetailContainer>
       <Title>
-        <Text typo={'Headline_25'}>{data?.title}</Text>
+        <Text typo={'Headline_25'}>{postData.title}</Text>
         <Date>{data?.createdAt}</Date>
       </Title>
       <Image src={data?.image} />
       <ContentContainer>
-        <Content>{data?.channel.description}</Content>
+        <Content>{postData.body}</Content>
         <Info>
           <Favorite />
           {data?.likes.length}
