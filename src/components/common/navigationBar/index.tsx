@@ -2,6 +2,9 @@ import styled from '@emotion/styled'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
+import Chat from '@/assets/icons/Chat'
+import Follow from '@/assets/icons/Follow'
+import Shop from '@/assets/icons/Shop'
 import { palette } from '@/styles/palette'
 import { typo } from '@/styles/typo'
 
@@ -20,15 +23,21 @@ const NavigationBar = () => {
       <StyleNavigation>
         <StyleNavigationItem onClick={() => moveFromNavigationBar('chatting')}>
           {/* 추후 StyleIcon 위치에 해당 아이콘 넣을 예정입니다. */}
-          <StyleIcon clickMenu={clickMenu == 'chatting'}></StyleIcon>
+          <StyleIcon clickMenu={clickMenu == 'chatting'}>
+            <Chat />
+          </StyleIcon>
           <StyleNavigationText>{'채팅목록'}</StyleNavigationText>
         </StyleNavigationItem>
         <StyleNavigationItem onClick={() => moveFromNavigationBar('')}>
-          <StyleIcon clickMenu={clickMenu == ''}></StyleIcon>
+          <StyleIcon clickMenu={clickMenu == ''}>
+            <Shop />
+          </StyleIcon>
           <StyleNavigationText>{'채널탐색'}</StyleNavigationText>
         </StyleNavigationItem>
         <StyleNavigationItem onClick={() => moveFromNavigationBar('friends')}>
-          <StyleIcon clickMenu={clickMenu == 'friends'}></StyleIcon>
+          <StyleIcon clickMenu={clickMenu == 'friends'}>
+            <Follow height={25} />
+          </StyleIcon>
           <StyleNavigationText>{'팔로우목록'}</StyleNavigationText>
         </StyleNavigationItem>
       </StyleNavigation>
@@ -62,15 +71,20 @@ const StyleNavigationItem = styled.button`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  gap: 5px;
 `
 
 const StyleNavigationText = styled.span`
   font-size: ${typo.Caption_9};
 `
 const StyleIcon = styled.span<{ clickMenu: boolean }>`
-  width: 34px;
-  height: 34px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
   background-color: ${({ clickMenu }) => (clickMenu ? `${palette.CORAL}` : '')};
   border-radius: 50px;
+  /* background-color: ${palette.CORAL}; */
 `
 export default NavigationBar
