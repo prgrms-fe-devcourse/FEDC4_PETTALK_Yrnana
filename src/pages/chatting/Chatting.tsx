@@ -1,3 +1,5 @@
+import styled from '@emotion/styled'
+
 import ChattingBubble from '@/components/common/chattingBubble'
 import { FlexBox } from '@/components/common/flexBox'
 import ListRow from '@/components/common/listRow'
@@ -41,7 +43,7 @@ const Chatting = () => {
   const entries = Object.entries(groupedMessages)
 
   return (
-    <>
+    <ChattingWrapper>
       {entries.map(([date, messages]) => (
         <FlexBox direction={'column'} gap={20} key={date}>
           <Datetime content={date}></Datetime>
@@ -68,8 +70,14 @@ const Chatting = () => {
           <Spacing size={20}></Spacing>
         </FlexBox>
       ))}
-    </>
+    </ChattingWrapper>
   )
 }
+
+const ChattingWrapper = styled.div(`
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 10%;
+`)
 
 export default Chatting
