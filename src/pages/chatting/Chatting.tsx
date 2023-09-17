@@ -7,6 +7,7 @@ import ProfileImage from '@/components/common/profileImage'
 import Spacing from '@/components/common/spacing'
 import { Message } from '@/libs/apis/message/messageType'
 import Datetime from '@/pages/chatting/datetime'
+import { theme } from '@/styles/theme'
 
 import { messageMock } from '../../mock/message'
 
@@ -74,10 +75,12 @@ const Chatting = () => {
   )
 }
 
-const ChattingWrapper = styled.div(`
+const ChattingWrapper = styled.div`
+  padding: 15px;
+  padding-bottom: 10%;
   height: 100%;
   overflow-y: auto;
-  padding-bottom: 10%;
-`)
+  background-color: ${theme.palette.GRAY100};
+`
 
 export default Chatting
