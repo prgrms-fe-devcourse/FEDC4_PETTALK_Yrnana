@@ -56,7 +56,9 @@ const PostDetailPage = () => {
             </UserDetail>
           </User>
         </Info>
-        <Comments></Comments>
+        <Comments>
+          {data?.comments.map((comment, index) => <SingleComment key={index}></SingleComment>)}
+        </Comments>
         <WriteComment>
           <StyledTextArea placeholder={'댓글을 입력해주세요.'} />
           <Button buttonType={'Medium'} value={'작성하기'} />
@@ -82,6 +84,7 @@ const Title = styled.div`
 
 const Image = styled.img`
   width: 100%;
+  height: 350px;
   border-radius: 20px;
 `
 
@@ -126,6 +129,10 @@ const UserDetail = styled.div`
 const Comments = styled.div`
   width: 100%;
   height: 100px;
+`
+
+const SingleComment = styled.div`
+  width: 100%;
 `
 
 const WriteComment = styled.form`
