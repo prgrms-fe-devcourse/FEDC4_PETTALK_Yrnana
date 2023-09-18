@@ -12,6 +12,8 @@ import PostRouter from '@/pages/postList'
 import PrivateRoute from '@/pages/redirect/PrivateRoute'
 import RegisterRouter from '@/pages/register'
 
+import EditPostRouter from './pages/editPost'
+
 const App = () => {
   return (
     <Routes>
@@ -22,6 +24,7 @@ const App = () => {
           <Route path={'/friends'} element={<FriendsRouter />}></Route>
           <Route path={'/myprofile'} element={<MyProfileRouter />}></Route>
           <Route path={'/chatting'} element={<ChattingRouter />}></Route>
+          <Route path={'/editpost'} element={<EditPostRouter />}></Route>
         </Route>
         <Route element={<PrivateRoute auth={false} />}>
           <Route path={'/login/*'} element={<LoginPage />} />
