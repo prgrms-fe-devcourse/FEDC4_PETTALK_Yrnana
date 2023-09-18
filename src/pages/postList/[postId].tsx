@@ -17,6 +17,8 @@ const PostDetailPage = () => {
   const postId = useLocation().pathname.split('/')[3]
   const { data, isLoading } = useQuery(['posts', postId], () => PostApi.DETAIL_POST(postId))
   const [comment, setComment] = useState('')
+  const [likes, setLikes] = useState(data?.likes.length)
+  const [like, setLike] = useState(false)
   const navigate = useNavigate()
 
   if (isLoading) {
@@ -45,9 +47,30 @@ const PostDetailPage = () => {
         comment: comment,
         postId: postId,
       })
+      return response
     } else {
       alert('댓글을 입력해주세요!')
     }
+  }
+
+  const handleCreateFavorite = async (postId: string) => {
+    setLike(true)
+    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+    const response = await axiosAPI.post('/likes/create', {
+      postId: postId,
+    })
+    setLikes(data?.likes.length)
+    return response
+  }
+
+  const handleRemoveFavorite = async (id: string) => {
+    setLike(false)
+    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+    const response = await axiosAPI.post('/likes/delete', {
+      id: id,
+    })
+    setLikes(data?.likes.length)
+    return response
   }
 
   return (
@@ -67,7 +90,15 @@ const PostDetailPage = () => {
         </Content>
         <Info>
           <Interaction>
-            <Favorite />
+            <Favorite
+              fill={like ? 'red' : 'none'}
+              onClick={
+                like
+                  ? () => handleRemoveFavorite(data?.likes[data?.likes.length - 1]._id as string)
+                  : () => handleCreateFavorite(data?._id as string)
+              }
+              style={{ cursor: 'pointer' }}
+            />
             <Text typo={'Caption_11'} color={'GRAY500'}>
               {data?.likes.length}
             </Text>
@@ -95,7 +126,16 @@ const PostDetailPage = () => {
         <VerticalLine />
         <Comments>
           {data?.comments.map((comment, index) => (
-            <SingleComment key={index}>{comment.comment}</SingleComment>
+            <>
+              <SingleComment key={index}>
+                <ProfileImage size={30} style={{ marginRight: '10px' }} />
+                {comment.comment}
+                <Text typo={'Caption_11'} color={'GRAY500'}>
+                  {comment.createdAt.slice(0, 10)}
+                </Text>
+              </SingleComment>
+              <VerticalLine key={comment._id} />
+            </>
           ))}
         </Comments>
         <WriteComment>
@@ -177,10 +217,17 @@ const UserDetail = styled.div`
 const Comments = styled.div`
   width: 100%;
   height: 130px;
+  overflow: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `
 
 const SingleComment = styled.div`
+  display: flex;
+  align-items: center;
   width: 100%;
+  padding: 10px 20px;
 `
 
 const WriteComment = styled.form`
