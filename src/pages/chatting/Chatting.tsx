@@ -1,10 +1,12 @@
 import styled from '@emotion/styled'
 
+import Button from '@/components/common/button'
 import ChattingBubble from '@/components/common/chattingBubble'
 import { FlexBox } from '@/components/common/flexBox'
 import ListRow from '@/components/common/listRow'
 import ProfileImage from '@/components/common/profileImage'
 import Spacing from '@/components/common/spacing'
+import TextArea from '@/components/common/textarea'
 import { Message } from '@/libs/apis/message/messageType'
 import Datetime from '@/pages/chatting/datetime'
 import { theme } from '@/styles/theme'
@@ -45,42 +47,60 @@ const Chatting = () => {
 
   return (
     <ChattingWrapper>
-      {entries.map(([date, messages]) => (
-        <FlexBox direction={'column'} gap={20} key={date}>
-          <Datetime content={date}></Datetime>
-          {messages.map((message) =>
-            'id2' === message.sender._id ? (
-              <ChattingBubble
-                key={message._id}
-                isMyChat={true}
-                message={message.message}
-                time={'17:45'}
-              />
-            ) : (
-              <ListRow
-                key={message._id}
-                leftImage={
-                  <ProfileImage size={35} image={message.sender.image} updatable={false} />
-                }
-                mainText={message.sender.fullName}
-                subElement={<ChattingBubble message={message.message} time={'17:44'} />}
-                rightElement={null}
-              />
-            ),
-          )}
-          <Spacing size={20}></Spacing>
-        </FlexBox>
-      ))}
+      <MessageWrapper>
+        {entries.map(([date, messages]) => (
+          <FlexBox direction={'column'} gap={20} key={date}>
+            <Datetime content={date}></Datetime>
+            {messages.map((message) =>
+              'id2' === message.sender._id ? (
+                <ChattingBubble
+                  key={message._id}
+                  isMyChat={true}
+                  message={message.message}
+                  time={'17:45'}
+                />
+              ) : (
+                <ListRow
+                  key={message._id}
+                  leftImage={
+                    <ProfileImage size={35} image={message.sender.image} updatable={false} />
+                  }
+                  mainText={message.sender.fullName}
+                  subElement={<ChattingBubble message={message.message} time={'17:44'} />}
+                  rightElement={null}
+                />
+              ),
+            )}
+            <Spacing size={20}></Spacing>
+          </FlexBox>
+        ))}
+      </MessageWrapper>
+      <TypingFlexBox gap={10}>
+        <TextArea height={20} />
+        <Button buttonType={'Medium'} value={'작성하기'} backgroundColor={'MAINYELLOW'}></Button>
+      </TypingFlexBox>
     </ChattingWrapper>
   )
 }
 
 const ChattingWrapper = styled.div`
   padding: 15px;
-  padding-bottom: 10%;
+  padding-bottom: 0px;
   height: 100%;
   overflow-y: auto;
   background-color: ${theme.palette.GRAY100};
+`
+
+const MessageWrapper = styled.div`
+  max-height: calc(100% - 70px);
+  overflow-y: auto;
+`
+
+const TypingFlexBox = styled(FlexBox)`
+  position: sticky;
+  bottom: 0;
+  padding: 10px;
+  border-radius: 10px;
 `
 
 export default Chatting
