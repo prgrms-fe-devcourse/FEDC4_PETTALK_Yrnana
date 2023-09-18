@@ -9,8 +9,8 @@ import Input from '@/components/common/input'
 import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
-import useModal from '@/hooks/useModal'
 import { axiosAPI } from '@/libs/apis/axios'
+import useModal from '@/libs/hooks/useModal'
 import { theme } from '@/styles/theme'
 
 const Login = () => {
