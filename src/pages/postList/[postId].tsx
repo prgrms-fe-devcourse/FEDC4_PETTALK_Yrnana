@@ -12,6 +12,7 @@ import PostApi from '@/libs/apis/post/postApi'
 const PostDetailPage = () => {
   const postId = useLocation().pathname.split('/')[3]
   const { data, isLoading } = useQuery(['posts', postId], () => PostApi.DETAIL_POST(postId))
+  console.log(data?.image)
   return (
     <DetailContainer>
       <Title>

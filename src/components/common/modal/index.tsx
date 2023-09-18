@@ -23,7 +23,7 @@ const Modal = ({ modalText, time = 3000, type = 'info' }: ModalProps) => {
       <StyleModal
         position={'top-center'}
         autoClose={time}
-        hideProgressBar={true}
+        hideProgressBar={false}
         closeOnClick
         pauseOnHover={false}
         limit={1}

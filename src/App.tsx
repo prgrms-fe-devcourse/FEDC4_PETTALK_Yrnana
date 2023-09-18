@@ -30,6 +30,7 @@ const App = () => {
         <Route element={<PrivateRoute auth={true} superAuth={true} />}>
           <Route path={'/create'} element={<CreateChannel />} />
         </Route>
+        <Route path={'/example'} element={<ExamplePage />}></Route>
       </Route>
     </Routes>
   )
