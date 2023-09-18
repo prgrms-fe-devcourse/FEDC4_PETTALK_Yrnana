@@ -25,7 +25,7 @@ const Chatting = () => {
 
   const getMessages = async () => {
     // GET_MESSAGES API 호출 및 데이터 반환
-    const response = await MessageApi.GET_MESSAGES()
+    const response = await MessageApi.GET_DETAIL_MESSAGES('6503f59754033e25ea4a4600')
     return response
   }
 
