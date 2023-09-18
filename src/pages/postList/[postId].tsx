@@ -56,6 +56,7 @@ const PostDetailPage = () => {
             </UserDetail>
           </User>
         </Info>
+        <VerticalLine />
         <Comments>
           {data?.comments.map((comment, index) => <SingleComment key={index}></SingleComment>)}
         </Comments>
@@ -70,6 +71,7 @@ const PostDetailPage = () => {
 
 const DetailContainer = styled.div`
   width: 100%;
+  height: 100%;
   background-color: #f6f6f6;
   border-radius: 20px;
 `
@@ -84,7 +86,7 @@ const Title = styled.div`
 
 const Image = styled.img`
   width: 100%;
-  height: 350px;
+  height: 40%;
   border-radius: 20px;
 `
 
@@ -102,7 +104,7 @@ const Content = styled.div`
 const Info = styled.div`
   width: 100%;
   display: flex;
-  padding: 20px;
+  padding: 0 20px 0 20px;
   justify-content: space-between;
 `
 
@@ -128,7 +130,7 @@ const UserDetail = styled.div`
 
 const Comments = styled.div`
   width: 100%;
-  height: 100px;
+  height: 130px;
 `
 
 const SingleComment = styled.div`
@@ -161,6 +163,10 @@ const StyledTextArea = styled.textarea`
     ${({ theme }) => theme.typo.Body_16}
     color: ${({ theme }) => theme.palette.GRAY400};
   }
+`
+
+const VerticalLine = styled.hr`
+  width: 90%;
 `
 
 export default PostDetailPage
