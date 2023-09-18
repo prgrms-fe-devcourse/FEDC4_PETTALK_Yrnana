@@ -9,6 +9,7 @@ import Input from '@/components/common/input'
 import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
+import useModal from '@/hooks/useModal'
 import { SignUpResponse } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
 import { theme } from '@/styles/theme'
@@ -21,6 +22,8 @@ const Register = () => {
   const [checkBox1, setCheckBox1] = useState(false)
   const [checkBox2, setCheckBox2] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [modalText, setModalText] = useState('')
+  const { isModalOpen, openModal, Modal } = useModal()
 
   useEffect(() => {}, [checkBox1, checkBox2])
 
@@ -75,12 +78,16 @@ const Register = () => {
     onSuccess: (data) => {
       console.log(data)
       setIsLoading(false)
-      alert('회원가입 성공!')
-      navigate('/login')
+      setModalText('회원가입 성공!')
+      openModal()
+      setTimeout(() => {
+        navigate('/login')
+      }, 2000)
     },
     onError: () => {
-      alert('회원가입 실패! 이미 있는 계정입니다.')
       setIsLoading(false)
+      setModalText('회원가입 실패! 이미 있는 계정입니다.')
+      openModal()
     },
   })
 
@@ -99,6 +106,7 @@ const Register = () => {
   ) : (
     <>
       <StyleRegisterWrapper image={BackgroundImage}>
+        {isModalOpen ? <Modal modalText={modalText} time={2000} /> : ''}
         <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
         <Spacing size={50} />
         <Input width={200} ref={emailInputRef} placeholder={'email'}></Input>
