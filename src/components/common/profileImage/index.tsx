@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { ComponentProps, RefObject, useEffect, useRef, useState } from 'react'
 
-import defaultImage from '@/assets/images/profile.png'
+import defaultImage from '@/assets/images/defaultProfileImage.png'
 import { axiosAPI } from '@/libs/apis/axios'
 
 interface ProfileImageProps extends ComponentProps<'div'> {
