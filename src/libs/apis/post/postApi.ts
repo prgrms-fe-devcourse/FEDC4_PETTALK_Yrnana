@@ -15,6 +15,11 @@ const PostApi = {
     const response = await axiosAPI.get(`/posts/channel/${channelId}`)
     return response.data
   },
+  UPDATE_POST: async (payload: FormData): Promise<Post> => {
+    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+    const response = await axiosAPI.put('posts/update', payload)
+    return response.data
+  },
 }
 
 export default PostApi

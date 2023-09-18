@@ -26,6 +26,8 @@ const PostDetailPage = () => {
     return <Loading />
   }
 
+  refetch()
+
   const postData = JSON.parse(data?.title as string)
 
   const deletePost = async (postId: string) => {
@@ -117,7 +119,11 @@ const PostDetailPage = () => {
             <Text typo={'Caption_11'} color={'GRAY500'}>
               {data?.comments.length}
             </Text>
-            <Button buttonType={'Small'} value={'수정'} />
+            <Button
+              buttonType={'Small'}
+              value={'수정'}
+              onClick={() => navigate(`/posts/${channelID}/${postId}/editpost`)}
+            />
             <Button
               buttonType={'Small'}
               value={'삭제'}
