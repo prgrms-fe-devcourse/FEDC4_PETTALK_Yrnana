@@ -19,27 +19,25 @@ import { messageMock } from '../../mock/message'
 
 interface FormattedMessage extends Message {
   formattedDate: string
+  formattedTime: string
 }
 
 const Chatting = () => {
   const messageRef = useRef<HTMLTextAreaElement>(null)
 
-  const getMessages = async () => {
-    // GET_MESSAGES API 호출 및 데이터 반환
+  const getDetailMessages = async () => {
     const response = await MessageApi.GET_DETAIL_MESSAGES('6503f59754033e25ea4a4600')
     return response
   }
 
-  const { data, error, isLoading, refetch } = useQuery(['messages'], getMessages)
-
+  const { data, error, isLoading, refetch } = useQuery(['messages'], getDetailMessages)
   console.log(data)
 
   const mutation = useMutation(MessageApi.SEND_MESSAGE, {
     onSuccess: () => {
       console.log('메시지 전송 성공!')
-      if (messageRef.current) {
-        messageRef.current.value = ''
-      }
+
+      if (messageRef.current) messageRef.current.value = ''
     },
     onError: (error) => {
       console.error('메시지 전송 중 오류 발생:', error)
@@ -48,72 +46,58 @@ const Chatting = () => {
 
   const sendMessage = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
+
+    console.log(messageRef.current, messageRef.current.value)
     if (!messageRef.current || !messageRef.current.value) {
       console.log('메시지를 입력하세요.')
       return
     }
 
-    const messageContent = messageRef.current.value
-    const userId = 'testId'
-
     try {
-      const formData = new FormData()
-      formData.append('message', messageContent)
-      formData.append('receiver', userId)
-
-      await mutation.mutateAsync({ message: messageContent, receiver: '6503f59754033e25ea4a4600' })
+      await mutation.mutateAsync({
+        message: messageRef.current.value,
+        receiver: '6503f59754033e25ea4a4600',
+      })
     } catch (error) {
       console.error('메시지 전송 중 오류 발생:', error)
     }
   }
 
-  // ----
+  // ----  데이터 포맷팅 ------
 
+  // utc 시간, 날짜 포맷팅
   const parsedMessages: FormattedMessage[] = data
     ? data.map((message) => {
         const parsedDate = new Date(message.createdAt)
         const formattedDate = `${parsedDate.getFullYear()}년 ${
           parsedDate.getMonth() + 1
         }월 ${parsedDate.getDate()}일`
-        return { ...message, formattedDate }
+        const formattedTime = `${String(parsedDate.getHours()).padStart(2, '0')}:${String(
+          parsedDate.getMinutes(),
+        ).padStart(2, '0')}`
+
+        return { ...message, formattedDate, formattedTime }
       })
     : []
 
+  // 날짜 기준 메시지 그룹화
   const groupedMessages: Record<string, FormattedMessage[]> = {}
   parsedMessages.forEach((message) => {
     const date = message.formattedDate
-    if (!groupedMessages[date]) {
-      groupedMessages[date] = []
-    }
+    if (!groupedMessages[date]) groupedMessages[date] = []
     groupedMessages[date].push(message)
   })
 
-  // 결과 출력
-  // console.log('일자별 그룹화된 메시지:', groupedMessages)
-
-  for (const [key, value] of Object.entries(groupedMessages)) {
-    console.log('Date:', key)
-    console.log('Messages:', value)
-  }
-
+  // 객체 -> 배열
   const entries = Object.entries(groupedMessages)
-
-  function convertToKoreaTime(utcTime: string) {
-    const hoursUTC = parseInt(utcTime.slice(11, 13))
-    const minutesUTC = utcTime.slice(14, 16)
-
-    const hoursKorea = (hoursUTC + 9) % 24
-    const hoursKoreaStr = String(hoursKorea).padStart(2, '0')
-
-    return `${hoursKoreaStr}:${minutesUTC}`
-  }
 
   return (
     <ChattingWrapper direction={'column'} fullWidth={true} align={'stretch'}>
       <MessageWrapper>
-        {isLoading ? ( // isLoading 값이 true일 때 "Loading..."을 표시
+        {isLoading ? (
           <Loading></Loading>
-        ) : data ? ( // data가 존재할 때 데이터를 처리
+        ) : (
+          data &&
           entries.map(([date, messages]) => (
             <FlexBox direction={'column'} gap={20} key={date}>
               <Datetime content={date}></Datetime>
@@ -124,7 +108,7 @@ const Chatting = () => {
                     key={message._id}
                     isMyChat={true}
                     message={message.message}
-                    time={convertToKoreaTime(message.createdAt)}
+                    time={message.formattedTime}
                   />
                 ) : (
                   <ListRow
@@ -141,7 +125,7 @@ const Chatting = () => {
               <Spacing size={20}></Spacing>
             </FlexBox>
           ))
-        ) : null}
+        )}
       </MessageWrapper>
       <TypingFlexBox gap={10}>
         <TextArea ref={messageRef} height={20} />
