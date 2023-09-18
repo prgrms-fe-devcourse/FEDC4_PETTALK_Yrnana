@@ -21,7 +21,7 @@ const Loading = () => {
     scene.add(pointLight)
 
     const loader = new GLTFLoader()
-    loader.load('paw_print/scene.gltf', (gltf: GLTF) => {
+    loader.load('/paw_print/scene.gltf', (gltf: GLTF) => {
       const model = gltf.scene
       model.scale.set(0.1, 0.1, 0.1)
 
