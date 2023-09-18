@@ -1,12 +1,13 @@
 import styled from '@emotion/styled'
 import { type ComponentProps, type ReactNode } from 'react'
 
+import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import { type KeyOfPalette, type KeyOfTypo } from '@/styles/theme'
 
 interface ListRowProps extends ComponentProps<'div'> {
   rightElement: ReactNode
-  leftImage: JSX.Element
+  leftImage: string
   mainText: ReactNode
   textTypo?: KeyOfTypo
   textColor?: KeyOfPalette
@@ -44,7 +45,7 @@ const ListRow = ({
     // TODO: Padding 컴포넌트 생성되면 추후 Padding도 추가할 예정입니다.
     <MainFlexBox fullWidth={fullWidth} {...props}>
       <SubFlexBox gap={imageGap}>
-        {leftImage}
+        <ProfileImage size={35} image={leftImage} updatable={false} />
         <TextFlexBox gap={gap}>
           <StyledText text={mainText} typo={textTypo} color={textColor} />
           {subElement && subElement}

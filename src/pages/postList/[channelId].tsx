@@ -11,8 +11,7 @@ import PostApi from '@/libs/apis/post/postApi'
 import { theme } from '@/styles/theme'
 const PostListPage = () => {
   const channelID = useLocation().pathname.split('/')[2]
-  const { data, isLoading } = useQuery(['posts'], () => PostApi.GET_POSTS(channelID))
-  console.log(data)
+  const { data, isLoading } = useQuery(['posts', channelID], () => PostApi.GET_POSTS(channelID))
   const navigate = useNavigate()
   return (
     <PostListPageWrapper>
@@ -28,19 +27,24 @@ const PostListPage = () => {
       {isLoading ? (
         <div>{'로딩중...'}</div>
       ) : (
-        <FlexBox gap={20} direction={'column'}>
-          {data?.map((post, index) => (
-            <PostCard
-              onClick={() => navigate(`/posts/${channelID}/${post._id}`)}
-              commentsNum={post.comments.length}
-              likesNum={post.likes.length}
-              key={index}
-              title={post.title}
-              author={post.author}
-              content={'크하하하'}
-              createdAt={post.createdAt}
-            />
-          ))}
+        <FlexBox gap={20} fullWidth={true} direction={'column'}>
+          {data?.map((post, index) => {
+            const titleJson = JSON.parse(post.title)
+            const parsedDate = post.createdAt.split('T')[0]
+            return (
+              <PostCard
+                onClick={() => navigate(`/posts/${channelID}/${post._id}`)}
+                commentsNum={post.comments.length}
+                likesNum={post.likes.length}
+                key={index}
+                image={post.image}
+                title={titleJson.title}
+                author={post.author}
+                content={titleJson.body}
+                createdAt={parsedDate}
+              />
+            )
+          })}
         </FlexBox>
       )}
     </PostListPageWrapper>
@@ -56,8 +60,27 @@ const PostListPageWrapper = styled.div`
   height: 100%;
   align-items: center;
   gap: 20px;
-  padding-bottom: 30px;
+  padding: 0px 10px 30px;
   overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0px;
+    height: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: #f2f2f2;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #999;
+  }
 `
 
 const NewPostButton = styled.button`
