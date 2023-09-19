@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -12,8 +13,10 @@ import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
 import PostApi from '@/libs/apis/post/postApi'
+import { userAtom } from '@/libs/store/userAtom'
 
 const PostDetailPage = () => {
+  const userData = useAtomValue(userAtom)
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
   const { data, isLoading, refetch } = useQuery(['posts', postId], () =>
@@ -22,7 +25,8 @@ const PostDetailPage = () => {
   const [comment, setComment] = useState('')
   const [like, setLike] = useState(false)
   const [modal, setModal] = useState(false)
-  const [follow, setFollow] = useState(false)
+  const [follow, setFollow] = useState<boolean | null>(null)
+  const [followId, setFollowId] = useState('')
   const navigate = useNavigate()
 
   if (isLoading) {
@@ -97,12 +101,13 @@ const PostDetailPage = () => {
       userId: userId,
     })
     refetch()
+    setFollowId(response.data?._id)
     return response
   }
 
   const handleUnFollow = async (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
     e.preventDefault()
-    setModal(true)
+    setModal(false)
     setFollow(false)
     const response = await axiosAPI.delete('/follow/delete', {
       headers: {
@@ -170,13 +175,26 @@ const PostDetailPage = () => {
               <Button
                 buttonType={'Small'}
                 backgroundColor={modal ? 'GREEN' : 'BEIGE'}
-                value={'팔로우'}
+                value={follow ? '팔로잉' : '팔로우'}
                 onClick={
                   follow
-                    ? (e) => handleUnFollow(e, data?.author._id as string)
+                    ? (e) => handleUnFollow(e, followId)
                     : (e) => handleFollow(e, data?.author._id as string)
                 }
               />
+              {!follow ? (
+                <Modal
+                  active={follow !== null}
+                  time={1000}
+                  modalText={`${data?.author.fullName}님을 팔로우!`}
+                />
+              ) : (
+                <Modal
+                  active={follow !== null}
+                  time={1000}
+                  modalText={`${data?.author.fullName}님을 언팔로우!`}
+                />
+              )}
             </UserDetail>
           </User>
         </Info>
