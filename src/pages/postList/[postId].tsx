@@ -1,15 +1,16 @@
 import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import Comment from '@/assets/icons/Comment'
 import Favorite from '@/assets/icons/Favorite'
 import Button from '@/components/common/button'
+import { FlexBox } from '@/components/common/flexBox'
 import Loading from '@/components/common/loading'
-import Modal from '@/components/common/modal'
 import ProfileImage from '@/components/common/profileImage'
+import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
 import PostApi from '@/libs/apis/post/postApi'
@@ -144,7 +145,7 @@ const PostDetailPage = () => {
           {data?.createdAt.slice(0, 10)}
         </Text>
       </Title>
-      <Image src={data?.image} />
+      {data?.image && <Image src={data?.image} />}
       <ContentContainer>
         <Content>
           <Text typo={'Body_16'} color={'BLACK'}>
@@ -224,8 +225,8 @@ const PostDetailPage = () => {
         <VerticalLine />
         <Comments>
           {data?.comments.map((comment, index) => (
-            <>
-              <CommentContainer key={index}>
+            <FlexBox direction={'column'} key={index} style={{ maxHeight: '250px' }}>
+              <CommentContainer>
                 <SingleComment>
                   <ProfileImage
                     size={30}
@@ -257,7 +258,7 @@ const PostDetailPage = () => {
                 </Text>
               </CommentContainer>
               <VerticalLine key={comment._id} />
-            </>
+            </FlexBox>
           ))}
         </Comments>
         <WriteComment>
@@ -273,15 +274,17 @@ const PostDetailPage = () => {
           />
         </WriteComment>
       </ContentContainer>
+      <Spacing size={125} />
     </DetailContainer>
   )
 }
 
 const DetailContainer = styled.div`
   width: 100%;
-  height: 100%;
   background-color: #f6f6f6;
   border-radius: 20px;
+  position: relative;
+  height: 100%;
 `
 
 const Title = styled.div`
@@ -294,7 +297,7 @@ const Title = styled.div`
 
 const Image = styled.img`
   width: 100%;
-  height: 40%;
+  height: 280px;
   border-radius: 20px;
 `
 
@@ -305,12 +308,10 @@ const ContentContainer = styled.div`
 `
 
 const Content = styled.div`
-  width: 100%;
   padding: 20px;
 `
 
 const Info = styled.div`
-  width: 100%;
   display: flex;
   padding: 0 20px 0 20px;
   justify-content: space-between;
@@ -338,8 +339,8 @@ const UserDetail = styled.div`
 
 const Comments = styled.div`
   width: 100%;
-  height: 130px;
   overflow: scroll;
+  max-height: 380px;
   ::-webkit-scrollbar {
     display: none;
   }
@@ -368,7 +369,11 @@ const WriteComment = styled.form`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  margin: 10px;
+  width: 98%;
+  position: fixed;
+  bottom: 4px;
+  padding: 10px;
+  box-sizing: border-box;
 `
 
 const StyledTextArea = styled.textarea`
