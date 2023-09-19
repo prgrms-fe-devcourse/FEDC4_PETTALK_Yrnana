@@ -27,13 +27,12 @@ const PostDetailPage = () => {
   const [modal, setModal] = useState(false)
   const [follow, setFollow] = useState<boolean | null>(null)
   const [followId, setFollowId] = useState('')
+  const [animate, setAnimate] = useState(false)
   const navigate = useNavigate()
 
   if (isLoading) {
     return <Loading />
   }
-
-  refetch()
 
   const postData = JSON.parse(data?.title as string)
 
@@ -69,6 +68,7 @@ const PostDetailPage = () => {
   const handleCreateFavorite = async (e: React.MouseEvent<HTMLDivElement>, postId: string) => {
     e.preventDefault()
     setLike(true)
+    setAnimate(true)
     axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     const response = await axiosAPI.post('/likes/create', {
       postId: postId,
@@ -80,6 +80,7 @@ const PostDetailPage = () => {
   const handleRemoveFavorite = async (e: React.MouseEvent<HTMLDivElement>, id: string) => {
     e.preventDefault()
     setLike(false)
+    setAnimate(false)
     const response = await axiosAPI.delete('/likes/delete', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -147,52 +148,60 @@ const PostDetailPage = () => {
                   : (e) => handleCreateFavorite(e, data?._id as string)
               }
               style={{ cursor: 'pointer' }}
+              className={`heart ${animate ? 'is_animating' : ''}`}
             />
-            <Text typo={'Caption_11'} color={'GRAY500'}>
+            <Text typo={'Body_16'} color={'GRAY500'}>
               {data?.likes.length}
             </Text>
             <Comment />
-            <Text typo={'Caption_11'} color={'GRAY500'}>
+            <Text typo={'Body_16'} color={'GRAY500'}>
               {data?.comments.length}
             </Text>
-            <Button
-              buttonType={'Small'}
-              value={'수정'}
-              onClick={() => navigate(`/posts/${channelID}/${postId}/editpost`)}
-            />
-            <Button
-              buttonType={'Small'}
-              value={'삭제'}
-              onClick={() => deletePost(data?._id as string)}
-            />
+            {userData._id === data?.author._id ? (
+              <>
+                <Button
+                  buttonType={'Small'}
+                  value={'수정'}
+                  onClick={() => navigate(`/posts/${channelID}/${postId}/editpost`)}
+                />
+                <Button
+                  buttonType={'Small'}
+                  value={'삭제'}
+                  onClick={() => deletePost(data?._id as string)}
+                />
+              </>
+            ) : (
+              ''
+            )}
           </Interaction>
           <User>
-            <ProfileImage size={50} />
+            <ProfileImage size={50} image={`${userData.image}`} />
             <UserDetail>
               <Text typo={'Caption_11'} color={'GRAY600'}>
                 {data?.author.fullName}
               </Text>
-              <Button
-                buttonType={'Small'}
-                backgroundColor={modal ? 'GREEN' : 'BEIGE'}
-                value={follow ? '팔로잉' : '팔로우'}
-                onClick={
-                  follow
-                    ? (e) => handleUnFollow(e, followId)
-                    : (e) => handleFollow(e, data?.author._id as string)
-                }
-              />
-              {!follow ? (
-                <Modal
-                  active={follow !== null}
-                  time={1000}
-                  modalText={`${data?.author.fullName}님을 팔로우!`}
+              {userData._id === data?.author._id ? (
+                <Button
+                  disabled
+                  buttonType={'Small'}
+                  backgroundColor={modal ? 'GREEN' : 'BEIGE'}
+                  value={follow ? '팔로잉' : '팔로우'}
+                  onClick={
+                    follow
+                      ? (e) => handleUnFollow(e, followId)
+                      : (e) => handleFollow(e, data?.author._id as string)
+                  }
                 />
               ) : (
-                <Modal
-                  active={follow !== null}
-                  time={1000}
-                  modalText={`${data?.author.fullName}님을 언팔로우!`}
+                <Button
+                  buttonType={'Small'}
+                  backgroundColor={modal ? 'GREEN' : 'BEIGE'}
+                  value={follow ? '팔로잉' : '팔로우'}
+                  onClick={
+                    follow
+                      ? (e) => handleUnFollow(e, followId)
+                      : (e) => handleFollow(e, data?.author._id as string)
+                  }
                 />
               )}
             </UserDetail>
@@ -202,13 +211,23 @@ const PostDetailPage = () => {
         <Comments>
           {data?.comments.map((comment, index) => (
             <>
-              <SingleComment key={index}>
-                <ProfileImage size={30} style={{ marginRight: '10px' }} />
-                {comment.comment}
-                <Text typo={'Caption_11'} color={'GRAY500'}>
+              <CommentContainer key={index}>
+                <SingleComment>
+                  <ProfileImage
+                    size={30}
+                    style={{ marginRight: '10px' }}
+                    image={comment.author.image}
+                  />
+                  {comment.comment}
+                </SingleComment>
+                <Text
+                  typo={'Caption_11'}
+                  color={'GRAY500'}
+                  style={{ width: '100px', padding: '10px 20px' }}
+                >
                   {comment.createdAt.slice(0, 10)}
                 </Text>
-              </SingleComment>
+              </CommentContainer>
               <VerticalLine key={comment._id} />
             </>
           ))}
@@ -296,6 +315,13 @@ const Comments = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+`
+
+const CommentContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 `
 
 const SingleComment = styled.div`
