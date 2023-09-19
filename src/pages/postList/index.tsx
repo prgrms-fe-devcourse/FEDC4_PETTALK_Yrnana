@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import AppBarNavTemplate from '@/components/layouts/AppBarNavTemplate'
 import PostListPage from '@/pages/postList/[channelId]'
 import PostDetailPage from '@/pages/postList/[postId]'
+import EditPostPage from '@/pages/postList/EditPost'
 import NewPostPage from '@/pages/postList/NewPost'
 
 const PostRouter = () => {
@@ -29,6 +30,14 @@ const PostRouter = () => {
         element={
           <AppBarNavTemplate hasNav={false} title={'게시글 상세보기'}>
             <PostDetailPage />
+          </AppBarNavTemplate>
+        }
+      ></Route>
+      <Route
+        path={'/:channeId/:postId/editpost'}
+        element={
+          <AppBarNavTemplate hasNav={false} title={'글 수정하기'}>
+            <EditPostPage />
           </AppBarNavTemplate>
         }
       ></Route>
