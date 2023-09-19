@@ -115,9 +115,22 @@ const Chatting = () => {
   // 객체 -> 배열
   const entries = Object.entries(groupedMessages)
 
+  const messageWrapperRef = useRef<HTMLDivElement>(null)
+  const [isInitialRender, setIsInitialRender] = useState(true)
+
+  useEffect(() => {
+    // 최초 렌더링 시에만 스크롤을 가장 아래로 이동
+    if (isInitialRender && data && messageWrapperRef.current) {
+      messageWrapperRef.current.scrollTop = messageWrapperRef.current.scrollHeight
+      setIsInitialRender(false) // 최초 렌더링 이후로는 더 이상 실행하지 않음
+    }
+  }, [data, isInitialRender]) // data 또는 isInitialRender가 업데이트될 때마다 실행
+
+  // ... (기존 코드)
+
   return (
     <ChattingWrapper direction={'column'} fullWidth={true} align={'stretch'}>
-      <MessageWrapper>
+      <MessageWrapper ref={messageWrapperRef}>
         {isLoading ? (
           <Loading></Loading>
         ) : (
