@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom'
 
+import UserDataRoute from '@/components/auth/UserDataRoute'
 import Layout from '@/components/layouts/Layout'
 import ChattingRouter from '@/pages/chatting'
 import ExamplePage from '@/pages/Example'
@@ -17,11 +18,13 @@ const App = () => {
     <Routes>
       <Route element={<Layout />}>
         <Route element={<PrivateRoute auth={true} />}>
-          <Route path={'*'} element={<ChannelsRouter />} />
-          <Route path={'/posts/*'} element={<PostRouter />} />
-          <Route path={'/friends'} element={<FriendsRouter />}></Route>
-          <Route path={'/myprofile'} element={<MyProfileRouter />}></Route>
-          <Route path={'/chatting'} element={<ChattingRouter />}></Route>
+          <Route element={<UserDataRoute />}>
+            <Route path={'*'} element={<ChannelsRouter />} />
+            <Route path={'/posts/*'} element={<PostRouter />} />
+            <Route path={'/friends'} element={<FriendsRouter />}></Route>
+            <Route path={'/myprofile'} element={<MyProfileRouter />}></Route>
+            <Route path={'/chatting'} element={<ChattingRouter />}></Route>
+          </Route>
         </Route>
         <Route element={<PrivateRoute auth={false} />}>
           <Route path={'/login/*'} element={<LoginPage />} />
