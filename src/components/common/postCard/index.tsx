@@ -1,40 +1,46 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
+import { ComponentProps } from 'react'
 
+import Comment from '@/assets/icons/Comment'
+import Favorite from '@/assets/icons/Favorite'
+import defaultImage from '@/assets/images/defaultProfileImage.png'
 import { FlexBox } from '@/components/common/flexBox'
 import ListRow from '@/components/common/listRow'
+import SvgWithText from '@/components/common/svgWithText'
 import { Text } from '@/components/common/text'
+import { User } from '@/libs/apis/auth/authType'
+import { media } from '@/styles/theme'
 import { theme } from '@/styles/theme'
 
-interface PostCardProps {
+interface PostCardProps extends ComponentProps<'div'> {
   likesNum: number
   commentsNum: number
   image?: string
   title: string
   content: string
-  author: string
+  author: User
   createdAt: string
 }
-
-// useEffect(() => {
-//   console.log('받아온 정보를 이용하여 작성자 정보 알아오기')
-// }, [])
 
 const PostCard = ({
   likesNum = 50,
   commentsNum = 33,
-  image = 'https://loremflickr.com/100/100/dog',
+  image,
   title = '제목을 입력해주세요',
   content = '내용을 입력합니다 내용내용',
-  author = '김유진',
+  author,
   createdAt = '2023.03.03',
+  ...props
 }: PostCardProps) => {
   return (
-    <PostCardWrapper>
+    <PostCardWrapper {...props}>
       <ListRow
-        leftImage={<img src={'https://loremflickr.com/30/30/dog​​'} alt={'profileImage'} />}
+        fullWidth={true}
+        leftImage={defaultImage}
         mainText={
           <Text typo={'Caption_11'} color={'GRAY600'}>
-            {author}
+            {author.fullName}
           </Text>
         }
         subElement={
@@ -48,19 +54,15 @@ const PostCard = ({
           </Text>
         }
       />
-      {image && <img src={image} />}
+      {image && <ImageContainer imageurl={image} />}
       <FlexBox align={'center'} justify={'flex-start'} fullWidth={true}>
         <Text typo={'Caption_11'} color={'GRAY600'}>
           {content}
         </Text>
       </FlexBox>
       <FlexBox align={'center'} justify={'flex-start'} fullWidth={true} gap={10}>
-        <Text typo={'Body_12'} color={'GRAY500'}>
-          {` 좋아요 : ${likesNum}`}
-        </Text>
-        <Text typo={'Body_12'} color={'GRAY500'}>
-          {`댓글 :  ${commentsNum}`}
-        </Text>
+        <SvgWithText svgComponent={<Favorite />} text={likesNum} />
+        <SvgWithText svgComponent={<Comment />} text={commentsNum} />
       </FlexBox>
     </PostCardWrapper>
   )
@@ -70,8 +72,9 @@ export default PostCard
 
 const PostCardWrapper = styled.div`
   display: flex;
+  cursor: pointer;
   flex-direction: column;
-  width: 331px;
+  width: 100%;
   padding: 10px;
   gap: 10px;
   border-radius: 10px;
@@ -80,4 +83,17 @@ const PostCardWrapper = styled.div`
   box-shadow:
     0px 0px 2px 0px rgba(0, 0, 0, 0.25),
     0px 4px 4px 0px rgba(0, 0, 0, 0.14);
+`
+const ImageContainer = styled.div<{ imageurl: string }>`
+  ${({ imageurl }) => css`
+    background: url(${imageurl});
+  `};
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 200px;
+  ${media.mobile} {
+    height: 150px;
+  }
 `

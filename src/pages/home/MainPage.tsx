@@ -1,28 +1,64 @@
+import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
+import { ComponentProps } from 'react'
 
-import Loading from '@/components/common/loading'
+import ChannelList from '@/components/channel/channelList'
+import ChannelSlider from '@/components/channel/channelSlider'
+import InterestHeader from '@/components/channel/interestHeader'
+import Spacing from '@/components/common/spacing'
+import { Text } from '@/components/common/text'
 import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
+import { Channel } from '@/libs/apis/channel/channelType'
+import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'
 
-const MainPage = () => {
-  const { data, isLoading } = useQuery(['channels'], () => ChannelApi.GET_CHANNEL())
-  const navigate = useNavigate()
+interface MainPageProps extends ComponentProps<'div'> {
+  todayChannelTypo?: KeyOfTypo
+  todayChannelColor?: KeyOfPalette
+  interestChannelTypo?: KeyOfTypo
+  interestChannelColor?: KeyOfPalette
+}
 
-  //TODO: 로딩 컴포넌트 추가 시 리팩토링 가능성 있음
-  if (isLoading)
-    return (
-      <>
-        <Loading />
-      </>
-    )
+const MainPage = ({
+  todayChannelTypo = 'Headline_23',
+  todayChannelColor = 'BLACK',
+  interestChannelTypo = 'Headline_20',
+  interestChannelColor = 'BLACK',
+  ...props
+}: MainPageProps) => {
+  const { data: channelListData, isLoading } = useQuery(['channels'], () =>
+    ChannelApi.GET_CHANNEL(),
+  )
+
+  if (isLoading) return <h2>{'로딩 중...'}</h2>
+
   return (
-    <>
-      {data?.map((channel, index) => (
-        <li key={index} onClick={() => navigate(`/posts/${channel._id}`)}>
-          {channel.name}
-        </li>
-      ))}
-    </>
+    <MainPageWrapper {...props}>
+      <TodayChannel>
+        <Text typo={todayChannelTypo} color={todayChannelColor}>
+          {'오늘의 채널'}
+        </Text>
+        <Spacing size={15}></Spacing>
+        <ChannelSlider data={channelListData as Channel[]} />
+      </TodayChannel>
+      <InterestChannel>
+        <InterestHeader typo={interestChannelTypo} color={interestChannelColor} />
+        <Spacing size={30}></Spacing>
+        <ChannelList data={channelListData as Channel[]} />
+      </InterestChannel>
+    </MainPageWrapper>
   )
 }
+
+const MainPageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  padding-bottom: 25%;
+`
+const TodayChannel = styled.div``
+const InterestChannel = styled.div``
+
 export default MainPage

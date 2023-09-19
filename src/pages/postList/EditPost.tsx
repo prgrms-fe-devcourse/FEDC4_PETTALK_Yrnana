@@ -1,33 +1,40 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 
 import Button from '@/components/common/button'
 import { FlexBox } from '@/components/common/flexBox'
+import Loading from '@/components/common/loading'
 import { Text } from '@/components/common/text'
 import ImageUploader from '@/components/posts/ImageUploader'
 import PostApi from '@/libs/apis/post/postApi'
-import { Post } from '@/libs/apis/post/postType'
-import { queryClient } from '@/libs/apis/queryClient'
 import encodeFileToBase64 from '@/libs/utils/encodeFileToBase64'
 import { theme } from '@/styles/theme'
 
-const NewPostPage = () => {
-  const postMutation = useMutation(PostApi.CREATE_POST, {
-    onSuccess: (newPost: Post) => {
+const EditPostPage = () => {
+  const postMutation = useMutation(PostApi.UPDATE_POST, {
+    onSuccess: () => {
       // queryClient.setQueryData(['posts', channelID, newPost._id], newPost)
-      navigate(`/posts/${channelID}/${newPost._id}`)
+      navigate(`/posts/${channelID}/${postId}`, { replace: true })
     },
   })
   const [uploadFile, setUploadFile] = useState<File | null>(null)
   const navigate = useNavigate()
   const channelID = useLocation().pathname.split('/')[2]
-  const [curImage, setCurImage] = useState<string | null>(null)
-  const [title, setTitle] = useState<string | undefined>('')
-  const [contents, setContents] = useState<string | undefined>('')
+  const postId = useLocation().pathname.split('/')[3]
+  const { data, isLoading } = useQuery(['posts', postId], () => PostApi.DETAIL_POST(postId))
+  const postData = JSON.parse(data?.title as string)
+  const [curImage, setCurImage] = useState<string | null>(data?.image)
+  const [title, setTitle] = useState<string | undefined>(postData.title)
+  const [contents, setContents] = useState<string | undefined>(postData.body)
+
+  if (isLoading) {
+    return <Loading />
+  }
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }
@@ -41,7 +48,7 @@ const NewPostPage = () => {
     setCurImage(null)
   }
 
-  const handleCreatePost = () => {
+  const handleEditPost = () => {
     const formData = new FormData()
     if (title && contents) {
       const json = {
@@ -50,6 +57,7 @@ const NewPostPage = () => {
       }
       formData.append('title', JSON.stringify(json))
       formData.append('channelId', channelID)
+      formData.append('postId', postId)
       if (uploadFile) formData.append('image', uploadFile, 'myfile')
       postMutation.mutate(formData)
     } else {
@@ -99,13 +107,13 @@ const NewPostPage = () => {
         />
       </form>
       <ButtonContainer>
-        <Button buttonType={'ExtraLarge'} value={'글 작성하기'} onClick={handleCreatePost} />
+        <Button buttonType={'ExtraLarge'} value={'수정하기'} onClick={handleEditPost} />
       </ButtonContainer>
     </NewPostContainer>
   )
 }
 
-export default NewPostPage
+export default EditPostPage
 
 const ButtonContainer = styled.div`
   display: flex;

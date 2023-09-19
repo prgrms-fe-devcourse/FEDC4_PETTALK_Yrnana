@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { User } from '@/libs/apis/auth/authType'
 import { Channel } from '@/libs/apis/channel/channelType'
 
@@ -5,7 +6,7 @@ export type Post = {
   likes: Like[]
   comments: Comment[]
   _id: string
-  image?: string
+  image: any
   imagePublicId?: string
   title: string
   channel: Channel
@@ -29,10 +30,4 @@ export type Comment = {
   post: string //post Id
   createdAt: string
   updatedAt: string
-}
-
-export type CreatePostRequest = {
-  title: string
-  image: string | null
-  channelId: string
 }
