@@ -138,7 +138,9 @@ const Chatting = () => {
                     key={message._id}
                     leftImage={message.sender.image}
                     mainText={message.sender.fullName}
-                    subElement={<ChattingBubble message={message.message} time={'17:44'} />}
+                    subElement={
+                      <ChattingBubble message={message.message} time={message.formattedTime} />
+                    }
                     rightElement={null}
                   />
                 ),
