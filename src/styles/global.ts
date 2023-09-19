@@ -70,4 +70,23 @@ export const globalStyle = css`
     opacity: 0;
     transition: opacity 1s ease-in-out;
   }
+
+  .heart {
+  }
+
+  .is_animating {
+    animation: like 0.5s 1;
+  }
+
+  @keyframes like {
+    0% {
+      transform: scale(1);
+    }
+    90% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1.1);
+    }
+  }
 `
