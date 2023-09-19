@@ -16,7 +16,6 @@ const userDataRoute = () => {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
       const response = getUserData()
       setUserData(response)
     }
