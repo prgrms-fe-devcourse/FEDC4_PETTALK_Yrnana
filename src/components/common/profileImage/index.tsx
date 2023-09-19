@@ -43,7 +43,6 @@ const ProfileImage = ({
           },
         )
         .then((response) => {
-          console.log(response)
           setSelectedImage(response.data.image)
         })
     }

@@ -232,6 +232,7 @@ const PostDetailPage = () => {
                     size={30}
                     style={{ marginRight: '10px' }}
                     image={comment.author.image}
+                    updatable={false}
                   />
                   <UserComment>
                     <Text typo={'Caption_11'}>{comment.author.fullName}</Text>

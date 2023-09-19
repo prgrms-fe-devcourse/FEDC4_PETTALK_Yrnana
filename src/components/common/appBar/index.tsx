@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { useAtomValue } from 'jotai'
 import { useNavigate } from 'react-router-dom'
 
 import BackArrow from '@/assets/icons/BackArrow'
@@ -6,6 +7,7 @@ import Bell from '@/assets/icons/Bell'
 import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import Toggle from '@/components/common/toggle'
+import { userAtom } from '@/libs/store/userAtom'
 import { theme } from '@/styles/theme'
 
 interface MainPage {
@@ -14,6 +16,7 @@ interface MainPage {
 }
 
 const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
+  const userData = useAtomValue(userAtom)
   const navigate = useNavigate()
 
   return (
@@ -32,7 +35,7 @@ const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
         <Toggle />
         <Bell style={{ cursor: 'pointer' }} onClick={() => navigate('/notification')} />
         <ProfileImage
-          image={'https://picsum.photos/200/300'}
+          image={userData.image}
           size={40}
           updatable={false}
           style={{ cursor: 'pointer' }}
