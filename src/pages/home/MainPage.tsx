@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 import { ComponentProps } from 'react'
 
 import ChannelList from '@/components/channel/channelList'
@@ -25,9 +26,27 @@ const MainPage = ({
   interestChannelColor = 'BLACK',
   ...props
 }: MainPageProps) => {
-  const { data: channelListData, isLoading } = useQuery(['channels'], () =>
-    ChannelApi.GET_CHANNEL(),
-  )
+  const { data, isLoading } = useQuery(['channels'], () => ChannelApi.GET_CHANNEL(), {
+    onSuccess: (data) => {
+      const newFilteredData = data.filter((item) => {
+        if (!localStorage.getItem('isLogin')) return true
+        else return !item.authRequired
+      })
+      setFilteredData(newFilteredData)
+    },
+  })
+
+  const [filteredData, setFilteredData] = useState<Channel[]>([])
+
+  useEffect(() => {
+    if (data) {
+      const newFilteredData = data.filter((item) => {
+        if (!localStorage.getItem('isLogin')) return true
+        else return !item.authRequired
+      })
+      setFilteredData(newFilteredData)
+    }
+  }, [data])
 
   if (isLoading) return <h2>{'로딩 중...'}</h2>
 
@@ -38,12 +57,12 @@ const MainPage = ({
           {'오늘의 채널'}
         </Text>
         <Spacing size={15}></Spacing>
-        <ChannelSlider data={channelListData as Channel[]} />
+        {filteredData.length > 0 && <ChannelSlider data={filteredData} />}
       </TodayChannel>
       <InterestChannel>
         <InterestHeader typo={interestChannelTypo} color={interestChannelColor} />
         <Spacing size={30}></Spacing>
-        <ChannelList data={channelListData as Channel[]} />
+        <ChannelList data={filteredData} />
       </InterestChannel>
     </MainPageWrapper>
   )
@@ -58,7 +77,9 @@ const MainPageWrapper = styled.div`
   overflow-y: auto;
   padding-bottom: 25%;
 `
+
 const TodayChannel = styled.div``
+
 const InterestChannel = styled.div``
 
 export default MainPage
