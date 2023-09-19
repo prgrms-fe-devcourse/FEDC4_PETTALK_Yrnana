@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { MouseEvent, useEffect, useRef } from 'react'
+import { useAtom, useAtomValue } from 'jotai'
+import { MouseEvent, useEffect, useRef, useState } from 'react'
 
 import Button from '@/components/common/button'
 import ChattingBubble from '@/components/common/chattingBubble'
@@ -12,6 +13,7 @@ import Spacing from '@/components/common/spacing'
 import TextArea from '@/components/common/textarea'
 import MessageApi from '@/libs/apis/message/messageApi'
 import { Message } from '@/libs/apis/message/messageType'
+import { userAtom } from '@/libs/store/userAtom'
 import Datetime from '@/pages/chatting/datetime'
 import { theme } from '@/styles/theme'
 
@@ -23,14 +25,37 @@ interface FormattedMessage extends Message {
 }
 
 const Chatting = () => {
+  const userData = useAtomValue(userAtom)
+
   const messageRef = useRef<HTMLTextAreaElement>(null)
 
-  const getDetailMessages = async () => {
-    const response = await MessageApi.GET_DETAIL_MESSAGES('6503f59754033e25ea4a4600')
+  const [testUserId, setTestUserId] = useState<string>('')
+
+  useEffect(() => {
+    setTestUserId(
+      userData._id === '65029272aa40045f5cff7ae9'
+        ? '6509302b2b2dc04dc8b34182'
+        : '65029272aa40045f5cff7ae9',
+    )
+  }, [userData])
+
+  const getDetailMessages = async (userId: string) => {
+    if (!userId) return
+
+    const response = await MessageApi.GET_DETAIL_MESSAGES(userId)
     return response
   }
 
-  const { data, error, isLoading, refetch } = useQuery(['messages'], getDetailMessages)
+  const { data, error, isLoading, refetch } = useQuery(
+    ['messages'],
+    () => getDetailMessages(testUserId),
+    {
+      enabled: testUserId !== userData._id, // testUserId가 존재할 때만 호출
+      refetchInterval: 5000,
+      refetchIntervalInBackground: true,
+      retry: 3,
+    },
+  )
   console.log(data)
 
   const mutation = useMutation(MessageApi.SEND_MESSAGE, {
@@ -55,7 +80,7 @@ const Chatting = () => {
     try {
       await mutation.mutateAsync({
         message: messageRef.current.value,
-        receiver: '6503f59754033e25ea4a4600',
+        receiver: testUserId,
       })
     } catch (error) {
       console.error('메시지 전송 중 오류 발생:', error)
@@ -90,27 +115,6 @@ const Chatting = () => {
   // 객체 -> 배열
   const entries = Object.entries(groupedMessages)
 
-  const pollMessages = async () => {
-    try {
-      await refetch()
-    } catch (error) {
-      console.error('Error fetching messages:', error)
-    }
-  }
-
-  // useEffect(() => {
-  //   console.log('hi')
-  //   const pollingInterval = setInterval(async () => {
-  //     try {
-  //       await refetch() // 서버로부터 새로운 메시지를 가져오기
-  //     } catch (error) {
-  //       console.error('메시지 가져오기 중 오류 발생:', error)
-  //     }
-  //   }, 2000) // 2초마다 폴링
-
-  //   return () => clearInterval(pollingInterval) // 언마운트 시에 clearInterval로 폴링 중지
-  // }, [refetch]) // refetch가 변경될 때마다 useEffect 재실행
-
   return (
     <ChattingWrapper direction={'column'} fullWidth={true} align={'stretch'}>
       <MessageWrapper>
@@ -122,8 +126,7 @@ const Chatting = () => {
             <FlexBox direction={'column'} gap={20} key={date}>
               <Datetime content={date}></Datetime>
               {messages.map((message) =>
-                // 유저 객체 jotai로 들어오면 내 유저 아이디로 변경
-                '65029272aa40045f5cff7ae9' === message.sender._id ? (
+                userData._id === message.sender._id ? (
                   <ChattingBubble
                     key={message._id}
                     isMyChat={true}
@@ -133,9 +136,7 @@ const Chatting = () => {
                 ) : (
                   <ListRow
                     key={message._id}
-                    leftImage={
-                      <ProfileImage size={35} image={message.sender.image} updatable={false} />
-                    }
+                    leftImage={message.sender.image}
                     mainText={message.sender.fullName}
                     subElement={<ChattingBubble message={message.message} time={'17:44'} />}
                     rightElement={null}
@@ -166,9 +167,6 @@ const ChattingWrapper = styled(FlexBox)`
   height: 100%;
   overflow-y: auto;
   background-color: ${theme.palette.GRAY100};
-
-  display: flex;
-  flex-direction: column; /* Children will be stacked vertically */
 `
 
 const MessageWrapper = styled.div`
