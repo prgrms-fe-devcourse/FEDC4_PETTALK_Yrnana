@@ -10,6 +10,7 @@ import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
+import useModal from '@/libs/hooks/useModal'
 import { theme } from '@/styles/theme'
 
 const Login = () => {
@@ -17,8 +18,10 @@ const Login = () => {
   const emailInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const { isModalOpen, openModal, Modal } = useModal()
 
-  const submitLogin = () => {
+  const submitLogin = (e: React.FormEvent) => {
+    e.preventDefault()
     if (emailInputRef.current && passwordInputRef.current) {
       setIsLoading(true)
       const body = {
@@ -41,13 +44,15 @@ const Login = () => {
       localStorage.setItem('token', data.data.token)
       localStorage.setItem('role', data.data.user.role)
       localStorage.setItem('isLogin', 'true')
-      alert('로그인 성공')
       if (localStorage.getItem('token')) {
         axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem(
           'token',
         )}`
       }
-      navigate('/')
+      openModal()
+      setTimeout(() => {
+        navigate('/')
+      }, 2000)
     },
     onError: () => {
       setIsLoading(false)
@@ -81,8 +86,8 @@ const Login = () => {
     <Loading />
   ) : (
     <>
-      {' '}
       <StyleRegisterWrapper>
+        {isModalOpen ? <Modal modalText={'로그인 성공'} time={2000} /> : ''}
         {loading ? <Greetings className={animation ? '' : 'fade-out'} /> : ''}
         <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
         <Spacing size={50} />
@@ -95,7 +100,7 @@ const Login = () => {
           type={'password'}
         ></Input>
         <Spacing size={50} />
-        <Button buttonType={'Large'} value={'로그인'} onClick={submitLogin}></Button>
+        <Button buttonType={'Large'} value={'로그인'} onClick={(e) => submitLogin(e)}></Button>
         <StyleMoveToRegisterPage onClick={goRegisterPage}>
           {'회원가입'}
         </StyleMoveToRegisterPage>{' '}
