@@ -17,7 +17,8 @@ import { theme } from '@/styles/theme'
 const EditPostPage = () => {
   const postMutation = useMutation(PostApi.UPDATE_POST, {
     onSuccess: () => {
-      navigate(`/posts/${channelID}/${postId}`)
+      // queryClient.setQueryData(['posts', channelID, newPost._id], newPost)
+      navigate(`/posts/${channelID}/${postId}`, { replace: true })
     },
   })
   const [uploadFile, setUploadFile] = useState<File | null>(null)

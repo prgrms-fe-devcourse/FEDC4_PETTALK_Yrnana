@@ -18,7 +18,7 @@ import { theme } from '@/styles/theme'
 const NewPostPage = () => {
   const postMutation = useMutation(PostApi.CREATE_POST, {
     onSuccess: (newPost: Post) => {
-      queryClient.setQueryData(['posts', channelID, newPost._id], newPost)
+      // queryClient.setQueryData(['posts', channelID, newPost._id], newPost)
       navigate(`/posts/${channelID}/${newPost._id}`)
     },
   })

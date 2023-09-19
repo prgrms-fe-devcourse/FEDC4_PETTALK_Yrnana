@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import Comment from '@/assets/icons/Comment'
@@ -122,6 +122,20 @@ const PostDetailPage = () => {
     return response
   }
 
+  const deleteComment = async (e: React.MouseEvent<HTMLDivElement>, id: string) => {
+    e.preventDefault()
+    const response = await axiosAPI.delete('/comments/delete', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      data: {
+        id: id,
+      },
+    })
+    refetch()
+    return response
+  }
+
   return (
     <DetailContainer>
       <Title>
@@ -218,7 +232,21 @@ const PostDetailPage = () => {
                     style={{ marginRight: '10px' }}
                     image={comment.author.image}
                   />
-                  {comment.comment}
+                  <UserComment>
+                    <Text typo={'Caption_11'}>{comment.author.fullName}</Text>
+                    <Text typo={'SubHead_14'}>{comment.comment}</Text>
+                  </UserComment>
+                  {userData._id === comment.author._id ? (
+                    <Text
+                      typo={'Body_16'}
+                      onClick={(e) => deleteComment(e, comment._id)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {'❌'}
+                    </Text>
+                  ) : (
+                    ''
+                  )}
                 </SingleComment>
                 <Text
                   typo={'Caption_11'}
@@ -315,6 +343,10 @@ const Comments = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+`
+
+const UserComment = styled.div`
+  width: 100%;
 `
 
 const CommentContainer = styled.div`
