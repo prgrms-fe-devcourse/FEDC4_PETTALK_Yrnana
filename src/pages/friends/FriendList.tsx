@@ -1,10 +1,16 @@
 import styled from '@emotion/styled'
+import { useQuery } from '@tanstack/react-query'
 
 import Search from '@/assets/icons/Search'
 import { FlexBox } from '@/components/common/flexBox'
 import Input from '@/components/common/input'
+import FollowFriend from '@/components/friends/FollowFriend'
 import OnlineFriends from '@/components/friends/OnlineFriends'
+import { UserApi } from '@/libs/apis/user/userApi'
+
 const FriendList = () => {
+  const { data } = useQuery(['userList'], () => UserApi.GET_USERS())
+  console.log(data)
   return (
     <FriendListWrapper>
       <FlexBox direction={'row'} gap={10} fullWidth={true}>
@@ -12,6 +18,12 @@ const FriendList = () => {
         <Search />
       </FlexBox>
       <OnlineFriends />
+      <FlexBox direction={'column'} fullWidth={true} gap={10}>
+        {data?.map((data, index) => {
+          console.log(data)
+          return <FollowFriend key={index} data={data} />
+        })}
+      </FlexBox>
     </FriendListWrapper>
   )
 }
