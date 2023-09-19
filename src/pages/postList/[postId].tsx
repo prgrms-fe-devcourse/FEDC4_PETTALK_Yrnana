@@ -7,6 +7,7 @@ import Comment from '@/assets/icons/Comment'
 import Favorite from '@/assets/icons/Favorite'
 import Button from '@/components/common/button'
 import Loading from '@/components/common/loading'
+import Modal from '@/components/common/modal'
 import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
@@ -20,6 +21,8 @@ const PostDetailPage = () => {
   )
   const [comment, setComment] = useState('')
   const [like, setLike] = useState(false)
+  const [modal, setModal] = useState(false)
+  const [follow, setFollow] = useState(false)
   const navigate = useNavigate()
 
   if (isLoading) {
@@ -85,6 +88,34 @@ const PostDetailPage = () => {
     return response
   }
 
+  const handleFollow = async (e: React.MouseEvent<HTMLButtonElement>, userId: string) => {
+    e.preventDefault()
+    setModal(true)
+    setFollow(true)
+    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+    const response = await axiosAPI.post('/follow/create', {
+      userId: userId,
+    })
+    refetch()
+    return response
+  }
+
+  const handleUnFollow = async (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
+    e.preventDefault()
+    setModal(true)
+    setFollow(false)
+    const response = await axiosAPI.delete('/follow/delete', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      data: {
+        id: id,
+      },
+    })
+    refetch()
+    return response
+  }
+
   return (
     <DetailContainer>
       <Title>
@@ -136,7 +167,16 @@ const PostDetailPage = () => {
               <Text typo={'Caption_11'} color={'GRAY600'}>
                 {data?.author.fullName}
               </Text>
-              <Button buttonType={'Small'} value={'팔로우'} />
+              <Button
+                buttonType={'Small'}
+                backgroundColor={modal ? 'GREEN' : 'BEIGE'}
+                value={'팔로우'}
+                onClick={
+                  follow
+                    ? (e) => handleUnFollow(e, data?.author._id as string)
+                    : (e) => handleFollow(e, data?.author._id as string)
+                }
+              />
             </UserDetail>
           </User>
         </Info>
