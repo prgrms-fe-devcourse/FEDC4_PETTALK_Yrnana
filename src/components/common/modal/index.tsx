@@ -12,12 +12,16 @@ interface ModalProps {
   modalText: string
   time?: number
   type?: ToastType
+  active: boolean
 }
-const Modal = ({ modalText, time = 3000, type = 'info' }: ModalProps) => {
+const Modal = ({ modalText, time = 3000, type = 'info', active = true }: ModalProps) => {
   const notify = () => toast(modalText, { type })
   useEffect(() => {
     notify()
   }, [])
+  if (!active) {
+    return null
+  }
   return (
     <>
       <StyleModal

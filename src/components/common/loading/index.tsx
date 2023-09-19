@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { type GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
@@ -13,7 +14,11 @@ const Loading = () => {
 
     const renderer = new THREE.WebGLRenderer()
     renderer.setClearColor(0x000000, 0)
-    renderer.setSize(360, 360)
+    if (window.innerWidth > 480) {
+      renderer.setSize(480, 480)
+    } else {
+      renderer.setSize(window.innerWidth, window.innerWidth)
+    }
     mount.current?.appendChild(renderer.domElement)
 
     const pointLight = new THREE.PointLight(0xffffff, 1, 0)
@@ -21,7 +26,7 @@ const Loading = () => {
     scene.add(pointLight)
 
     const loader = new GLTFLoader()
-    loader.load('paw_print/scene.gltf', (gltf: GLTF) => {
+    loader.load('/paw_print/scene.gltf', (gltf: GLTF) => {
       const model = gltf.scene
       model.scale.set(0.1, 0.1, 0.1)
 
@@ -37,7 +42,14 @@ const Loading = () => {
     })
   }, [])
 
-  return <div ref={mount}></div>
+  return <LoadingContainer ref={mount}></LoadingContainer>
 }
+
+const LoadingContainer = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`
 
 export default Loading
