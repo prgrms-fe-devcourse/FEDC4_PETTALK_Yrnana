@@ -9,11 +9,15 @@ const PostApi = {
   },
   DETAIL_POST: async (postId: string): Promise<Post> => {
     const response = await axiosAPI.get(`/posts/${postId}`)
-    console.log(response)
     return response.data
   },
   GET_POSTS: async (channelId: string): Promise<Post[]> => {
     const response = await axiosAPI.get(`/posts/channel/${channelId}`)
+    return response.data
+  },
+  UPDATE_POST: async (payload: FormData): Promise<Post> => {
+    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+    const response = await axiosAPI.put('posts/update', payload)
     return response.data
   },
 }

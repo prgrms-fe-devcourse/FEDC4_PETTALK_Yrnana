@@ -7,6 +7,7 @@ import Comment from '@/assets/icons/Comment'
 import Favorite from '@/assets/icons/Favorite'
 import Button from '@/components/common/button'
 import Loading from '@/components/common/loading'
+import Modal from '@/components/common/modal'
 import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
@@ -15,15 +16,20 @@ import PostApi from '@/libs/apis/post/postApi'
 const PostDetailPage = () => {
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
-  const { data, isLoading } = useQuery(['posts', postId], () => PostApi.DETAIL_POST(postId))
+  const { data, isLoading, refetch } = useQuery(['posts', postId], () =>
+    PostApi.DETAIL_POST(postId),
+  )
   const [comment, setComment] = useState('')
-  const [likes, setLikes] = useState(data?.likes.length)
   const [like, setLike] = useState(false)
+  const [modal, setModal] = useState(false)
+  const [follow, setFollow] = useState(false)
   const navigate = useNavigate()
 
   if (isLoading) {
     return <Loading />
   }
+
+  refetch()
 
   const postData = JSON.parse(data?.title as string)
 
@@ -40,36 +46,73 @@ const PostDetailPage = () => {
     return response
   }
 
-  const handleCreateComment = async (postId: string) => {
+  const handleCreateComment = async (e: React.MouseEvent<HTMLButtonElement>, postId: string) => {
+    e.preventDefault()
+    setComment('')
     axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     if (comment) {
       const response = await axiosAPI.post('/comments/create', {
         comment: comment,
         postId: postId,
       })
+      refetch()
       return response
     } else {
       alert('댓글을 입력해주세요!')
     }
   }
 
-  const handleCreateFavorite = async (postId: string) => {
+  const handleCreateFavorite = async (e: React.MouseEvent<HTMLDivElement>, postId: string) => {
+    e.preventDefault()
     setLike(true)
     axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     const response = await axiosAPI.post('/likes/create', {
       postId: postId,
     })
-    setLikes(data?.likes.length)
+    refetch()
     return response
   }
 
-  const handleRemoveFavorite = async (id: string) => {
+  const handleRemoveFavorite = async (e: React.MouseEvent<HTMLDivElement>, id: string) => {
+    e.preventDefault()
     setLike(false)
-    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-    const response = await axiosAPI.post('/likes/delete', {
-      id: id,
+    const response = await axiosAPI.delete('/likes/delete', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      data: {
+        id: id,
+      },
     })
-    setLikes(data?.likes.length)
+    refetch()
+    return response
+  }
+
+  const handleFollow = async (e: React.MouseEvent<HTMLButtonElement>, userId: string) => {
+    e.preventDefault()
+    setModal(true)
+    setFollow(true)
+    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+    const response = await axiosAPI.post('/follow/create', {
+      userId: userId,
+    })
+    refetch()
+    return response
+  }
+
+  const handleUnFollow = async (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
+    e.preventDefault()
+    setModal(true)
+    setFollow(false)
+    const response = await axiosAPI.delete('/follow/delete', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      data: {
+        id: id,
+      },
+    })
+    refetch()
     return response
   }
 
@@ -94,8 +137,9 @@ const PostDetailPage = () => {
               fill={like ? 'red' : 'none'}
               onClick={
                 like
-                  ? () => handleRemoveFavorite(data?.likes[data?.likes.length - 1]._id as string)
-                  : () => handleCreateFavorite(data?._id as string)
+                  ? (e) =>
+                      handleRemoveFavorite(e, data?.likes[data?.likes.length - 1]._id as string)
+                  : (e) => handleCreateFavorite(e, data?._id as string)
               }
               style={{ cursor: 'pointer' }}
             />
@@ -106,7 +150,11 @@ const PostDetailPage = () => {
             <Text typo={'Caption_11'} color={'GRAY500'}>
               {data?.comments.length}
             </Text>
-            <Button buttonType={'Small'} value={'수정'} />
+            <Button
+              buttonType={'Small'}
+              value={'수정'}
+              onClick={() => navigate(`/posts/${channelID}/${postId}/editpost`)}
+            />
             <Button
               buttonType={'Small'}
               value={'삭제'}
@@ -119,7 +167,16 @@ const PostDetailPage = () => {
               <Text typo={'Caption_11'} color={'GRAY600'}>
                 {data?.author.fullName}
               </Text>
-              <Button buttonType={'Small'} value={'팔로우'} />
+              <Button
+                buttonType={'Small'}
+                backgroundColor={modal ? 'GREEN' : 'BEIGE'}
+                value={'팔로우'}
+                onClick={
+                  follow
+                    ? (e) => handleUnFollow(e, data?.author._id as string)
+                    : (e) => handleFollow(e, data?.author._id as string)
+                }
+              />
             </UserDetail>
           </User>
         </Info>
@@ -147,7 +204,7 @@ const PostDetailPage = () => {
           <Button
             buttonType={'Medium'}
             value={'작성하기'}
-            onClick={() => handleCreateComment(data?._id as string)}
+            onClick={(e) => handleCreateComment(e, data?._id as string)}
           />
         </WriteComment>
       </ContentContainer>
