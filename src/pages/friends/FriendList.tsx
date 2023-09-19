@@ -1,16 +1,28 @@
+/* eslint-disable prettier/prettier */
 import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
+import { useEffect } from 'react'
+import { useState } from 'react'
 
 import Search from '@/assets/icons/Search'
 import { FlexBox } from '@/components/common/flexBox'
 import Input from '@/components/common/input'
 import FollowFriend from '@/components/friends/FollowFriend'
 import OnlineFriends from '@/components/friends/OnlineFriends'
+import { User } from '@/libs/apis/auth/authType'
 import { UserApi } from '@/libs/apis/user/userApi'
-
+import { userAtom } from '@/libs/store/userAtom'
 const FriendList = () => {
   const { data } = useQuery(['userList'], () => UserApi.GET_USERS())
-  console.log(data)
+  const mydata = useAtomValue<User>(userAtom)
+  const [followingList, setFollowingList] = useState<string[]>([])
+  useEffect(() => {
+    if (mydata.followers.length) {
+      const followData = mydata.following.map((value) => value.user)
+      setFollowingList(followData)
+    }
+  }, [mydata])
   return (
     <FriendListWrapper>
       <FlexBox direction={'row'} gap={10} fullWidth={true}>
@@ -19,10 +31,15 @@ const FriendList = () => {
       </FlexBox>
       <OnlineFriends />
       <FlexBox direction={'column'} fullWidth={true} gap={10}>
-        {data?.map((data, index) => {
-          console.log(data)
-          return <FollowFriend key={index} data={data} />
-        })}
+        {followingList.length === 0
+          ? 'loading....'
+          : data?.map((data, index) =>
+            followingList.includes(data._id) ? (
+              <FollowFriend key={index} data={data} follow={true} />
+            ) : (
+              <FollowFriend key={index} data={data} follow={false} />
+            ),
+          )}
       </FlexBox>
     </FriendListWrapper>
   )
