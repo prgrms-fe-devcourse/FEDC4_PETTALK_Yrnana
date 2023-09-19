@@ -7,7 +7,7 @@ import { axiosAPI } from '@/libs/apis/axios'
 interface ProfileImageProps extends ComponentProps<'div'> {
   size: number
   image: string
-  updatable: boolean
+  updatable?: boolean
 }
 
 interface ImageProps {

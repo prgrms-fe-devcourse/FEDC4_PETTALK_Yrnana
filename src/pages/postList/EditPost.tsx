@@ -11,13 +11,18 @@ import Loading from '@/components/common/loading'
 import { Text } from '@/components/common/text'
 import ImageUploader from '@/components/posts/ImageUploader'
 import PostApi from '@/libs/apis/post/postApi'
+import { Post } from '@/libs/apis/post/postType'
+import { queryClient } from '@/libs/apis/queryClient'
 import encodeFileToBase64 from '@/libs/utils/encodeFileToBase64'
 import { theme } from '@/styles/theme'
 
 const EditPostPage = () => {
   const postMutation = useMutation(PostApi.UPDATE_POST, {
-    onSuccess: () => {
-      // queryClient.setQueryData(['posts', channelID, newPost._id], newPost)
+    onSettled: () => {
+      queryClient.invalidateQueries(['posts', postId])
+    },
+    onSuccess: (newPost: Post) => {
+      queryClient.setQueryData(['posts', newPost._id], newPost)
       navigate(`/posts/${channelID}/${postId}`, { replace: true })
     },
   })
