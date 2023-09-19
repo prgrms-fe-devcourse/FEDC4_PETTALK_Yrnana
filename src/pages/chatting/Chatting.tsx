@@ -47,7 +47,6 @@ const Chatting = () => {
   const sendMessage = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    console.log(messageRef.current, messageRef.current.value)
     if (!messageRef.current || !messageRef.current.value) {
       console.log('메시지를 입력하세요.')
       return
@@ -90,6 +89,27 @@ const Chatting = () => {
 
   // 객체 -> 배열
   const entries = Object.entries(groupedMessages)
+
+  const pollMessages = async () => {
+    try {
+      await refetch()
+    } catch (error) {
+      console.error('Error fetching messages:', error)
+    }
+  }
+
+  // useEffect(() => {
+  //   console.log('hi')
+  //   const pollingInterval = setInterval(async () => {
+  //     try {
+  //       await refetch() // 서버로부터 새로운 메시지를 가져오기
+  //     } catch (error) {
+  //       console.error('메시지 가져오기 중 오류 발생:', error)
+  //     }
+  //   }, 2000) // 2초마다 폴링
+
+  //   return () => clearInterval(pollingInterval) // 언마운트 시에 clearInterval로 폴링 중지
+  // }, [refetch]) // refetch가 변경될 때마다 useEffect 재실행
 
   return (
     <ChattingWrapper direction={'column'} fullWidth={true} align={'stretch'}>
