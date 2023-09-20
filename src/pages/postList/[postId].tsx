@@ -190,28 +190,26 @@ const PostDetailPage = () => {
             )}
           </Interaction>
           <User>
-            <ProfileImage size={50} image={`${userData.image}`} />
+            <ProfileImage size={50} image={userData.image} updatable={false} />
             <UserDetail>
               <Text typo={'Caption_11'} color={'GRAY600'}>
                 {data?.author.fullName}
               </Text>
               {userData._id === data?.author._id ? (
-                <Button
-                  disabled
-                  buttonType={'Small'}
-                  backgroundColor={modal ? 'GREEN' : 'BEIGE'}
-                  value={follow ? '팔로잉' : '팔로우'}
-                  onClick={
-                    follow
-                      ? (e) => handleUnFollow(e, followId)
-                      : (e) => handleFollow(e, data?.author._id as string)
-                  }
-                />
+                ''
               ) : (
                 <Button
                   buttonType={'Small'}
-                  backgroundColor={modal ? 'GREEN' : 'BEIGE'}
-                  value={follow ? '팔로잉' : '팔로우'}
+                  backgroundColor={
+                    userData.following.find((object) => object.user === data?.author._id)
+                      ? 'GREEN'
+                      : 'BEIGE'
+                  }
+                  value={
+                    userData.following.find((object) => object.user === data?.author._id)
+                      ? '팔로잉'
+                      : '팔로우'
+                  }
                   onClick={
                     follow
                       ? (e) => handleUnFollow(e, followId)
@@ -274,7 +272,6 @@ const PostDetailPage = () => {
           />
         </WriteComment>
       </ContentContainer>
-      <Spacing size={125} />
     </DetailContainer>
   )
 }
@@ -374,6 +371,13 @@ const WriteComment = styled.form`
   bottom: 4px;
   padding: 10px;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    width: 98%;
+  }
+  @media (min-width: 769px) {
+    width: 48%;
+  }
 `
 
 const StyledTextArea = styled.textarea`
