@@ -4,6 +4,7 @@ import { useAtomValue } from 'jotai'
 import { MouseEvent, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
+import Datetime from '@/components/chatting/datetime'
 import Button from '@/components/common/button'
 import ChattingBubble from '@/components/common/chattingBubble'
 import { FlexBox } from '@/components/common/flexBox'
@@ -15,7 +16,6 @@ import { User } from '@/libs/apis/auth/authType'
 import MessageApi from '@/libs/apis/message/messageApi'
 import { Message } from '@/libs/apis/message/messageType'
 import { userAtom } from '@/libs/store/userAtom'
-import Datetime from '@/pages/chatting/datetime'
 import { theme } from '@/styles/theme'
 
 interface FormattedMessage extends Message {
