@@ -6,10 +6,12 @@ import { ComponentProps } from 'react'
 import ChannelList from '@/components/channel/channelList'
 import ChannelSlider from '@/components/channel/channelSlider'
 import InterestHeader from '@/components/channel/interestHeader'
+import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
 import { Channel } from '@/libs/apis/channel/channelType'
+import { queryClient } from '@/libs/apis/queryClient'
 import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'
 
 interface MainPageProps extends ComponentProps<'div'> {
@@ -27,28 +29,23 @@ const MainPage = ({
   ...props
 }: MainPageProps) => {
   const { data, isLoading } = useQuery(['channels'], () => ChannelApi.GET_CHANNEL(), {
+    // onSettled: (data) => {
+    //   queryClient.invalidateQueries(['channels', 'first'])
+    // },
     onSuccess: (data) => {
-      const newFilteredData = data.filter((item) => {
-        if (!localStorage.getItem('isLogin')) return true
-        else return !item.authRequired
-      })
-      setFilteredData(newFilteredData)
+      // queryClient.setQueryData(['channels', data![data!.length - 1]._id], data)
+      console.log(data)
     },
   })
 
-  const [filteredData, setFilteredData] = useState<Channel[]>([])
+  const filterData = (data: Channel[]) => {
+    return data.filter((item) => {
+      if (localStorage.getItem('isLogin')) return true
+      else return !item.authRequired
+    })
+  }
 
-  useEffect(() => {
-    if (data) {
-      const newFilteredData = data.filter((item) => {
-        if (!localStorage.getItem('isLogin')) return true
-        else return !item.authRequired
-      })
-      setFilteredData(newFilteredData)
-    }
-  }, [data])
-
-  if (isLoading) return <h2>{'로딩 중...'}</h2>
+  if (isLoading) return <Loading />
 
   return (
     <MainPageWrapper {...props}>
@@ -57,12 +54,12 @@ const MainPage = ({
           {'오늘의 채널'}
         </Text>
         <Spacing size={15}></Spacing>
-        {filteredData.length > 0 && <ChannelSlider data={filteredData} />}
+        {!isLoading && <ChannelSlider data={filterData(data as Channel[])} />}
       </TodayChannel>
       <InterestChannel>
         <InterestHeader typo={interestChannelTypo} color={interestChannelColor} />
         <Spacing size={30}></Spacing>
-        <ChannelList data={filteredData} />
+        {!isLoading && <ChannelList data={filterData(data as Channel[])} />}
       </InterestChannel>
     </MainPageWrapper>
   )
