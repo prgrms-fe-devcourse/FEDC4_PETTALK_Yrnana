@@ -69,7 +69,7 @@ const ChattingList = () => {
   }
   useEffect(() => {
     if (data !== undefined) setChattingList(data?.data)
-  }, [])
+  }, [searchInputRef, filteredChattingList, chattingList])
   return (
     <StyleWrapper>
       {isLoading ? (
