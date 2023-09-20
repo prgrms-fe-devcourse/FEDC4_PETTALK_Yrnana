@@ -232,6 +232,7 @@ const PostDetailPage = () => {
                     size={30}
                     style={{ marginRight: '10px' }}
                     image={comment.author.image}
+                    updatable={false}
                   />
                   <UserComment>
                     <Text typo={'Caption_11'}>{comment.author.fullName}</Text>
@@ -274,7 +275,6 @@ const PostDetailPage = () => {
           />
         </WriteComment>
       </ContentContainer>
-      <Spacing size={125} />
     </DetailContainer>
   )
 }
@@ -305,6 +305,7 @@ const ContentContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
 `
 
 const Content = styled.div`
@@ -369,11 +370,18 @@ const WriteComment = styled.form`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  width: 98%;
   position: fixed;
   bottom: 4px;
   padding: 10px;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    width: 98%;
+  }
+
+  @media (min-width: 769px) {
+    width: 48%;
+  }
 `
 
 const StyledTextArea = styled.textarea`
