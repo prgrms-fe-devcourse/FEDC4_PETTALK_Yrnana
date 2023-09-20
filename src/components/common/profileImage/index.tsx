@@ -7,7 +7,7 @@ import { axiosAPI } from '@/libs/apis/axios'
 interface ProfileImageProps extends ComponentProps<'div'> {
   size: number
   image: string
-  updatable: boolean
+  updatable?: boolean
 }
 
 interface ImageProps {
@@ -37,7 +37,7 @@ const ProfileImage = ({
           },
           {
             headers: {
-              Authorization: `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY1MDJhYTM3YWE0MDA0NWY1Y2ZmN2IyZiIsImVtYWlsIjoibmV3amVhbnMifSwiaWF0IjoxNjk0NzYxOTE2fQ.dIC03yB0pCLn3SUwu8kFd1UUaoqNuXEJ775oGb_116E`,
+              Authorization: `bearer ${localStorage.getItem('token')}`,
               'Content-Type': 'multipart/form-data',
             },
           },

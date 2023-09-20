@@ -9,8 +9,8 @@ export type User = {
   posts: Post[]
   likes: Like[]
   comments: string[]
-  followers: []
-  following: []
+  followers: Follow[]
+  following: Follow[]
   notifications: Notification[]
   messages: Message[]
   _id: string
@@ -22,4 +22,12 @@ export type User = {
 export type SignUpResponse = {
   user: User
   token: string
+}
+
+export type Follow = {
+  _id: string
+  user: string
+  follower: string
+  updatedAt: string
+  createdAt: string
 }

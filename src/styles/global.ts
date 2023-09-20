@@ -22,6 +22,11 @@ export const globalStyle = css`
 
   body {
     box-sizing: border-box;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  ::-webkit-scrollbar {
+    display: none;
   }
   div {
     box-sizing: border-box;
@@ -69,5 +74,24 @@ export const globalStyle = css`
   .fade-out {
     opacity: 0;
     transition: opacity 1s ease-in-out;
+  }
+
+  .heart {
+  }
+
+  .is_animating {
+    animation: like 0.5s 1;
+  }
+
+  @keyframes like {
+    0% {
+      transform: scale(1);
+    }
+    90% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1.1);
+    }
   }
 `

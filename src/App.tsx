@@ -1,10 +1,12 @@
 import { Route, Routes } from 'react-router-dom'
 
 import UserDataRoute from '@/components/auth/UserDataRoute'
+import AppBarNavTemplate from '@/components/layouts/AppBarNavTemplate'
 import Layout from '@/components/layouts/Layout'
 import ChattingRouter from '@/pages/chatting'
+import ChattingListRouter from '@/pages/chattingList'
 import ExamplePage from '@/pages/Example'
-import FriendsRouter from '@/pages/friends'
+import FriendList from '@/pages/friends/FriendList'
 import ChannelsRouter from '@/pages/home'
 import CreateChannel from '@/pages/home/CreateChannel'
 import LoginPage from '@/pages/login'
@@ -21,9 +23,17 @@ const App = () => {
           <Route element={<UserDataRoute />}>
             <Route path={'*'} element={<ChannelsRouter />} />
             <Route path={'/posts/*'} element={<PostRouter />} />
-            <Route path={'/friends'} element={<FriendsRouter />}></Route>
+            <Route
+              path={'/friends'}
+              element={
+                <AppBarNavTemplate hasNav={true} title={'팔로우 목록'}>
+                  <FriendList />
+                </AppBarNavTemplate>
+              }
+            ></Route>
             <Route path={'/myprofile'} element={<MyProfileRouter />}></Route>
             <Route path={'/chatting'} element={<ChattingRouter />}></Route>
+            <Route path={'/chattinglist'} element={<ChattingListRouter />}></Route>
           </Route>
         </Route>
         <Route element={<PrivateRoute auth={false} />}>
