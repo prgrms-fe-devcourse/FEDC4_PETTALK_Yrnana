@@ -22,6 +22,11 @@ export const globalStyle = css`
 
   body {
     box-sizing: border-box;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  ::-webkit-scrollbar {
+    display: none;
   }
   div {
     box-sizing: border-box;
