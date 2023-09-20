@@ -12,8 +12,6 @@ const MyProfile = () => {
   const userData = useAtomValue(userAtom)
   const navigate = useNavigate()
 
-  console.log(userData)
-
   return (
     <>
       <Spacing size={40} />
