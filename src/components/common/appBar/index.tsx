@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useNavigate } from 'react-router-dom'
 
 import BackArrow from '@/assets/icons/BackArrow'
@@ -16,7 +16,7 @@ interface MainPage {
 }
 
 const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
-  const userData = useAtomValue(userAtom)
+  const userData = useAtom(userAtom)[0]
   const navigate = useNavigate()
 
   return (

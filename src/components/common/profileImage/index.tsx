@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
+import { useAtom } from 'jotai'
 import { ComponentProps, RefObject, useEffect, useRef, useState } from 'react'
 
 import defaultImage from '@/assets/images/defaultProfileImage.png'
 import { axiosAPI } from '@/libs/apis/axios'
+import { userAtom } from '@/libs/store/userAtom'
 
 interface ProfileImageProps extends ComponentProps<'div'> {
   size: number
@@ -20,6 +22,7 @@ const ProfileImage = ({
   updatable = false,
   ...props
 }: ProfileImageProps) => {
+  const [userData, setUserData] = useAtom(userAtom)
   const [selectedImage, setSelectedImage] = useState('')
   const imgRef = useRef<HTMLInputElement>(null) as RefObject<HTMLInputElement>
 
@@ -47,6 +50,8 @@ const ProfileImage = ({
         )
         .then((response) => {
           setSelectedImage(response.data.image)
+          const updatedUser = { ...userData, image: response.data.image }
+          setUserData(updatedUser)
         })
     }
   }
