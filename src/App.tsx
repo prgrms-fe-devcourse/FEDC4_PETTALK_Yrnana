@@ -4,6 +4,7 @@ import UserDataRoute from '@/components/auth/UserDataRoute'
 import AppBarNavTemplate from '@/components/layouts/AppBarNavTemplate'
 import Layout from '@/components/layouts/Layout'
 import ChattingRouter from '@/pages/chatting'
+import ChattingListRouter from '@/pages/chattingList'
 import ExamplePage from '@/pages/Example'
 import FriendList from '@/pages/friends/FriendList'
 import ChannelsRouter from '@/pages/home'
@@ -32,6 +33,7 @@ const App = () => {
             ></Route>
             <Route path={'/myprofile'} element={<MyProfileRouter />}></Route>
             <Route path={'/chatting'} element={<ChattingRouter />}></Route>
+            <Route path={'/chattinglist'} element={<ChattingListRouter />}></Route>
           </Route>
         </Route>
         <Route element={<PrivateRoute auth={false} />}>
