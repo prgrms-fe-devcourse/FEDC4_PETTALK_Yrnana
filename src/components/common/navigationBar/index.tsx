@@ -22,9 +22,9 @@ const NavigationBar = () => {
   return (
     <StyleWrapper fullWidth={true}>
       <StyleNavigation justify={'space-around'}>
-        <StyleNavigationItem onClick={() => moveFromNavigationBar('chatting')}>
+        <StyleNavigationItem onClick={() => moveFromNavigationBar('chattinglist')}>
           <FlexBox direction={'column'} gap={5}>
-            <StyleIcon clickMenu={clickMenu == 'chatting'}>
+            <StyleIcon clickMenu={clickMenu == 'chattinglist'}>
               <Chat />
             </StyleIcon>
             <StyleNavigationText>{'채팅목록'}</StyleNavigationText>
