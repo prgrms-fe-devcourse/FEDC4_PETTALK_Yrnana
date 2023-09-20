@@ -17,12 +17,15 @@ interface ImageProps {
 const ProfileImage = ({
   size,
   image = defaultImage,
-  updatable = true,
+  updatable = false,
   ...props
 }: ProfileImageProps) => {
-  const [loadable, setLoadable] = useState(false)
-  const [selectedImage, setSelectedImage] = useState(image)
+  const [selectedImage, setSelectedImage] = useState('')
   const imgRef = useRef<HTMLInputElement>(null) as RefObject<HTMLInputElement>
+
+  useEffect(() => {
+    setSelectedImage(image)
+  }, [image])
 
   const handleImageChange = () => {
     if (imgRef.current && imgRef.current?.files) {
@@ -47,18 +50,13 @@ const ProfileImage = ({
         })
     }
   }
-  useEffect(() => {
-    if (updatable) {
-      setLoadable(true)
-    }
-  }, [])
 
   return (
     <span {...props}>
       <label htmlFor={'fileInput'}>
         <Image src={selectedImage} size={size} alt={''} />
       </label>
-      {loadable ? (
+      {updatable ? (
         <input
           type={'file'}
           ref={imgRef}
