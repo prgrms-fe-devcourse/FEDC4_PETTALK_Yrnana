@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import Comment from '@/assets/icons/Comment'
@@ -27,13 +27,23 @@ const PostDetailPage = () => {
   const [like, setLike] = useState(false)
   const [modal, setModal] = useState(false)
   const [follow, setFollow] = useState<boolean | null>(null)
-  const [followId, setFollowId] = useState('')
+  const [followId, setFollowId] = useState(
+    userData.following.find((object) => object.user === data?.author._id)
+      ? (userData.following.find((object) => object.user === data?.author._id)?._id as string)
+      : '',
+  )
   const [animate, setAnimate] = useState(false)
   const navigate = useNavigate()
 
   if (isLoading) {
     return <Loading />
   }
+
+  useEffect(() => {
+    setFollow(userData.following.find((object) => object.user === data?.author._id) ? true : false)
+  }, [])
+
+  console.log(follow)
 
   const postData = JSON.parse(data?.title as string)
 
@@ -96,7 +106,7 @@ const PostDetailPage = () => {
 
   const handleFollow = async (e: React.MouseEvent<HTMLButtonElement>, userId: string) => {
     e.preventDefault()
-    setModal(true)
+    // setModal(true)
     setFollow(true)
     axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     const response = await axiosAPI.post('/follow/create', {
@@ -109,7 +119,7 @@ const PostDetailPage = () => {
 
   const handleUnFollow = async (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
     e.preventDefault()
-    setModal(false)
+    // setModal(false)
     setFollow(false)
     const response = await axiosAPI.delete('/follow/delete', {
       headers: {
@@ -190,7 +200,7 @@ const PostDetailPage = () => {
             )}
           </Interaction>
           <User>
-            <ProfileImage size={50} image={userData.image} updatable={false} />
+            <ProfileImage size={50} image={data?.author.image as string} updatable={false} />
             <UserDetail>
               <Text typo={'Caption_11'} color={'GRAY600'}>
                 {data?.author.fullName}
@@ -200,19 +210,11 @@ const PostDetailPage = () => {
               ) : (
                 <Button
                   buttonType={'Small'}
-                  backgroundColor={
-                    userData.following.find((object) => object.user === data?.author._id)
-                      ? 'GREEN'
-                      : 'BEIGE'
-                  }
-                  value={
-                    userData.following.find((object) => object.user === data?.author._id)
-                      ? '팔로잉'
-                      : '팔로우'
-                  }
+                  backgroundColor={follow ? 'GREEN' : 'BEIGE'}
+                  value={follow ? '팔로잉' : '팔로우'}
                   onClick={
                     follow
-                      ? (e) => handleUnFollow(e, followId)
+                      ? (e) => handleUnFollow(e, followId as string)
                       : (e) => handleFollow(e, data?.author._id as string)
                   }
                 />
