@@ -17,7 +17,7 @@ const CreateChannel = () => {
   const navigate = useNavigate()
   const ouathRegisterMutation = useMutation(ChannelApi.CREATE_CHANNEL, {
     onSuccess: (newChannel: Channel) => {
-      queryClient.setQueryData(['channels', newChannel._id], newChannel)
+      queryClient.invalidateQueries(['channels'])
     },
   })
   const channelTitleRef = useRef<HTMLInputElement>(null)
