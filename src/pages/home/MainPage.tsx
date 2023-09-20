@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { ComponentProps } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import ChannelList from '@/components/channel/channelList'
 import ChannelSlider from '@/components/channel/channelSlider'
@@ -28,15 +29,11 @@ const MainPage = ({
   interestChannelColor = 'BLACK',
   ...props
 }: MainPageProps) => {
-  const { data, isLoading } = useQuery(['channels'], () => ChannelApi.GET_CHANNEL(), {
-    // onSettled: (data) => {
-    //   queryClient.invalidateQueries(['channels', 'first'])
-    // },
-    onSuccess: (data) => {
-      // queryClient.setQueryData(['channels', data![data!.length - 1]._id], data)
-      console.log(data)
-    },
-  })
+  const { data, isLoading, refetch } = useQuery(['channels'], () => ChannelApi.GET_CHANNEL(), {})
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   const filterData = (data: Channel[]) => {
     return data.filter((item) => {
