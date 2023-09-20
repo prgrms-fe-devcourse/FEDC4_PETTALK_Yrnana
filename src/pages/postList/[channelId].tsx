@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import Search from '@/assets/icons/Search'
 import { FlexBox } from '@/components/common/flexBox'
-import Input from '@/components/common/input'
+import Input from '@/components/common/Input'
 import PostCard from '@/components/common/postCard'
 import { Text } from '@/components/common/text'
 import PostApi from '@/libs/apis/post/postApi'
