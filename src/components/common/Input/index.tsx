@@ -14,7 +14,7 @@ interface InputProps extends ComponentProps<'input'> {
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
-  { width, height = 39, type = 'text', placeholder }: InputProps,
+  { width, height = 39, type = 'text', placeholder, ...props }: InputProps,
   inputRef,
 ) {
   const resetInput = () => {
@@ -31,6 +31,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
         ref={inputRef}
         placeholder={placeholder}
         type={type}
+        {...props}
       />
       <StyleResetIcon onClick={resetInput}>
         <InputValueDelete></InputValueDelete>
