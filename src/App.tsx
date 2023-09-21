@@ -11,7 +11,11 @@ import ChannelsRouter from '@/pages/home'
 import CreateChannel from '@/pages/home/CreateChannel'
 import LoginPage from '@/pages/login'
 import MyProfileRouter from '@/pages/myprofile'
+
 import NotificationRouter from '@/pages/notification'
+
+import NotFoundPage from '@/pages/notFound'
+
 import PostRouter from '@/pages/postList'
 import PrivateRoute from '@/pages/redirect/PrivateRoute'
 import RegisterRouter from '@/pages/register'
@@ -22,7 +26,7 @@ const App = () => {
       <Route element={<Layout />}>
         <Route element={<PrivateRoute auth={true} />}>
           <Route element={<UserDataRoute />}>
-            <Route path={'*'} element={<ChannelsRouter />} />
+            <Route path={'/'} element={<ChannelsRouter />} />
             <Route path={'/posts/*'} element={<PostRouter />} />
             <Route
               path={'/friends'}
@@ -41,11 +45,14 @@ const App = () => {
         <Route element={<PrivateRoute auth={false} />}>
           <Route path={'/login/*'} element={<LoginPage />} />
           <Route path={'/register/*'} element={<RegisterRouter />} />
+          <Route path={'*'} element={<NotFoundPage />}></Route>
         </Route>
         <Route element={<PrivateRoute auth={true} superAuth={true} />}>
           <Route path={'/create'} element={<CreateChannel />} />
+          <Route path={'*'} element={<NotFoundPage />}></Route>
         </Route>
         <Route path={'/example'} element={<ExamplePage />}></Route>
+        <Route path={'*'} element={<NotFoundPage />}></Route>
       </Route>
     </Routes>
   )

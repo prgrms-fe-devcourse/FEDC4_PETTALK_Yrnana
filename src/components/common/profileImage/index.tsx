@@ -10,6 +10,7 @@ interface ProfileImageProps extends ComponentProps<'div'> {
   size: number
   image: string
   updatable?: boolean
+  online?: boolean
 }
 
 interface ImageProps {
@@ -20,6 +21,7 @@ const ProfileImage = ({
   size,
   image = defaultImage,
   updatable = false,
+  online = false,
   ...props
 }: ProfileImageProps) => {
   const [userData, setUserData] = useAtom(userAtom)
@@ -58,8 +60,9 @@ const ProfileImage = ({
 
   return (
     <span {...props}>
-      <label htmlFor={'fileInput'}>
+      <label htmlFor={'fileInput'} style={{ position: 'relative' }}>
         <Image src={selectedImage} size={size} alt={''} />
+        {online && <OnlineStatus />}
       </label>
       {updatable ? (
         <input
@@ -79,7 +82,18 @@ const Image = styled.img<ImageProps>`
   width: ${(props) => props.size + 'px'};
   height: ${(props) => props.size + 'px'};
   border-radius: 50%;
+  position: relative;
   object-fit: cover;
+`
+
+const OnlineStatus = styled.div`
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: green;
+  border-radius: 50px;
+  bottom: 2px;
+  right: 2px;
 `
 
 export default ProfileImage
