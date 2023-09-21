@@ -63,8 +63,7 @@ const PostDetailPage = () => {
       refetch()
       useNotification({
         postId: postId,
-        // userId: response.data.author._id,
-        userId: userData._id,
+        userId: response.data.author._id,
         type: 'COMMENT',
         typeId: response.data._id,
       })
@@ -84,8 +83,7 @@ const PostDetailPage = () => {
     })
     useNotification({
       postId: postId,
-      // userId: response.data.user._id,
-      userId: userData._id,
+      userId: response.data.user._id,
       type: 'LIKE',
       typeId: response.data._id,
     })
@@ -119,8 +117,7 @@ const PostDetailPage = () => {
     })
     useNotification({
       postId: postId,
-      // userId: response.data.user,
-      userId: userData._id,
+      userId: response.data.user,
       type: 'FOLLOW',
       typeId: response.data._id,
     })
