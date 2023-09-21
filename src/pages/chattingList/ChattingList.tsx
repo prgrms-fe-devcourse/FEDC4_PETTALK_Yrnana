@@ -11,7 +11,6 @@ import Input from '@/components/common/input'
 import ListRow from '@/components/common/listRow'
 import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
-import { axiosAPI } from '@/libs/apis/axios'
 import { Conversation } from '@/libs/apis/message/conversationType'
 import MessageApi from '@/libs/apis/message/messageApi'
 import { userAtom } from '@/libs/store/userAtom'
@@ -29,7 +28,6 @@ const ChattingList = () => {
   }
   const { data, isLoading } = useQuery(['chattingList'], () => getChattingList())
 
-  console.log(data)
   const moveChattingRoom = async (selectedChat: Conversation) => {
     navigate(`/chatting`, {
       state: {
@@ -96,7 +94,11 @@ const ChattingList = () => {
                     }}
                   >
                     <ListRow
-                      rightElement={<div style={{ color: 'red' }}>{chat.seen ? '' : 'new'}</div>}
+                      rightElement={
+                        <div style={{ color: 'red' }}>
+                          {!chat.seen && chat.receiver._id === userData._id ? 'new' : ''}
+                        </div>
+                      }
                       leftImage={
                         findOpponent(chat).image ? findOpponent(chat).image : defaultProfileImage
                       }
@@ -125,7 +127,11 @@ const ChattingList = () => {
                   }}
                 >
                   <ListRow
-                    rightElement={<div style={{ color: 'red' }}>{chat.seen ? '' : 'new'}</div>}
+                    rightElement={
+                      <div style={{ color: 'red' }}>
+                        {!chat.seen && chat.receiver._id === userData._id ? 'new' : ''}
+                      </div>
+                    }
                     leftImage={
                       findOpponent(chat).image ? findOpponent(chat).image : defaultProfileImage
                     }

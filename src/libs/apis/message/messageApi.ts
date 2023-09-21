@@ -34,7 +34,6 @@ const MessageApi = {
   READ_MESSAGE: async (sender: string): Promise<Message> => {
     axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     const response = await axiosAPI.put('/messages/update-seen', { sender })
-    console.log(response)
     return response.data
   },
 }
