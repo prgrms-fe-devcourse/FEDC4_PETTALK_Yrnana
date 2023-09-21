@@ -29,6 +29,7 @@ const ChattingList = () => {
   }
   const { data, isLoading } = useQuery(['chattingList'], () => getChattingList())
 
+  console.log(data)
   const moveChattingRoom = async (selectedChat: Conversation) => {
     navigate(`/chatting`, {
       state: {
@@ -37,16 +38,7 @@ const ChattingList = () => {
       },
     })
 
-    await axiosAPI
-      .put('/messages/update-seen', {
-        sender: selectedChat.sender._id,
-      })
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((err) => console.log(err))
-
-    // await MessageApi.READ_MESSAGE(selectedChat.sender._id)
+    await MessageApi.READ_MESSAGE(selectedChat.sender._id)
   }
   const searchChattingList = () => {
     if (searchInputRef.current !== null) {
