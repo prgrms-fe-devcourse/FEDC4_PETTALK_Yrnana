@@ -11,11 +11,8 @@ import ChannelsRouter from '@/pages/home'
 import CreateChannel from '@/pages/home/CreateChannel'
 import LoginPage from '@/pages/login'
 import MyProfileRouter from '@/pages/myprofile'
-
-import NotificationRouter from '@/pages/notification'
-
 import NotFoundPage from '@/pages/notFound'
-
+import NotificationRouter from '@/pages/notification'
 import PostRouter from '@/pages/postList'
 import PrivateRoute from '@/pages/redirect/PrivateRoute'
 import RegisterRouter from '@/pages/register'

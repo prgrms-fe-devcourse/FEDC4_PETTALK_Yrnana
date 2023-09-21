@@ -8,14 +8,13 @@ import Datetime from '@/components/chatting/datetime'
 import Button from '@/components/common/button'
 import ChattingBubble from '@/components/common/chattingBubble'
 import { FlexBox } from '@/components/common/flexBox'
-import ListRow from '@/components/common/ListRow'
+import ListRow from '@/components/common/listRow'
 import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import TextArea from '@/components/common/textarea'
 import { User } from '@/libs/apis/auth/authType'
 import MessageApi from '@/libs/apis/message/messageApi'
 import { Message } from '@/libs/apis/message/messageType'
-import { useNotification } from '@/libs/hooks/useNotification'
 import { userAtom } from '@/libs/store/userAtom'
 import { theme } from '@/styles/theme'
 
@@ -55,14 +54,8 @@ const Chatting = () => {
   })
 
   const mutation = useMutation(MessageApi.SEND_MESSAGE, {
-    onSuccess: (data) => {
+    onSuccess: () => {
       if (messageRef.current) messageRef.current.value = ''
-      useNotification({
-        type: 'MESSAGE',
-        typeId: data?._id,
-        userId: opponent,
-        postId: null,
-      })
     },
     onError: (error) => {
       console.error('메시지 전송 중 오류 발생:', error)
