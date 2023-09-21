@@ -11,7 +11,11 @@ import ChannelsRouter from '@/pages/home'
 import CreateChannel from '@/pages/home/CreateChannel'
 import LoginPage from '@/pages/login'
 import MyProfileRouter from '@/pages/myprofile'
+
+import NotificationRouter from '@/pages/notification'
+
 import NotFoundPage from '@/pages/notFound'
+
 import PostRouter from '@/pages/postList'
 import PrivateRoute from '@/pages/redirect/PrivateRoute'
 import RegisterRouter from '@/pages/register'
@@ -35,7 +39,7 @@ const App = () => {
             <Route path={'/myprofile'} element={<MyProfileRouter />}></Route>
             <Route path={'/chatting'} element={<ChattingRouter />}></Route>
             <Route path={'/chattinglist'} element={<ChattingListRouter />}></Route>
-            <Route path={'*'} element={<NotFoundPage />}></Route>
+            <Route path={'/notification/*'} element={<NotificationRouter />}></Route>
           </Route>
         </Route>
         <Route element={<PrivateRoute auth={false} />}>
@@ -48,6 +52,7 @@ const App = () => {
           <Route path={'*'} element={<NotFoundPage />}></Route>
         </Route>
         <Route path={'/example'} element={<ExamplePage />}></Route>
+        <Route path={'*'} element={<NotFoundPage />}></Route>
       </Route>
     </Routes>
   )
