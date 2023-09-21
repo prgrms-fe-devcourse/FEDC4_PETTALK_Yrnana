@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import styled from '@emotion/styled'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect } from 'react'
 import { useState } from 'react'
@@ -9,9 +9,10 @@ import { ChangeEvent } from 'react'
 import Search from '@/assets/icons/Search'
 import { FlexBox } from '@/components/common/flexBox'
 import Input from '@/components/common/input'
+import Loading from '@/components/common/loading'
 import FollowFriend from '@/components/friends/FollowFriend'
 import OnlineFriends from '@/components/friends/OnlineFriends'
-import { User } from '@/libs/apis/auth/authType'
+import { FriendListResponse, User } from '@/libs/apis/auth/authType'
 import { UserApi } from '@/libs/apis/user/userApi'
 import { userAtom } from '@/libs/store/userAtom'
 
@@ -19,7 +20,7 @@ import { useDebounce } from '../../hooks/useDebounce'
 
 const FriendList = () => {
   const [keyword, setKeyword] = useState<string>('')
-  const [friendList, setFriendList] = useState<User[]>([])
+  const [friendList, setFriendList] = useState<FriendListResponse[]>([])
   const { data } = useQuery(['userList'], () => UserApi.GET_USERS())
   const mydata = useAtomValue<User>(userAtom)
   const debouncedValue = useDebounce(keyword, 400)
@@ -29,9 +30,13 @@ const FriendList = () => {
       const followData = mydata.following.map((value) => value.user)
       setFollowingList(followData)
     }
-    if(data)
-    setFriendList(data)
   }, [mydata])
+
+  useEffect(() => {
+    if(data)
+      setFriendList(data)
+  },[data])
+
 
   const handleSearchFriend = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value)
@@ -57,13 +62,13 @@ const FriendList = () => {
       </FlexBox>
       <OnlineFriends />
       <FlexBox direction={'column'} fullWidth={true} gap={10}>
-        {followingList.length === 0
-          ? 'loading....'
+        {followingList.length === 0 || friendList.length === 0
+          ? <Loading/>
           : friendList?.map((data, index) =>
             followingList.includes(data._id) ? (
               <FollowFriend key={index} data={data} follow={true} />
             ) : (
-              <FollowFriend key={index} data={data} follow={false} />
+              <FollowFriend key={index} data={data} follow={false}/>
             ),
           )}
       </FlexBox>
