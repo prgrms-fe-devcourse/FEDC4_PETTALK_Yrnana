@@ -10,4 +10,8 @@ export const UserApi = {
     const response = await axiosAPI.get('/users/online-users')
     return response.data
   },
+  SERACH_USER: async (query: string): Promise<User[]> => {
+    const response = await axiosAPI.get(`/search/users/${query}`)
+    return response.data
+  },
 }
