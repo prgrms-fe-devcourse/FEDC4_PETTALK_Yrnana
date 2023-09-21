@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
-import { useAtomValue } from 'jotai'
+import { atom, useAtomValue } from 'jotai'
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -14,6 +14,7 @@ import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
 import PostApi from '@/libs/apis/post/postApi'
+import { useNotification } from '@/libs/hooks/useNotification'
 import { userAtom } from '@/libs/store/userAtom'
 
 const PostDetailPage = () => {
