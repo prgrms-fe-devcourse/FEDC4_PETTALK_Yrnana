@@ -26,7 +26,9 @@ const PostDetailPage = () => {
   const [comment, setComment] = useState('')
   const [like, setLike] = useState(false)
   const [modal, setModal] = useState(false)
-  const [follow, setFollow] = useState<boolean | null>(null)
+  const [follow, setFollow] = useState<boolean | null>(
+    userData.following.find((object) => object.user === data?.author._id) ? true : false,
+  )
   const [followId, setFollowId] = useState(
     userData.following.find((object) => object.user === data?.author._id)
       ? (userData.following.find((object) => object.user === data?.author._id)?._id as string)
@@ -38,12 +40,6 @@ const PostDetailPage = () => {
   if (isLoading) {
     return <Loading />
   }
-
-  useEffect(() => {
-    setFollow(userData.following.find((object) => object.user === data?.author._id) ? true : false)
-  }, [])
-
-  console.log(follow)
 
   const postData = JSON.parse(data?.title as string)
 
@@ -210,8 +206,16 @@ const PostDetailPage = () => {
               ) : (
                 <Button
                   buttonType={'Small'}
-                  backgroundColor={follow ? 'GREEN' : 'BEIGE'}
-                  value={follow ? '팔로잉' : '팔로우'}
+                  backgroundColor={
+                    userData.following.find((object) => object._id === data?.author._id)
+                      ? 'GREEN'
+                      : 'BEIGE'
+                  }
+                  value={
+                    userData.following.find((object) => object._id === data?.author._id)
+                      ? '팔로잉'
+                      : '팔로우'
+                  }
                   onClick={
                     follow
                       ? (e) => handleUnFollow(e, followId as string)
@@ -376,10 +380,10 @@ const WriteComment = styled.form`
   box-sizing: border-box;
 
   @media (max-width: 768px) {
-    width: 98%;
+    width: 95%;
   }
   @media (min-width: 769px) {
-    width: 48%;
+    width: 460px;
   }
 `
 
