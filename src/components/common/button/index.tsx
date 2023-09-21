@@ -33,10 +33,10 @@ const Button = ({
   return (
     <StyleButtonWrapper>
       <StyleButton
+        {...props}
         buttonType={buttonType}
         onClick={onClick}
         backgroundColor={backgroundColor}
-        {...props}
       >
         <Text typo={`${BUTTON_SHAPE_TYPE[buttonType].typo}`}>{value}</Text>
       </StyleButton>

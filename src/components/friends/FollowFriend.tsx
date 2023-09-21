@@ -1,15 +1,57 @@
+import { useMutation } from '@tanstack/react-query'
+import { useAtom } from 'jotai'
+
 import Send from '@/assets/icons/Send'
 import Button from '@/components/common/button'
 import { FlexBox } from '@/components/common/flexBox'
 import ListRow from '@/components/common/listRow'
 import Spacing from '@/components/common/spacing'
-import { User } from '@/libs/apis/auth/authType'
+import { FriendListResponse, User } from '@/libs/apis/auth/authType'
+import { Follow } from '@/libs/apis/auth/authType'
+import { queryClient } from '@/libs/apis/queryClient'
+import { UserApi } from '@/libs/apis/user/userApi'
+import { userAtom } from '@/libs/store/userAtom'
+
 interface FollowFriendProps {
-  data: User
+  data: FriendListResponse
   follow: boolean
+  handleFollow?: (id: string) => void
 }
 
 const FollowFriend = ({ data, follow }: FollowFriendProps) => {
+  const [user, setUser] = useAtom(userAtom)
+  const followMutation = useMutation(UserApi.FOLLOW_USER, {
+    onSettled: () => {
+      queryClient.invalidateQueries(['userList'])
+    },
+    onSuccess: (follow: Follow) => {
+      setUser({ ...user, following: [...user.following, follow] })
+      console.log(user)
+    },
+  })
+
+  const unfollowMutation = useMutation(UserApi.UNFOLLOW_USER, {
+    onSettled: () => {
+      queryClient.invalidateQueries(['userList'])
+    },
+    onSuccess: (follow: Follow) => {
+      const filtered = user.following.filter((data) => data._id !== follow._id)
+      setUser({ ...user, following: [...filtered] })
+    },
+  })
+
+  const handleFollow = (userId: string) => {
+    followMutation.mutate(userId)
+  }
+
+  const handleUnFollow = (followerList: string[]) => {
+    const myfollowingList = user.following.map((data) => data._id)
+    const followId = myfollowingList.filter((data) => followerList.includes(data))
+    if (followId.length === 0) return
+    else {
+      unfollowMutation.mutate(followId[0])
+    }
+  }
   return (
     <FlexBox direction={'column'} fullWidth={true} align={'center'} gap={10}>
       <ListRow
@@ -23,11 +65,16 @@ const FollowFriend = ({ data, follow }: FollowFriendProps) => {
                 buttonType={'Medium'}
                 backgroundColor={'MINT'}
                 value={'팔로잉'}
-                onClick={() => handleFollow(follow)}
+                onClick={() => handleUnFollow(data.followers)}
               />
             </FlexBox>
           ) : (
-            <Button buttonType={'Medium'} backgroundColor={'BEIGE'} value={'팔로우'}></Button>
+            <Button
+              buttonType={'Medium'}
+              backgroundColor={'BEIGE'}
+              value={'팔로우'}
+              onClick={() => handleFollow(data._id)}
+            />
           )
         }
       />
