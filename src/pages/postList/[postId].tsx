@@ -11,6 +11,7 @@ import Button from '@/components/common/button'
 import { FlexBox } from '@/components/common/flexBox'
 import Loading from '@/components/common/loading'
 import ProfileImage from '@/components/common/profileImage'
+import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { Follow } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
@@ -18,8 +19,8 @@ import PostApi from '@/libs/apis/post/postApi'
 import { Like } from '@/libs/apis/post/postType'
 import { queryClient } from '@/libs/apis/queryClient'
 import { UserApi } from '@/libs/apis/user/userApi'
+import { useNotification } from '@/libs/hooks/useNotification'
 import { userAtom } from '@/libs/store/userAtom'
-
 const PostDetailPage = () => {
   const [userData, setUserData] = useAtom(userAtom)
   const channelID = useLocation().pathname.split('/')[2]
@@ -35,6 +36,12 @@ const PostDetailPage = () => {
     },
     onSuccess: (like: Like) => {
       setUserData({ ...userData, likes: [...userData.likes, like] })
+      useNotification({
+        postId: postId,
+        userId: like.user,
+        type: 'LIKE',
+        typeId: like._id,
+      })
     },
   })
   const unlikeMutation = useMutation(PostApi.UNLIKE_POST, {
@@ -65,6 +72,12 @@ const PostDetailPage = () => {
     },
     onSuccess: (follow: Follow) => {
       setUserData({ ...userData, following: [...userData.following, follow] })
+      useNotification({
+        postId: postId,
+        userId: follow.user,
+        type: 'FOLLOW',
+        typeId: follow._id,
+      })
     },
   })
 
@@ -107,6 +120,12 @@ const PostDetailPage = () => {
         postId: postId,
       })
       refetch()
+      useNotification({
+        postId: postId,
+        userId: response.data.author._id,
+        type: 'COMMENT',
+        typeId: response.data._id,
+      })
       return response
     } else {
       alert('댓글을 입력해주세요!')
@@ -117,14 +136,13 @@ const PostDetailPage = () => {
     if (like) return
     likeMutation.mutate(postId)
   }
-
   const handleRemoveFavorite = () => {
     const likedPost = userData.likes.filter((data) => data.post === postId)
     const id = likedPost[0]._id
     unlikeMutation.mutate(id)
   }
 
-  const handleFollow = (e: React.MouseEvent<HTMLButtonElement>, userId: string) => {
+  const handleFollow = async (e: React.MouseEvent<HTMLButtonElement>, userId: string) => {
     e.preventDefault()
     followMutation.mutate(userId)
   }
@@ -245,7 +263,6 @@ const PostDetailPage = () => {
                     size={30}
                     style={{ marginRight: '10px' }}
                     image={comment.author.image}
-                    updatable={false}
                   />
                   <UserComment>
                     <Text typo={'Caption_11'}>{comment.author.fullName}</Text>
@@ -288,6 +305,7 @@ const PostDetailPage = () => {
           />
         </WriteComment>
       </ContentContainer>
+      <Spacing size={125} />
     </DetailContainer>
   )
 }
@@ -324,7 +342,6 @@ const ContentContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  position: relative;
 `
 
 const Content = styled.div`
@@ -389,6 +406,7 @@ const WriteComment = styled.form`
   justify-content: center;
   align-items: center;
   gap: 10px;
+  width: 98%;
   position: fixed;
   bottom: 4px;
   padding: 10px;
