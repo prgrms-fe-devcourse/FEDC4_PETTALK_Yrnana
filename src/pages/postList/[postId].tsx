@@ -61,6 +61,13 @@ const PostDetailPage = () => {
         postId: postId,
       })
       refetch()
+      useNotification({
+        postId: postId,
+        // userId: response.data.author._id,
+        userId: userData._id,
+        type: 'COMMENT',
+        typeId: response.data._id,
+      })
       return response
     } else {
       alert('댓글을 입력해주세요!')
@@ -74,6 +81,13 @@ const PostDetailPage = () => {
     axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     const response = await axiosAPI.post('/likes/create', {
       postId: postId,
+    })
+    useNotification({
+      postId: postId,
+      // userId: response.data.user._id,
+      userId: userData._id,
+      type: 'LIKE',
+      typeId: response.data._id,
     })
     refetch()
     return response
@@ -102,6 +116,13 @@ const PostDetailPage = () => {
     axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     const response = await axiosAPI.post('/follow/create', {
       userId: userId,
+    })
+    useNotification({
+      postId: postId,
+      // userId: response.data.user,
+      userId: userData._id,
+      type: 'FOLLOW',
+      typeId: response.data._id,
     })
     refetch()
     setFollowId(response.data?._id)
@@ -233,7 +254,6 @@ const PostDetailPage = () => {
                     size={30}
                     style={{ marginRight: '10px' }}
                     image={comment.author.image}
-                    updatable={false}
                   />
                   <UserComment>
                     <Text typo={'Caption_11'}>{comment.author.fullName}</Text>
@@ -276,6 +296,7 @@ const PostDetailPage = () => {
           />
         </WriteComment>
       </ContentContainer>
+      <Spacing size={125} />
     </DetailContainer>
   )
 }
@@ -306,7 +327,6 @@ const ContentContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  position: relative;
 `
 
 const Content = styled.div`
@@ -371,18 +391,11 @@ const WriteComment = styled.form`
   justify-content: center;
   align-items: center;
   gap: 10px;
+  width: 98%;
   position: fixed;
   bottom: 4px;
   padding: 10px;
   box-sizing: border-box;
-
-  @media (max-width: 768px) {
-    width: 98%;
-  }
-
-  @media (min-width: 769px) {
-    width: 48%;
-  }
 `
 
 const StyledTextArea = styled.textarea`
