@@ -1,3 +1,4 @@
+import { User } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
 import { Post } from '@/libs/apis/post/postType'
 
@@ -18,6 +19,10 @@ const PostApi = {
   UPDATE_POST: async (payload: FormData): Promise<Post> => {
     axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     const response = await axiosAPI.put('posts/update', payload)
+    return response.data
+  },
+  SEARCH_POST: async (query: string): Promise<Post[]> => {
+    const response = await axiosAPI.get(`/search/all/${query}`)
     return response.data
   },
 }

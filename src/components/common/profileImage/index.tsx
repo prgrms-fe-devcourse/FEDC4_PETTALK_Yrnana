@@ -1,8 +1,10 @@
 import styled from '@emotion/styled'
+import { useAtom } from 'jotai'
 import { ComponentProps, RefObject, useEffect, useRef, useState } from 'react'
 
 import defaultImage from '@/assets/images/defaultProfileImage.png'
 import { axiosAPI } from '@/libs/apis/axios'
+import { userAtom } from '@/libs/store/userAtom'
 
 interface ProfileImageProps extends ComponentProps<'div'> {
   size: number
@@ -17,12 +19,16 @@ interface ImageProps {
 const ProfileImage = ({
   size,
   image = defaultImage,
-  updatable = true,
+  updatable = false,
   ...props
 }: ProfileImageProps) => {
-  const [loadable, setLoadable] = useState(false)
-  const [selectedImage, setSelectedImage] = useState(image)
+  const [userData, setUserData] = useAtom(userAtom)
+  const [selectedImage, setSelectedImage] = useState('')
   const imgRef = useRef<HTMLInputElement>(null) as RefObject<HTMLInputElement>
+
+  useEffect(() => {
+    setSelectedImage(image)
+  }, [image])
 
   const handleImageChange = () => {
     if (imgRef.current && imgRef.current?.files) {
@@ -43,23 +49,19 @@ const ProfileImage = ({
           },
         )
         .then((response) => {
-          console.log(response)
           setSelectedImage(response.data.image)
+          const updatedUser = { ...userData, image: response.data.image }
+          setUserData(updatedUser)
         })
     }
   }
-  useEffect(() => {
-    if (updatable) {
-      setLoadable(true)
-    }
-  }, [])
 
   return (
     <span {...props}>
       <label htmlFor={'fileInput'}>
         <Image src={selectedImage} size={size} alt={''} />
       </label>
-      {loadable ? (
+      {updatable ? (
         <input
           type={'file'}
           ref={imgRef}

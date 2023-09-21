@@ -1,45 +1,36 @@
 import styled from '@emotion/styled'
-import { useQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 import { useNavigate } from 'react-router-dom'
 
 import Button from '@/components/common/button'
-import Loading from '@/components/common/loading'
 import ProfileImage from '@/components/common/profileImage'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
-import { axiosAPI } from '@/libs/apis/axios'
+import { userAtom } from '@/libs/store/userAtom'
 
 const MyProfile = () => {
+  const userData = useAtomValue(userAtom)
   const navigate = useNavigate()
-  const { data, isLoading, isError } = useQuery(['user'], async () => {
-    const response = await axiosAPI.get('/users/650156c1aa40045f5cff792a')
-
-    return response.data
-  })
-
-  if (isLoading) {
-    return <Loading />
-  }
 
   return (
     <>
       <Spacing size={40} />
       <MyPageContainer>
-        <Text typo={'Headline_25'}>{data.fullName}</Text>
-        <ProfileImage size={200} updatable={true} image={data.image} />
+        <Text typo={'Headline_25'}>{userData.fullName}</Text>
+        <ProfileImage size={200} updatable={true} image={userData.image} />
         <Follows>
           <Follower>
             <Text typo={'Headline_25'}>{'팔로워'}</Text>
             <Spacing size={10} />
             <Text typo={'Headline_25'} color={'MAINBLUE'}>
-              {data.followers.length}
+              {userData.followers.length}
             </Text>
           </Follower>
           <Following>
             <Text typo={'Headline_25'}>{'팔로잉'}</Text>
             <Spacing size={10} />
             <Text typo={'Headline_25'} color={'MAINBLUE'}>
-              {data.following.length}
+              {userData.following.length}
             </Text>
           </Following>
         </Follows>

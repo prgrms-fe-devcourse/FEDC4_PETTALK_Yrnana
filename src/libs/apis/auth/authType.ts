@@ -2,6 +2,7 @@ import { Message } from '@/libs/apis/message/messageType'
 import { Post } from '@/libs/apis/post/postType'
 import { Like } from '@/libs/apis/post/postType'
 export type User = {
+  name: 'user'
   coverImage: string // 커버 이미지
   image: string // 프로필 이미지
   role: string
