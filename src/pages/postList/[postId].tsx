@@ -1,7 +1,8 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { useQuery } from '@tanstack/react-query'
-import { useAtomValue } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useAtom } from 'jotai'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import Comment from '@/assets/icons/Comment'
@@ -10,14 +11,16 @@ import Button from '@/components/common/button'
 import { FlexBox } from '@/components/common/flexBox'
 import Loading from '@/components/common/loading'
 import ProfileImage from '@/components/common/profileImage'
-import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
+import { Follow } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
 import PostApi from '@/libs/apis/post/postApi'
+import { queryClient } from '@/libs/apis/queryClient'
+import { UserApi } from '@/libs/apis/user/userApi'
 import { userAtom } from '@/libs/store/userAtom'
 
 const PostDetailPage = () => {
-  const userData = useAtomValue(userAtom)
+  const [userData, setUserData] = useAtom(userAtom)
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
   const { data, isLoading, refetch } = useQuery(['posts', postId], () =>
@@ -25,17 +28,27 @@ const PostDetailPage = () => {
   )
   const [comment, setComment] = useState('')
   const [like, setLike] = useState(false)
-  const [modal, setModal] = useState(false)
-  const [follow, setFollow] = useState<boolean | null>(
-    userData.following.find((object) => object.user === data?.author._id) ? true : false,
-  )
-  const [followId, setFollowId] = useState(
-    userData.following.find((object) => object.user === data?.author._id)
-      ? (userData.following.find((object) => object.user === data?.author._id)?._id as string)
-      : '',
-  )
   const [animate, setAnimate] = useState(false)
   const navigate = useNavigate()
+
+  const followMutation = useMutation(UserApi.FOLLOW_USER, {
+    onSettled: () => {
+      queryClient.invalidateQueries(['posts', postId])
+    },
+    onSuccess: (follow: Follow) => {
+      setUserData({ ...userData, following: [...userData.following, follow] })
+    },
+  })
+
+  const unfollowMutation = useMutation(UserApi.UNFOLLOW_USER, {
+    onSettled: () => {
+      queryClient.invalidateQueries(['posts', postId])
+    },
+    onSuccess: (follow: Follow) => {
+      const filtered = userData.following.filter((data) => data._id !== follow._id)
+      setUserData({ ...userData, following: [...filtered] })
+    },
+  })
 
   if (isLoading) {
     return <Loading />
@@ -100,33 +113,14 @@ const PostDetailPage = () => {
     return response
   }
 
-  const handleFollow = async (e: React.MouseEvent<HTMLButtonElement>, userId: string) => {
+  const handleFollow = (e: React.MouseEvent<HTMLButtonElement>, userId: string) => {
     e.preventDefault()
-    // setModal(true)
-    setFollow(true)
-    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-    const response = await axiosAPI.post('/follow/create', {
-      userId: userId,
-    })
-    refetch()
-    setFollowId(response.data?._id)
-    return response
+    followMutation.mutate(userId)
   }
 
   const handleUnFollow = async (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
     e.preventDefault()
-    // setModal(false)
-    setFollow(false)
-    const response = await axiosAPI.delete('/follow/delete', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      data: {
-        id: id,
-      },
-    })
-    refetch()
-    return response
+    unfollowMutation.mutate(id)
   }
 
   const deleteComment = async (e: React.MouseEvent<HTMLDivElement>, id: string) => {
@@ -151,7 +145,7 @@ const PostDetailPage = () => {
           {data?.createdAt.slice(0, 10)}
         </Text>
       </Title>
-      {data?.image && <Image src={data?.image} />}
+      {data?.image && <Image imageurl={data?.image} />}
       <ContentContainer>
         <Content>
           <Text typo={'Body_16'} color={'BLACK'}>
@@ -207,18 +201,23 @@ const PostDetailPage = () => {
                 <Button
                   buttonType={'Small'}
                   backgroundColor={
-                    userData.following.find((object) => object._id === data?.author._id)
+                    userData.following.find((object) => object.user === data?.author._id)
                       ? 'GREEN'
                       : 'BEIGE'
                   }
                   value={
-                    userData.following.find((object) => object._id === data?.author._id)
+                    userData.following.find((object) => object.user === data?.author._id)
                       ? '팔로잉'
                       : '팔로우'
                   }
                   onClick={
-                    follow
-                      ? (e) => handleUnFollow(e, followId as string)
+                    userData.following.find((object) => object.user === data?.author._id)
+                      ? (e) =>
+                          handleUnFollow(
+                            e,
+                            userData.following.find((object) => object.user === data?.author._id)
+                              ?._id as string,
+                          )
                       : (e) => handleFollow(e, data?.author._id as string)
                   }
                 />
@@ -299,9 +298,15 @@ const Title = styled.div`
   padding: 30px;
 `
 
-const Image = styled.img`
+const Image = styled.div<{ imageurl: string }>`
+  ${({ imageurl }) => css`
+    background: url(${imageurl});
+  `};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   width: 100%;
-  height: 280px;
+  height: 300px;
   border-radius: 20px;
 `
 
