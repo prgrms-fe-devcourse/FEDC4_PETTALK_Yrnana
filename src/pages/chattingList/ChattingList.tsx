@@ -11,6 +11,7 @@ import Input from '@/components/common/input'
 import ListRow from '@/components/common/listRow'
 import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
+import { axiosAPI } from '@/libs/apis/axios'
 import { Conversation } from '@/libs/apis/message/conversationType'
 import MessageApi from '@/libs/apis/message/messageApi'
 import { userAtom } from '@/libs/store/userAtom'
@@ -28,7 +29,6 @@ const ChattingList = () => {
   }
   const { data, isLoading } = useQuery(['chattingList'], () => getChattingList())
 
-  console.log(data)
   const moveChattingRoom = async (selectedChat: Conversation) => {
     navigate(`/chatting`, {
       state: {
@@ -37,32 +37,43 @@ const ChattingList = () => {
       },
     })
 
-    // await axiosAPI
-    //   .put('/messages/update-seen', {
-    //     sender: selectedChat.sender._id,
-    //   })
-    //   .then((response) => {
-    //     console.log(response)
-    //   })
-    //   .catch((err) => console.log(err))
+    await axiosAPI
+      .put('/messages/update-seen', {
+        sender: selectedChat.sender._id,
+      })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((err) => console.log(err))
 
-    await MessageApi.READ_MESSAGE(selectedChat.sender._id)
+    // await MessageApi.READ_MESSAGE(selectedChat.sender._id)
   }
   const searchChattingList = () => {
     if (searchInputRef.current !== null) {
-      setSearchMode(true)
-      const inputValue = searchInputRef.current!.value
-      setFilteredChattingList(
-        chattingList.filter(
-          (chat) => chat.sender.fullName.includes(inputValue) || chat.message.includes(inputValue),
-        ),
+      const inputValue = searchInputRef.current.value
+      const sourceList = data?.length !== 0 ? data : chattingList // Use data if available, else use chattingList
+      const filteredList = sourceList!.filter(
+        (chat) => chat.sender.fullName.includes(inputValue) || chat.message.includes(inputValue),
       )
+      console.log('Filtered list:', filteredList)
+      setFilteredChattingList(filteredList)
+      setSearchMode(true)
     }
   }
 
+  const findOpponent = (data: Conversation) => {
+    if (data.sender._id === userData._id) return data.receiver
+    else return data.sender
+  }
+
   useEffect(() => {
-    if (data !== undefined) setChattingList(data)
-  }, [searchInputRef, filteredChattingList, chattingList])
+    if (data !== undefined) {
+      setChattingList(data)
+      setFilteredChattingList(data) // Update filteredChattingList initially with data
+    }
+  }, [data])
+
+  if (isLoading) return <Loading></Loading>
 
   return (
     <StyleWrapper justify={'flex-start'} direction={'column'} gap={20}>
@@ -94,8 +105,10 @@ const ChattingList = () => {
                   >
                     <ListRow
                       rightElement={<div style={{ color: 'red' }}>{chat.seen ? '' : 'new'}</div>}
-                      leftImage={chat.sender.image ? chat.sender.image : defaultProfileImage}
-                      mainText={chat.sender.fullName}
+                      leftImage={
+                        findOpponent(chat).image ? findOpponent(chat).image : defaultProfileImage
+                      }
+                      mainText={findOpponent(chat).fullName}
                       subElement={chat.message}
                       gap={10}
                       imageGap={10}
@@ -121,8 +134,10 @@ const ChattingList = () => {
                 >
                   <ListRow
                     rightElement={<div style={{ color: 'red' }}>{chat.seen ? '' : 'new'}</div>}
-                    leftImage={chat.sender.image ? chat.sender.image : defaultProfileImage}
-                    mainText={chat.sender.fullName}
+                    leftImage={
+                      findOpponent(chat).image ? findOpponent(chat).image : defaultProfileImage
+                    }
+                    mainText={findOpponent(chat).fullName}
                     subElement={chat.message}
                     gap={10}
                     imageGap={10}
