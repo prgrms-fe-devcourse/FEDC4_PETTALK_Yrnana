@@ -20,11 +20,9 @@ const Notification = () => {
   const { data, isLoading, refetch } = useQuery(['notificationList'], getNotification)
   useEffect(() => {
     if (data !== undefined) setNotifyList(data.data)
-    console.log(notifyList)
     handleSeenPost()
     const polling = setInterval(() => {
       refetch()
-      console.log(data)
     }, 3000)
 
     // 페이지에 벗어날 경우 polling X
