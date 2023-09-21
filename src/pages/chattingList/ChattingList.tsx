@@ -41,11 +41,11 @@ const ChattingList = () => {
   const searchChattingList = () => {
     if (searchInputRef.current !== null) {
       const inputValue = searchInputRef.current.value
-      const sourceList = data?.length !== 0 ? data : chattingList // Use data if available, else use chattingList
+      const sourceList = data?.length !== 0 ? data : chattingList
       const filteredList = sourceList!.filter(
         (chat) => chat.sender.fullName.includes(inputValue) || chat.message.includes(inputValue),
       )
-      console.log('Filtered list:', filteredList)
+
       setFilteredChattingList(filteredList)
       setSearchMode(true)
     }
@@ -59,7 +59,7 @@ const ChattingList = () => {
   useEffect(() => {
     if (data !== undefined) {
       setChattingList(data)
-      setFilteredChattingList(data) // Update filteredChattingList initially with data
+      setFilteredChattingList(data)
     }
   }, [data])
 
@@ -81,42 +81,12 @@ const ChattingList = () => {
           </FlexBox>
           <Spacing size={30} />
           <StyleChattingItem>
-            {filteredChattingList && searchMode ? (
-              filteredChattingList.length !== 0 ? (
-                filteredChattingList.map((chat) => (
-                  <StyleListRow
-                    direction={'column'}
-                    fullWidth={true}
-                    gap={10}
-                    key={chat._id[1]}
-                    onClick={() => {
-                      moveChattingRoom(chat)
-                    }}
-                  >
-                    <ListRow
-                      rightElement={
-                        <div style={{ color: 'red' }}>
-                          {!chat.seen && chat.receiver._id === userData._id ? 'new' : ''}
-                        </div>
-                      }
-                      leftImage={
-                        findOpponent(chat).image ? findOpponent(chat).image : defaultProfileImage
-                      }
-                      mainText={findOpponent(chat).fullName}
-                      subElement={chat.message}
-                      gap={10}
-                      imageGap={10}
-                      textColor={'GRAY600'}
-                      textTypo={'Body_13'}
-                    />
-                    <Stylehr />
-                  </StyleListRow>
-                ))
-              ) : (
-                <StyleNoData>{'검색 결과가 존재하지 않습니다!'}</StyleNoData>
-              )
-            ) : data?.length !== 0 ? (
-              data?.map((chat: Conversation) => (
+            {(
+              filteredChattingList && searchMode
+                ? filteredChattingList.length !== 0
+                : data?.length !== 0
+            ) ? (
+              (filteredChattingList || data).map((chat) => (
                 <StyleListRow
                   direction={'column'}
                   fullWidth={true}
@@ -146,7 +116,7 @@ const ChattingList = () => {
                 </StyleListRow>
               ))
             ) : (
-              <StyleNoData>{'아직 대화내역이 없습니다!'}</StyleNoData>
+              <StyleNoData>{'검색 결과가 존재하지 않습니다!'}</StyleNoData>
             )}
           </StyleChattingItem>
         </StyleChattingListWrapper>

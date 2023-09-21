@@ -13,8 +13,10 @@ import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import TextArea from '@/components/common/textarea'
 import { User } from '@/libs/apis/auth/authType'
+import { Conversation } from '@/libs/apis/message/conversationType'
 import MessageApi from '@/libs/apis/message/messageApi'
 import { Message } from '@/libs/apis/message/messageType'
+import { queryClient } from '@/libs/apis/queryClient'
 import { userAtom } from '@/libs/store/userAtom'
 import { theme } from '@/styles/theme'
 
@@ -54,7 +56,20 @@ const Chatting = () => {
   })
 
   const mutation = useMutation(MessageApi.SEND_MESSAGE, {
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log(data)
+      queryClient.invalidateQueries(['chattingList'])
+
+      const currentChattingList = queryClient.getQueryData<Conversation[]>(['chattingList'])
+      const updatedChattingList = currentChattingList?.map((chat) => {
+        if (chat._id[1] === opponent) {
+          return { ...chat, message: data.message }
+        }
+        return chat
+      })
+
+      queryClient.setQueryData(['chattingList'], updatedChattingList)
+
       if (messageRef.current) messageRef.current.value = ''
     },
     onError: (error) => {

@@ -28,7 +28,6 @@ const MessageApi = {
   SEND_MESSAGE: async (payload: MessageType): Promise<Message> => {
     axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     const response = await axiosAPI.post('/messages/create', payload)
-    console.log(response)
     return response.data
   },
   READ_MESSAGE: async (sender: string): Promise<Message> => {
