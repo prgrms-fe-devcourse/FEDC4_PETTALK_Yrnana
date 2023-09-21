@@ -2,7 +2,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import Comment from '@/assets/icons/Comment'
@@ -15,6 +15,7 @@ import { Text } from '@/components/common/text'
 import { Follow } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
 import PostApi from '@/libs/apis/post/postApi'
+import { Like } from '@/libs/apis/post/postType'
 import { queryClient } from '@/libs/apis/queryClient'
 import { UserApi } from '@/libs/apis/user/userApi'
 import { userAtom } from '@/libs/store/userAtom'
@@ -26,10 +27,37 @@ const PostDetailPage = () => {
   const { data, isLoading, refetch } = useQuery(['posts', postId], () =>
     PostApi.DETAIL_POST(postId),
   )
+  const likeMutation = useMutation(PostApi.LIKE_POST, {
+    onSettled: () => {
+      setLike(true)
+      setAnimate(true)
+      queryClient.invalidateQueries(['posts', postId])
+    },
+    onSuccess: (like: Like) => {
+      setUserData({ ...userData, likes: [...userData.likes, like] })
+    },
+  })
+  const unlikeMutation = useMutation(PostApi.UNLIKE_POST, {
+    onSettled: () => {
+      setLike(false)
+      setAnimate(false)
+      queryClient.invalidateQueries(['posts', postId])
+    },
+    onSuccess: (like: Like) => {
+      const filtered = userData.likes.filter((data) => data._id !== like._id)
+      setUserData({ ...userData, likes: [...filtered] })
+    },
+  })
   const [comment, setComment] = useState('')
   const [like, setLike] = useState(false)
   const [animate, setAnimate] = useState(false)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (userData.likes.find((data) => data.post === postId)) {
+      setLike(true)
+    }
+  }, [])
 
   const followMutation = useMutation(UserApi.FOLLOW_USER, {
     onSettled: () => {
@@ -85,32 +113,15 @@ const PostDetailPage = () => {
     }
   }
 
-  const handleCreateFavorite = async (e: React.MouseEvent<HTMLDivElement>, postId: string) => {
-    e.preventDefault()
-    setLike(true)
-    setAnimate(true)
-    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-    const response = await axiosAPI.post('/likes/create', {
-      postId: postId,
-    })
-    refetch()
-    return response
+  const handleCreateFavorite = (postId: string) => {
+    if (like) return
+    likeMutation.mutate(postId)
   }
 
-  const handleRemoveFavorite = async (e: React.MouseEvent<HTMLDivElement>, id: string) => {
-    e.preventDefault()
-    setLike(false)
-    setAnimate(false)
-    const response = await axiosAPI.delete('/likes/delete', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      data: {
-        id: id,
-      },
-    })
-    refetch()
-    return response
+  const handleRemoveFavorite = () => {
+    const likedPost = userData.likes.filter((data) => data.post === postId)
+    const id = likedPost[0]._id
+    unlikeMutation.mutate(id)
   }
 
   const handleFollow = (e: React.MouseEvent<HTMLButtonElement>, userId: string) => {
@@ -158,9 +169,8 @@ const PostDetailPage = () => {
               fill={like ? 'red' : 'none'}
               onClick={
                 like
-                  ? (e) =>
-                      handleRemoveFavorite(e, data?.likes[data?.likes.length - 1]._id as string)
-                  : (e) => handleCreateFavorite(e, data?._id as string)
+                  ? () => handleRemoveFavorite()
+                  : () => handleCreateFavorite(data?._id as string)
               }
               style={{ cursor: 'pointer' }}
               className={`heart ${animate ? 'is_animating' : ''}`}
