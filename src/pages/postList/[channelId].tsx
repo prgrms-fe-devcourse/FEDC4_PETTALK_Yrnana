@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 import Search from '@/assets/icons/Search'
 import { FlexBox } from '@/components/common/flexBox'
-import Input from '@/components/common/Input'
+import Input from '@/components/common/input'
 import PostCard from '@/components/common/postCard'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
@@ -37,9 +37,7 @@ const PostListPage = () => {
 
   const fetchSearchData = async (keyword: string) => {
     const data = await PostApi.SEARCH_POST(keyword)
-    const filterdData = data.filter(
-      (data) => 'title' in data && (data.channel as unknown as string) === channelID,
-    )
+    const filterdData = data.filter((data) => 'title' in data && data.channel._id === channelID)
     if (filterdData) setPost(filterdData)
   }
 
