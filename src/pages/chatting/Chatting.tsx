@@ -48,8 +48,9 @@ const Chatting = () => {
     refetchInterval: 2000,
     refetchIntervalInBackground: true,
     retry: 3,
-    onSuccess: (responseData) => {
+    onSuccess: async (responseData: Message[]) => {
       setMessageData(responseData)
+      await MessageApi.READ_MESSAGE(responseData[responseData.length - 1].sender._id)
     },
   })
 
@@ -91,7 +92,7 @@ const Chatting = () => {
     : []
 
   const groupedMessages: Record<string, FormattedMessage[]> = {}
-  parsedMessages.forEach((message) => {
+  parsedMessages.forEach((message: FormattedMessage) => {
     const date = message.formattedDate
     if (!groupedMessages[date]) groupedMessages[date] = []
     groupedMessages[date].push(message)
