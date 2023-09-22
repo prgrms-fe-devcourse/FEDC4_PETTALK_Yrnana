@@ -346,7 +346,7 @@ const ContentContainer = styled.div`
     height: 37%;
   }
   @media (max-width: 820px) {
-    height: 60%;
+    height: 55%;
   }
   display: flex;
   flex-direction: column;
