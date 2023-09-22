@@ -16,7 +16,7 @@ interface AppBarProps {
   backurl?: string
 }
 
-const AppBar = ({ mainPage = false, title = '게시글 보기', backurl = '/' }: AppBarProps) => {
+const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBarProps) => {
   const userData = useAtom(userAtom)[0]
   const navigate = useNavigate()
   return (
@@ -44,7 +44,7 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl = '/' }:
           size={40}
           updatable={false}
           style={{ cursor: 'pointer' }}
-          onClick={() => navigate(backurl)}
+          onClick={() => navigate('/myprofile')}
         />
       </Functions>
     </HeadingBar>

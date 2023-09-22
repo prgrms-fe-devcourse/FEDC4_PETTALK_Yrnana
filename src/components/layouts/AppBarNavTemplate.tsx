@@ -20,7 +20,7 @@ const AppBarNavTemplate = ({
   hasNav,
   title,
   hasSpacing = true,
-  backurl = '/',
+  backurl,
   hasPadding = true,
 }: AppBarTemplateProps) => {
   const location = useLocation()

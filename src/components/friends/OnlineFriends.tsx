@@ -3,13 +3,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
 import { FlexBox } from '@/components/common/flexBox'
+import Loading from '@/components/common/loading'
 import ProfileImage from '@/components/common/profileImage'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { FriendListResponse } from '@/libs/apis/auth/authType'
-import { User } from '@/libs/apis/auth/authType'
 import { UserApi } from '@/libs/apis/user/userApi'
-
 interface OnlineFriendsProps {
   userList: FriendListResponse[]
   userFollowing: string[]
@@ -19,11 +18,16 @@ interface OnlineFriendsProps {
 const OnlineFriends = ({ userList, userFollowing }: OnlineFriendsProps) => {
   const [myFollowing, setMyFollowing] = useState<FriendListResponse[]>([])
   const [onlineUser, setOnlineUser] = useState<string[]>([])
+  // useEffect(() => {
+  //   const filtered = userList.filter((data) => userFollowing.includes(data._id))
+  //   setMyFollowing([...filtered])
+  // }, [userList])
+  console.log(userFollowing)
 
   useEffect(() => {
     const filtered = userList.filter((data) => userFollowing.includes(data._id))
     setMyFollowing([...filtered])
-  }, [userList])
+  }, [userFollowing])
 
   const { data } = useQuery(['online'], () => UserApi.GET_ONLINE_USERS(), {
     refetchInterval: 2000,
@@ -44,6 +48,8 @@ const OnlineFriends = ({ userList, userFollowing }: OnlineFriendsProps) => {
           <Text typo={'Body_16'} color={'GRAY500'}>
             {'팔로잉하고있는 유저가 없습니다.'}
           </Text>
+        ) : myFollowing.length === 0 ? (
+          <Loading />
         ) : (
           myFollowing?.map((data, index) => {
             return (

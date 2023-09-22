@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
+import { useNavigate } from 'react-router-dom'
 
 import Send from '@/assets/icons/Send'
 import Button from '@/components/common/button'
@@ -19,6 +20,7 @@ interface FollowFriendProps {
 }
 
 const FollowFriend = ({ data, follow }: FollowFriendProps) => {
+  const navigate = useNavigate()
   const [user, setUser] = useAtom(userAtom)
   const followMutation = useMutation(UserApi.FOLLOW_USER, {
     onSettled: () => {
@@ -26,7 +28,6 @@ const FollowFriend = ({ data, follow }: FollowFriendProps) => {
     },
     onSuccess: (follow: Follow) => {
       setUser({ ...user, following: [...user.following, follow] })
-      console.log(user)
     },
   })
 
@@ -60,7 +61,17 @@ const FollowFriend = ({ data, follow }: FollowFriendProps) => {
         rightElement={
           follow ? (
             <FlexBox direction={'row'} align={'center'} gap={20}>
-              <Send />
+              <Send
+                style={{ cursor: 'pointer' }}
+                onClick={() =>
+                  navigate('/chatting', {
+                    state: {
+                      sender: user._id,
+                      receiver: data._id,
+                    },
+                  })
+                }
+              />
               <Button
                 buttonType={'Medium'}
                 backgroundColor={'MINT'}

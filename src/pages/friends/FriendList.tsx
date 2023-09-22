@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 import { ChangeEvent,useCallback, useEffect, useState } from 'react'
 
-import Search from '@/assets/icons/Search'
 import { FlexBox } from '@/components/common/flexBox'
 import Input from '@/components/common/input'
 import Loading from '@/components/common/loading'
@@ -31,8 +30,10 @@ const FriendList = () => {
   }, [mydata])
 
   useEffect(() => {
-    if(data)
+    if(data){
       setFriendList(data)
+
+    }
   },[data])
 
 
@@ -56,7 +57,6 @@ const FriendList = () => {
     <FriendListWrapper>
       <FlexBox direction={'row'} gap={10} fullWidth={true}>
         <Input placeholder={'유저명을 검색해보세요.'} onChange={handleSearchFriend}  />
-        <Search />
       </FlexBox>
       {data && <OnlineFriends userList ={data} userFollowing={followingList} />}
       <FlexBox direction={'column'} fullWidth={true} gap={10}>
