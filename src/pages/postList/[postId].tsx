@@ -257,7 +257,7 @@ const PostDetailPage = () => {
         <Comments>
           {data?.comments.map((comment, index) => (
             <FlexBox direction={'column'} key={index} style={{ maxHeight: '250px' }}>
-              <CommentContainer>
+              <CommentContainer checkUser={userData._id === comment.author._id}>
                 <SingleComment>
                   <ProfileImage
                     size={30}
@@ -268,18 +268,8 @@ const PostDetailPage = () => {
                     <Text typo={'Caption_11'}>{comment.author.fullName}</Text>
                     <Text typo={'SubHead_14'}>{comment.comment}</Text>
                   </UserComment>
-                  {userData._id === comment.author._id ? (
-                    <Text
-                      typo={'Body_16'}
-                      onClick={(e) => deleteComment(e, comment._id)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {'❌'}
-                    </Text>
-                  ) : (
-                    ''
-                  )}
                 </SingleComment>
+
                 <Text
                   typo={'Caption_11'}
                   color={'GRAY500'}
@@ -287,6 +277,18 @@ const PostDetailPage = () => {
                 >
                   {comment.createdAt.slice(0, 10)}
                 </Text>
+                {userData._id === comment.author._id ? (
+                  <Text
+                    typo={'Body_16'}
+                    onClick={(e) => deleteComment(e, comment._id)}
+                    style={{ cursor: 'pointer', position: 'absolute', right: 10 }}
+                    color={'GRAY500'}
+                  >
+                    {'✖'}
+                  </Text>
+                ) : (
+                  ''
+                )}
               </CommentContainer>
               <VerticalLine key={comment._id} />
             </FlexBox>
@@ -376,7 +378,7 @@ const UserDetail = styled.div`
 const Comments = styled.div`
   width: 100%;
   overflow: scroll;
-  max-height: 380px;
+  max-height: 180px;
   ::-webkit-scrollbar {
     display: none;
   }
@@ -384,13 +386,24 @@ const Comments = styled.div`
 
 const UserComment = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 `
 
-const CommentContainer = styled.div`
+const CommentContainer = styled.div<{ checkUser: boolean }>`
   width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  position: relative;
+
+  &:hover {
+    :nth-child(1) {
+      transform: ${(props) => (props.checkUser ? 'translateX(-10px)' : '')};
+      transition: transform 0.5s ease-in-out;
+    }
+  }
 `
 
 const SingleComment = styled.div`
