@@ -335,12 +335,19 @@ const Image = styled.div<{ imageurl: string }>`
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
-  height: 300px;
+  height: 30%;
   border-radius: 20px;
 `
 
 const ContentContainer = styled.div`
   width: 100%;
+  height: 50%;
+  @media (max-width: 375px) {
+    height: 37%;
+  }
+  @media (max-width: 820px) {
+    height: 60%;
+  }
   display: flex;
   flex-direction: column;
 `
@@ -378,7 +385,15 @@ const UserDetail = styled.div`
 const Comments = styled.div`
   width: 100%;
   overflow: scroll;
-  max-height: 180px;
+  @media (max-width: 375px) {
+    height: 20%;
+  }
+  @media (max-width: 768px) {
+    height: 55%;
+  }
+  @media (min-width: 769px) {
+    height: 60%;
+  }
   ::-webkit-scrollbar {
     display: none;
   }
@@ -398,10 +413,12 @@ const CommentContainer = styled.div<{ checkUser: boolean }>`
   align-items: center;
   position: relative;
 
-  &:hover {
-    :nth-child(1) {
-      transform: ${(props) => (props.checkUser ? 'translateX(-10px)' : '')};
-      transition: transform 0.5s ease-in-out;
+  @media (min-width: 769px) {
+    &:hover {
+      :nth-of-type(1) {
+        transform: ${(props) => (props.checkUser ? 'translateX(-10px)' : '')};
+        transition: transform 0.5s ease-in-out;
+      }
     }
   }
 `
@@ -411,6 +428,9 @@ const SingleComment = styled.div`
   align-items: center;
   width: 100%;
   padding: 10px 20px;
+  @media (max-width: 768px) {
+    padding: 5px 20px;
+  }
 `
 
 const WriteComment = styled.form`
@@ -440,7 +460,7 @@ const StyledTextArea = styled.textarea`
   border-radius: 20px;
   padding: 20px;
   width: 100%;
-  height: 100px;
+  height: 10%;
   line-height: 100%;
 
   ${({ theme }) => theme.typo.Body_16};
