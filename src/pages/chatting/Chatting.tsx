@@ -13,10 +13,8 @@ import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import TextArea from '@/components/common/textarea'
 import { User } from '@/libs/apis/auth/authType'
-import { Conversation } from '@/libs/apis/message/conversationType'
 import MessageApi from '@/libs/apis/message/messageApi'
 import { Message } from '@/libs/apis/message/messageType'
-import { queryClient } from '@/libs/apis/queryClient'
 import { userAtom } from '@/libs/store/userAtom'
 import { theme } from '@/styles/theme'
 
@@ -50,26 +48,14 @@ const Chatting = () => {
     refetchInterval: 2000,
     refetchIntervalInBackground: true,
     retry: 3,
-    onSuccess: (responseData) => {
+    onSuccess: async (responseData: Message[]) => {
       setMessageData(responseData)
+      await MessageApi.READ_MESSAGE(responseData[responseData.length - 1].sender._id)
     },
   })
 
   const mutation = useMutation(MessageApi.SEND_MESSAGE, {
-    onSuccess: (data) => {
-      console.log(data)
-      queryClient.invalidateQueries(['chattingList'])
-
-      const currentChattingList = queryClient.getQueryData<Conversation[]>(['chattingList'])
-      const updatedChattingList = currentChattingList?.map((chat) => {
-        if (chat._id[1] === opponent) {
-          return { ...chat, message: data.message }
-        }
-        return chat
-      })
-
-      queryClient.setQueryData(['chattingList'], updatedChattingList)
-
+    onSuccess: () => {
       if (messageRef.current) messageRef.current.value = ''
     },
     onError: (error) => {
@@ -106,7 +92,7 @@ const Chatting = () => {
     : []
 
   const groupedMessages: Record<string, FormattedMessage[]> = {}
-  parsedMessages.forEach((message) => {
+  parsedMessages.forEach((message: FormattedMessage) => {
     const date = message.formattedDate
     if (!groupedMessages[date]) groupedMessages[date] = []
     groupedMessages[date].push(message)

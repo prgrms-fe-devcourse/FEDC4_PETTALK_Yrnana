@@ -26,7 +26,15 @@ const ChattingList = () => {
   const getChattingList = async () => {
     return await MessageApi.GET_MESSAGES()
   }
-  const { data, isLoading } = useQuery(['chattingList'], () => getChattingList())
+  const { data, isLoading } = useQuery(['chattingList'], () => getChattingList(), {
+    refetchInterval: 2000,
+    refetchIntervalInBackground: true,
+    retry: 3,
+    onSuccess: async (responseData: Conversation[]) => {
+      await MessageApi.READ_MESSAGE(responseData[responseData.length - 1].sender._id)
+    },
+    cacheTime: 0,
+  })
 
   const moveChattingRoom = async (selectedChat: Conversation) => {
     navigate(`/chatting`, {
