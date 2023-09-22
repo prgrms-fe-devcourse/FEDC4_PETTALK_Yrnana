@@ -4,6 +4,7 @@ import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import defaultProfileImage from '@/assets/images/defaultProfileImage.png'
 import AppBar from '@/components/common/appBar'
 import ListRow from '@/components/common/ListRow'
 import Loading from '@/components/common/loading'
@@ -27,7 +28,6 @@ const Notification = () => {
     const polling = setInterval(() => {
       refetch()
     }, 3000)
-
     // 페이지에 벗어날 경우 polling X
     return () => {
       clearInterval(polling)
@@ -75,11 +75,9 @@ const Notification = () => {
                 )}
 
                 <ListRow
-                  mainText={
-                    <div>{`${v.user.fullName}님이 댓글을 남겼습니다. "${v.comment?.comment}"`}</div>
-                  }
+                  mainText={<div>{`게시글에 댓글이 달렸습니다. "${v.comment?.comment}"`}</div>}
                   rightElement={<div>{}</div>}
-                  leftImage={v.user.image}
+                  leftImage={defaultProfileImage}
                 />
               </StyleNotifyList>
             ) : v.message ? (
@@ -95,9 +93,9 @@ const Notification = () => {
                   />
                 )}
                 <ListRow
-                  mainText={<div>{`${v.user.fullName}님이 메시지를 보냈습니다.`}</div>}
+                  mainText={<div>{'메시지가 도착했습니다!'}</div>}
                   rightElement={<div>{}</div>}
-                  leftImage={v.user.image}
+                  leftImage={defaultProfileImage}
                 />
               </StyleNotifyList>
             ) : v.follow ? (
@@ -113,9 +111,9 @@ const Notification = () => {
                   />
                 )}
                 <ListRow
-                  mainText={<div>{`${v.user.fullName}님이 팔로우했습니다.`}</div>}
+                  mainText={<div>{`${v.user.fullName}님을 팔로우했습니다.`}</div>}
                   rightElement={<div>{}</div>}
-                  leftImage={v.user.image}
+                  leftImage={defaultProfileImage}
                 />
               </StyleNotifyList>
             ) : v.post ? (
@@ -131,9 +129,9 @@ const Notification = () => {
                   />
                 )}
                 <ListRow
-                  mainText={<div>{`${v.user.fullName}님이 게시글을 좋아합니다.`}</div>}
+                  mainText={<div>{`친구가 ${v.user.fullName}님의 게시글을 좋아합니다.`}</div>}
                   rightElement={<div>{}</div>}
-                  leftImage={v.user.image}
+                  leftImage={defaultProfileImage}
                 />
               </StyleNotifyList>
             ) : (
