@@ -1,12 +1,16 @@
+import { useAtom } from 'jotai'
 import { Route, Routes } from 'react-router-dom'
 
 import AppBarNavTemplate from '@/components/layouts/AppBarNavTemplate'
+import { urlAtom } from '@/libs/store/urlAtom'
 import PostListPage from '@/pages/postList/[channelId]'
 import PostDetailPage from '@/pages/postList/[postId]'
 import EditPostPage from '@/pages/postList/EditPost'
 import NewPostPage from '@/pages/postList/NewPost'
 
 const PostRouter = () => {
+  const [urlData, setUrlData] = useAtom(urlAtom)
+  console.log(urlData.channelId)
   return (
     <Routes>
       <Route
@@ -28,7 +32,11 @@ const PostRouter = () => {
       <Route
         path={'/:channeId/:postId/*'}
         element={
-          <AppBarNavTemplate hasNav={false} title={'게시글 상세보기'}>
+          <AppBarNavTemplate
+            hasNav={false}
+            title={'게시글 상세보기'}
+            backurl={`posts/${urlData.channelId}`}
+          >
             <PostDetailPage />
           </AppBarNavTemplate>
         }

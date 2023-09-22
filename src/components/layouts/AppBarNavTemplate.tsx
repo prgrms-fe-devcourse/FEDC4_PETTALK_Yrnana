@@ -9,6 +9,7 @@ import Spacing from '@/components/common/spacing'
 interface AppBarTemplateProps {
   children: ReactNode
   hasNav: boolean
+  backurl?: string
   title?: string
   hasSpacing?: boolean
   hasPadding?: boolean
@@ -19,12 +20,13 @@ const AppBarNavTemplate = ({
   hasNav,
   title,
   hasSpacing = true,
+  backurl = '/',
   hasPadding = true,
 }: AppBarTemplateProps) => {
   const location = useLocation()
   return (
     <AppBarNavTemplateWrapper>
-      <AppBar mainPage={location.pathname === '/' ? true : false} title={title} />
+      <AppBar mainPage={location.pathname === '/' ? true : false} title={title} backurl={backurl} />
       {hasSpacing && <Spacing size={30} />}
       <ChildrenWrapper hasPadding={hasPadding} hasSpacing={hasSpacing}>
         {children}

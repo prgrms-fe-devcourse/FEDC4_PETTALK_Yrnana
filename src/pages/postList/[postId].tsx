@@ -20,8 +20,10 @@ import { Like } from '@/libs/apis/post/postType'
 import { queryClient } from '@/libs/apis/queryClient'
 import { UserApi } from '@/libs/apis/user/userApi'
 import { useNotification } from '@/libs/hooks/useNotification'
+import { urlAtom } from '@/libs/store/urlAtom'
 import { userAtom } from '@/libs/store/userAtom'
 const PostDetailPage = () => {
+  const [urlData, setUrlData] = useAtom(urlAtom)
   const [userData, setUserData] = useAtom(userAtom)
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
@@ -64,6 +66,10 @@ const PostDetailPage = () => {
     if (userData.likes.find((data) => data.post === postId)) {
       setLike(true)
     }
+    setUrlData({
+      channelId: channelID,
+      postId: postId,
+    })
   }, [])
 
   const followMutation = useMutation(UserApi.FOLLOW_USER, {
@@ -259,11 +265,19 @@ const PostDetailPage = () => {
             <FlexBox direction={'column'} key={index} style={{ maxHeight: '250px' }}>
               <CommentContainer>
                 <SingleComment>
-                  <ProfileImage
-                    size={30}
-                    style={{ marginRight: '10px' }}
-                    image={comment.author.image}
-                  />
+                  {userData._id === comment.author._id ? (
+                    <ProfileImage
+                      size={30}
+                      style={{ marginRight: '10px' }}
+                      image={userData.image}
+                    />
+                  ) : (
+                    <ProfileImage
+                      size={30}
+                      style={{ marginRight: '10px' }}
+                      image={comment.author.image}
+                    />
+                  )}
                   <UserComment>
                     <Text typo={'Caption_11'}>{comment.author.fullName}</Text>
                     <Text typo={'SubHead_14'}>{comment.comment}</Text>

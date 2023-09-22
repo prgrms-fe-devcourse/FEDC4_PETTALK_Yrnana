@@ -10,15 +10,15 @@ import Toggle from '@/components/common/toggle'
 import { userAtom } from '@/libs/store/userAtom'
 import { theme } from '@/styles/theme'
 
-interface MainPage {
+interface AppBarProps {
   mainPage: boolean
   title?: string
+  backurl?: string
 }
 
-const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
+const AppBar = ({ mainPage = false, title = '게시글 보기', backurl = '/' }: AppBarProps) => {
   const userData = useAtom(userAtom)[0]
   const navigate = useNavigate()
-
   return (
     <HeadingBar>
       {mainPage ? (
@@ -27,7 +27,12 @@ const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
         </Text>
       ) : (
         <HeaderContainer>
-          <BackArrow style={{ cursor: 'pointer' }} onClick={() => navigate(-1)} />
+          <BackArrow
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              backurl ? navigate(`/${backurl}`) : navigate(-1)
+            }}
+          />
           <Text typo={'SubHead_18'}>{title}</Text>
         </HeaderContainer>
       )}
@@ -39,7 +44,7 @@ const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
           size={40}
           updatable={false}
           style={{ cursor: 'pointer' }}
-          onClick={() => navigate('/myprofile')}
+          onClick={() => navigate(backurl)}
         />
       </Functions>
     </HeadingBar>

@@ -1,6 +1,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useMutation } from '@tanstack/react-query'
+import { useAtom } from 'jotai'
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
@@ -12,13 +13,19 @@ import ImageUploader from '@/components/posts/ImageUploader'
 import PostApi from '@/libs/apis/post/postApi'
 import { Post } from '@/libs/apis/post/postType'
 import { queryClient } from '@/libs/apis/queryClient'
+import { urlAtom } from '@/libs/store/urlAtom'
 import encodeFileToBase64 from '@/libs/utils/encodeFileToBase64'
 import { theme } from '@/styles/theme'
 
 const NewPostPage = () => {
+  const [urlData, setUrlData] = useAtom(urlAtom)
   const postMutation = useMutation(PostApi.CREATE_POST, {
     onSuccess: (newPost: Post) => {
       queryClient.setQueryData(['posts', newPost._id], newPost)
+      setUrlData({
+        channelId: channelID,
+        postId: newPost._id,
+      })
       navigate(`/posts/${channelID}/${newPost._id}`)
     },
   })
