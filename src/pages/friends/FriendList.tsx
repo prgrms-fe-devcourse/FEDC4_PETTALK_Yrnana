@@ -1,10 +1,8 @@
 /* eslint-disable prettier/prettier */
 import styled from '@emotion/styled'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
-import { useCallback, useEffect } from 'react'
-import { useState } from 'react'
-import { ChangeEvent } from 'react'
+import { ChangeEvent,useCallback, useEffect, useState } from 'react'
 
 import Search from '@/assets/icons/Search'
 import { FlexBox } from '@/components/common/flexBox'
@@ -23,7 +21,7 @@ const FriendList = () => {
   const [friendList, setFriendList] = useState<FriendListResponse[]>([])
   const { data } = useQuery(['userList'], () => UserApi.GET_USERS())
   const mydata = useAtomValue<User>(userAtom)
-  const debouncedValue = useDebounce(keyword, 400)
+  const debouncedValue = useDebounce(keyword, 200)
   const [followingList, setFollowingList] = useState<string[]>([])
   useEffect(() => {
     if (mydata.followers.length) {
@@ -60,7 +58,7 @@ const FriendList = () => {
         <Input placeholder={'유저명을 검색해보세요.'} onChange={handleSearchFriend}  />
         <Search />
       </FlexBox>
-      <OnlineFriends />
+      {data && <OnlineFriends userList ={data} userFollowing={followingList} />}
       <FlexBox direction={'column'} fullWidth={true} gap={10}>
         {followingList.length === 0 || friendList.length === 0
           ? <Loading/>

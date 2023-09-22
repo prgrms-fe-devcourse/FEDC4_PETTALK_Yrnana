@@ -1,22 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import Search from '@/assets/icons/Search'
 import { FlexBox } from '@/components/common/flexBox'
-import Input from '@/components/common/Input'
+import Input from '@/components/common/input'
 import PostCard from '@/components/common/postCard'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import PostApi from '@/libs/apis/post/postApi'
 import { Post } from '@/libs/apis/post/postType'
+import { userAtom } from '@/libs/store/userAtom'
 import { theme } from '@/styles/theme'
 
 import { useDebounce } from '../../hooks/useDebounce'
 
 const PostListPage = () => {
+  const userData = useAtomValue(userAtom)
   const [keyword, setKeyword] = useState<string>('')
   const [post, setPost] = useState<Post[]>([])
   const channelID = useLocation().pathname.split('/')[2]
@@ -37,9 +40,7 @@ const PostListPage = () => {
 
   const fetchSearchData = async (keyword: string) => {
     const data = await PostApi.SEARCH_POST(keyword)
-    const filterdData = data.filter(
-      (data) => 'title' in data && (data.channel as unknown as string) === channelID,
-    )
+    const filterdData = data.filter((data) => 'title' in data && data.channel._id === channelID)
     if (filterdData) setPost(filterdData)
   }
 
@@ -83,6 +84,7 @@ const PostListPage = () => {
                   author={post.author}
                   content={titleJson.body}
                   createdAt={parsedDate}
+                  likeStatus={post.likes.find((data) => data.user === userData._id) ? true : false}
                 />
               )
             })
