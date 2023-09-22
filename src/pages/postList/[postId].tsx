@@ -36,12 +36,14 @@ const PostDetailPage = () => {
     },
     onSuccess: (like: Like) => {
       setUserData({ ...userData, likes: [...userData.likes, like] })
-      useNotification({
-        postId: postId,
-        userId: data !== undefined ? data?.author._id : '',
-        type: 'LIKE',
-        typeId: like._id,
-      })
+      data?.author._id !== userData._id
+        ? useNotification({
+            postId: postId,
+            userId: data !== undefined ? data?.author._id : '',
+            type: 'LIKE',
+            typeId: like._id,
+          })
+        : ''
     },
   })
   const unlikeMutation = useMutation(PostApi.UNLIKE_POST, {
@@ -120,12 +122,14 @@ const PostDetailPage = () => {
         postId: postId,
       })
       refetch()
-      useNotification({
-        postId: postId,
-        userId: data !== undefined ? data?.author._id : '',
-        type: 'COMMENT',
-        typeId: response.data._id,
-      })
+      data?.author._id !== userData._id
+        ? useNotification({
+            postId: postId,
+            userId: data !== undefined ? data?.author._id : '',
+            type: 'COMMENT',
+            typeId: response.data._id,
+          })
+        : ''
       return response
     } else {
       alert('댓글을 입력해주세요!')
