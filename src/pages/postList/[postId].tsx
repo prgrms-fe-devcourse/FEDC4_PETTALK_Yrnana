@@ -38,7 +38,7 @@ const PostDetailPage = () => {
       setUserData({ ...userData, likes: [...userData.likes, like] })
       useNotification({
         postId: postId,
-        userId: like.user,
+        userId: data !== undefined ? data?.author._id : '',
         type: 'LIKE',
         typeId: like._id,
       })
@@ -122,7 +122,7 @@ const PostDetailPage = () => {
       refetch()
       useNotification({
         postId: postId,
-        userId: response.data.author._id,
+        userId: data !== undefined ? data?.author._id : '',
         type: 'COMMENT',
         typeId: response.data._id,
       })
