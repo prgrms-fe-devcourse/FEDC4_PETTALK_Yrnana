@@ -30,7 +30,9 @@ const MainPage = ({
   interestChannelColor = 'BLACK',
   ...props
 }: MainPageProps) => {
-  const { data, isLoading, refetch } = useQuery(['channels'], () => ChannelApi.GET_CHANNEL(), {})
+  const { data, isLoading, refetch } = useQuery(['channels'], () => ChannelApi.GET_CHANNEL(), {
+    cacheTime: 0,
+  })
 
   useEffect(() => {
     refetch()
