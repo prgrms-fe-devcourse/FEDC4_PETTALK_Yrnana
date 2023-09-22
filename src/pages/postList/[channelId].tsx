@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import Search from '@/assets/icons/Search'
 import { FlexBox } from '@/components/common/flexBox'
 import Input from '@/components/common/input'
+import Loading from '@/components/common/loading'
 import PostCard from '@/components/common/postCard'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
@@ -23,7 +24,9 @@ const PostListPage = () => {
   const [keyword, setKeyword] = useState<string>('')
   const [post, setPost] = useState<Post[]>([])
   const channelID = useLocation().pathname.split('/')[2]
-  const { data, isLoading } = useQuery(['posts', channelID], () => PostApi.GET_POSTS(channelID))
+  const { data, isLoading } = useQuery(['posts', channelID], () => PostApi.GET_POSTS(channelID), {
+    cacheTime: 0,
+  })
   const debouncedValue = useDebounce(keyword, 400)
   const navigate = useNavigate()
   const handleSearchPost = useCallback(
@@ -49,9 +52,8 @@ const PostListPage = () => {
   }, [data])
   return (
     <PostListPageWrapper>
-      <FlexBox direction={'row'} gap={10} fullWidth={true}>
+      <FlexBox direction={'row'} gap={8} fullWidth={true}>
         <Input placeholder={'글 제목/내용으로 검색 가능합니다.'} onChange={handleSearchPost} />
-        <Search />
         <NewPostButton onClick={() => navigate(`/posts/${channelID}/create`)}>
           <Text typo={'Headline_20'} as={'span'}>
             {'＋'}
@@ -59,7 +61,7 @@ const PostListPage = () => {
         </NewPostButton>
       </FlexBox>
       {isLoading ? (
-        <div>{'로딩중...'}</div>
+        <Loading />
       ) : (
         <FlexBox gap={20} fullWidth={true} direction={'column'}>
           {!post || post.length === 0 ? (

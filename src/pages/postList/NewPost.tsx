@@ -21,7 +21,7 @@ const NewPostPage = () => {
   const [urlData, setUrlData] = useAtom(urlAtom)
   const postMutation = useMutation(PostApi.CREATE_POST, {
     onSuccess: (newPost: Post) => {
-      queryClient.setQueryData(['posts', newPost._id], newPost)
+      queryClient.setQueryData(['post', newPost._id], newPost)
       setUrlData({
         channelId: channelID,
         postId: newPost._id,

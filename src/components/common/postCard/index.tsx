@@ -39,7 +39,7 @@ const PostCard = ({
     <PostCardWrapper {...props}>
       <ListRow
         fullWidth={true}
-        leftImage={defaultImage}
+        leftImage={author.image}
         mainText={
           <Text typo={'Caption_11'} color={'GRAY600'}>
             {author.fullName}

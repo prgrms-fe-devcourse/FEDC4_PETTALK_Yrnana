@@ -27,14 +27,12 @@ const PostDetailPage = () => {
   const [userData, setUserData] = useAtom(userAtom)
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
-  const { data, isLoading, refetch } = useQuery(['posts', postId], () =>
-    PostApi.DETAIL_POST(postId),
-  )
+  const { data, isLoading, refetch } = useQuery(['post', postId], () => PostApi.DETAIL_POST(postId))
   const likeMutation = useMutation(PostApi.LIKE_POST, {
     onSettled: () => {
       setLike(true)
       setAnimate(true)
-      queryClient.invalidateQueries(['posts', postId])
+      queryClient.invalidateQueries(['post', postId])
     },
     onSuccess: (like: Like) => {
       setUserData({ ...userData, likes: [...userData.likes, like] })
@@ -50,7 +48,7 @@ const PostDetailPage = () => {
     onSettled: () => {
       setLike(false)
       setAnimate(false)
-      queryClient.invalidateQueries(['posts', postId])
+      queryClient.invalidateQueries(['post', postId])
     },
     onSuccess: (like: Like) => {
       const filtered = userData.likes.filter((data) => data._id !== like._id)
@@ -74,7 +72,7 @@ const PostDetailPage = () => {
 
   const followMutation = useMutation(UserApi.FOLLOW_USER, {
     onSettled: () => {
-      queryClient.invalidateQueries(['posts', postId])
+      queryClient.invalidateQueries(['post', postId])
     },
     onSuccess: (follow: Follow) => {
       setUserData({ ...userData, following: [...userData.following, follow] })
@@ -89,7 +87,7 @@ const PostDetailPage = () => {
 
   const unfollowMutation = useMutation(UserApi.UNFOLLOW_USER, {
     onSettled: () => {
-      queryClient.invalidateQueries(['posts', postId])
+      queryClient.invalidateQueries(['post', postId])
     },
     onSuccess: (follow: Follow) => {
       const filtered = userData.following.filter((data) => data._id !== follow._id)

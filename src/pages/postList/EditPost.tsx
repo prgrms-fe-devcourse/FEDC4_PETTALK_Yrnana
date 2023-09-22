@@ -19,10 +19,10 @@ import { theme } from '@/styles/theme'
 const EditPostPage = () => {
   const postMutation = useMutation(PostApi.UPDATE_POST, {
     onSettled: () => {
-      queryClient.invalidateQueries(['posts', postId])
+      queryClient.invalidateQueries(['post', postId])
     },
     onSuccess: (newPost: Post) => {
-      queryClient.setQueryData(['posts', newPost._id], newPost)
+      queryClient.setQueryData(['post', newPost._id], newPost)
       navigate(`/posts/${channelID}/${postId}`, { replace: true })
     },
   })
@@ -30,7 +30,7 @@ const EditPostPage = () => {
   const navigate = useNavigate()
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
-  const { data, isLoading } = useQuery(['posts', postId], () => PostApi.DETAIL_POST(postId))
+  const { data, isLoading } = useQuery(['post', postId], () => PostApi.DETAIL_POST(postId))
   const postData = JSON.parse(data?.title as string)
   const [curImage, setCurImage] = useState<string | null>(data?.image)
   const [title, setTitle] = useState<string | undefined>(postData.title)
