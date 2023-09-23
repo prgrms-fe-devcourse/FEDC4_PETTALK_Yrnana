@@ -104,7 +104,10 @@ const SpanWrapper = styled.div`
 
 const ImageSlider = styled.div`
   display: flex;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s linear;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 `
 
 const Image = styled.img`
