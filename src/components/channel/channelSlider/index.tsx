@@ -1,11 +1,12 @@
 import styled from '@emotion/styled'
-import { ComponentProps } from 'react'
+import { ComponentProps, useEffect, useState } from 'react'
 
-import pic1 from '@/assets/images/pet/pickture1.jpg'
-import pic2 from '@/assets/images/pet/pickture2.jpg'
-import pic3 from '@/assets/images/pet/pickture3.jpg'
-import pic4 from '@/assets/images/pet/pickture4.jpg'
+import pic1 from '@/assets/images/pet/picture1.webp'
+import pic2 from '@/assets/images/pet/picture2.webp'
+import pic3 from '@/assets/images/pet/picture3.webp'
+import pic4 from '@/assets/images/pet/picture4.webp'
 import Carousel from '@/components/channel/carousel'
+import Skeleton from '@/components/channel/skeleton'
 import { Channel } from '@/libs/apis/channel/channelType'
 
 interface ChannelSliderProps extends ComponentProps<'div'> {
@@ -13,11 +14,40 @@ interface ChannelSliderProps extends ComponentProps<'div'> {
 }
 
 const ChannelSlider = ({ data: channelListData }: ChannelSliderProps) => {
-  const carouselItems = [pic1, pic2, pic3, pic4]
+  const [imagesLoaded, setImagesLoaded] = useState(false)
+
+  // 이미지 프리로딩
+  useEffect(() => {
+    const imagesToPreload = [pic1, pic2, pic3, pic4]
+    const preloadImages = () => {
+      const imagePromises: Promise<void>[] = imagesToPreload.map((src) => {
+        return new Promise<void>((resolve, reject) => {
+          const img = new Image()
+          img.src = src
+          img.onload = () => resolve()
+          img.onerror = reject
+        })
+      })
+
+      Promise.all(imagePromises)
+        .then(() => {
+          setImagesLoaded(true)
+        })
+        .catch((error) => {
+          console.error('Error preloading images:', error)
+        })
+    }
+
+    preloadImages()
+  }, [])
 
   return (
     <CarouselWrapper>
-      <Carousel images={carouselItems} data={channelListData} />
+      {imagesLoaded ? (
+        <Carousel images={[pic1, pic2, pic3, pic4]} data={channelListData} />
+      ) : (
+        <Skeleton></Skeleton>
+      )}
     </CarouselWrapper>
   )
 }

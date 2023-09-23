@@ -1,7 +1,8 @@
 import styled from '@emotion/styled'
-import { ComponentProps, useEffect, useRef, useState } from 'react'
+import { ComponentProps, SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import picture1 from '@/assets/images/pet/picture1.webp'
 import { FlexBox } from '@/components/common/flexBox'
 import { Text } from '@/components/common/text'
 import { Channel } from '@/libs/apis/channel/channelType'
@@ -41,7 +42,11 @@ const Carousel = ({
       const imageWidth = sliderRef.current.offsetWidth
       sliderRef.current.style.transform = `translateX(-${activeIndex * imageWidth}px)`
     }
-  }, [activeIndex])
+  }, [activeIndex, images])
+
+  const addDefaultImg = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = picture1
+  }
 
   const [randomData] = useState<Channel[]>(() => {
     const shuffledData = [...channelListData].sort(() => Math.random() - 0.5).slice(0, 4)
@@ -54,7 +59,7 @@ const Carousel = ({
         {randomData.map((channel, index) => (
           <CarouselItem key={channel._id}>
             <Link to={`/posts/${channel._id}`} style={{ textDecoration: 'none' }}>
-              <Image src={images[index]} alt={`Image ${index}`} />
+              <Image src={images[index]} alt={'img test'} onError={addDefaultImg} />
               <SpanWrapper>
                 <Text typo={channelTypo} color={channelColor}>
                   {channel.name}
@@ -107,6 +112,7 @@ const Image = styled.img`
   height: 190px;
   object-fit: cover;
   opacity: 0.4;
+  content-visibility: auto;
 `
 
 const PageIndicator = styled(FlexBox)`
