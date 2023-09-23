@@ -1,16 +1,16 @@
 import { Route, Routes } from 'react-router-dom'
 
 import AppBarNavTemplate from '@/components/layouts/AppBarNavTemplate'
-import Chatting from '@/pages/chatting/Chatting'
+import ChattingList from '@/pages/chattingList/ChattingList'
 
-const ChattingRouter = () => {
+const ChattingListRouter = () => {
   return (
     <Routes>
       <Route
         path={'/'}
         element={
-          <AppBarNavTemplate hasNav={false} hasSpacing={false} hasPadding={false}>
-            <Chatting />
+          <AppBarNavTemplate hasNav={true}>
+            <ChattingList />
           </AppBarNavTemplate>
         }
       />
@@ -18,4 +18,4 @@ const ChattingRouter = () => {
   )
 }
 
-export default ChattingRouter
+export default ChattingListRouter

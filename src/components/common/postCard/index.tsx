@@ -21,6 +21,7 @@ interface PostCardProps extends ComponentProps<'div'> {
   content: string
   author: User
   createdAt: string
+  likeStatus?: boolean
 }
 
 const PostCard = ({
@@ -31,6 +32,7 @@ const PostCard = ({
   content = '내용을 입력합니다 내용내용',
   author,
   createdAt = '2023.03.03',
+  likeStatus = false,
   ...props
 }: PostCardProps) => {
   return (
@@ -61,7 +63,10 @@ const PostCard = ({
         </Text>
       </FlexBox>
       <FlexBox align={'center'} justify={'flex-start'} fullWidth={true} gap={10}>
-        <SvgWithText svgComponent={<Favorite />} text={likesNum} />
+        <SvgWithText
+          svgComponent={<Favorite fill={likeStatus ? 'red' : 'none'} />}
+          text={likesNum}
+        />
         <SvgWithText svgComponent={<Comment />} text={commentsNum} />
       </FlexBox>
     </PostCardWrapper>

@@ -1,19 +1,16 @@
 import styled from '@emotion/styled'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { ComponentProps } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import ChannelList from '@/components/channel/channelList'
 import ChannelSlider from '@/components/channel/channelSlider'
 import InterestHeader from '@/components/channel/interestHeader'
-import Skeleton from '@/components/channel/skeleton'
 import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
 import { Channel } from '@/libs/apis/channel/channelType'
-import { queryClient } from '@/libs/apis/queryClient'
 import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'
 
 interface MainPageProps extends ComponentProps<'div'> {

@@ -55,6 +55,7 @@ const BubbleContainer = styled.div<{ isMyChat: boolean }>`
   align-items: center;
   justify-content: ${(props) => props.isMyChat && 'flex-end'};
   gap: 10px;
+  width: 100%;
 `
 
 const StyledText = styled.div<{

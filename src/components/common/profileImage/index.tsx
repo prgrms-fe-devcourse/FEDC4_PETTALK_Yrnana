@@ -1,13 +1,16 @@
 import styled from '@emotion/styled'
+import { useAtom } from 'jotai'
 import { ComponentProps, RefObject, useEffect, useRef, useState } from 'react'
 
 import defaultImage from '@/assets/images/defaultProfileImage.png'
 import { axiosAPI } from '@/libs/apis/axios'
+import { userAtom } from '@/libs/store/userAtom'
 
 interface ProfileImageProps extends ComponentProps<'div'> {
   size: number
   image: string
   updatable?: boolean
+  online?: boolean
 }
 
 interface ImageProps {
@@ -17,12 +20,17 @@ interface ImageProps {
 const ProfileImage = ({
   size,
   image = defaultImage,
-  updatable = true,
+  updatable = false,
+  online = false,
   ...props
 }: ProfileImageProps) => {
-  const [loadable, setLoadable] = useState(false)
-  const [selectedImage, setSelectedImage] = useState(image)
+  const [userData, setUserData] = useAtom(userAtom)
+  const [selectedImage, setSelectedImage] = useState('')
   const imgRef = useRef<HTMLInputElement>(null) as RefObject<HTMLInputElement>
+
+  useEffect(() => {
+    setSelectedImage(image)
+  }, [image])
 
   const handleImageChange = () => {
     if (imgRef.current && imgRef.current?.files) {
@@ -43,23 +51,20 @@ const ProfileImage = ({
           },
         )
         .then((response) => {
-          console.log(response)
           setSelectedImage(response.data.image)
+          const updatedUser = { ...userData, image: response.data.image }
+          setUserData(updatedUser)
         })
     }
   }
-  useEffect(() => {
-    if (updatable) {
-      setLoadable(true)
-    }
-  }, [])
 
   return (
     <span {...props}>
-      <label htmlFor={'fileInput'}>
+      <label htmlFor={'fileInput'} style={{ position: 'relative' }}>
         <Image src={selectedImage} size={size} alt={''} />
+        {online && <OnlineStatus />}
       </label>
-      {loadable ? (
+      {updatable ? (
         <input
           type={'file'}
           ref={imgRef}
@@ -77,7 +82,18 @@ const Image = styled.img<ImageProps>`
   width: ${(props) => props.size + 'px'};
   height: ${(props) => props.size + 'px'};
   border-radius: 50%;
+  position: relative;
   object-fit: cover;
+`
+
+const OnlineStatus = styled.div`
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: green;
+  border-radius: 50px;
+  bottom: 2px;
+  right: 2px;
 `
 
 export default ProfileImage

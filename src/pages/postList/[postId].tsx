@@ -1,7 +1,8 @@
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { useQuery } from '@tanstack/react-query'
-import { useAtomValue } from 'jotai'
-import { useState } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useAtom } from 'jotai'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import Comment from '@/assets/icons/Comment'
@@ -12,24 +13,83 @@ import Loading from '@/components/common/loading'
 import ProfileImage from '@/components/common/profileImage'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
+import { Follow } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
 import PostApi from '@/libs/apis/post/postApi'
+import { Like } from '@/libs/apis/post/postType'
+import { queryClient } from '@/libs/apis/queryClient'
+import { UserApi } from '@/libs/apis/user/userApi'
+import { useNotification } from '@/libs/hooks/useNotification'
 import { userAtom } from '@/libs/store/userAtom'
-
 const PostDetailPage = () => {
-  const userData = useAtomValue(userAtom)
+  const [userData, setUserData] = useAtom(userAtom)
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
   const { data, isLoading, refetch } = useQuery(['posts', postId], () =>
     PostApi.DETAIL_POST(postId),
   )
+  const likeMutation = useMutation(PostApi.LIKE_POST, {
+    onSettled: () => {
+      setLike(true)
+      setAnimate(true)
+      queryClient.invalidateQueries(['posts', postId])
+    },
+    onSuccess: (like: Like) => {
+      setUserData({ ...userData, likes: [...userData.likes, like] })
+      useNotification({
+        postId: postId,
+        userId: like.user,
+        type: 'LIKE',
+        typeId: like._id,
+      })
+    },
+  })
+  const unlikeMutation = useMutation(PostApi.UNLIKE_POST, {
+    onSettled: () => {
+      setLike(false)
+      setAnimate(false)
+      queryClient.invalidateQueries(['posts', postId])
+    },
+    onSuccess: (like: Like) => {
+      const filtered = userData.likes.filter((data) => data._id !== like._id)
+      setUserData({ ...userData, likes: [...filtered] })
+    },
+  })
   const [comment, setComment] = useState('')
   const [like, setLike] = useState(false)
-  const [modal, setModal] = useState(false)
-  const [follow, setFollow] = useState<boolean | null>(null)
-  const [followId, setFollowId] = useState('')
   const [animate, setAnimate] = useState(false)
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (userData.likes.find((data) => data.post === postId)) {
+      setLike(true)
+    }
+  }, [])
+
+  const followMutation = useMutation(UserApi.FOLLOW_USER, {
+    onSettled: () => {
+      queryClient.invalidateQueries(['posts', postId])
+    },
+    onSuccess: (follow: Follow) => {
+      setUserData({ ...userData, following: [...userData.following, follow] })
+      useNotification({
+        postId: postId,
+        userId: follow.user,
+        type: 'FOLLOW',
+        typeId: follow._id,
+      })
+    },
+  })
+
+  const unfollowMutation = useMutation(UserApi.UNFOLLOW_USER, {
+    onSettled: () => {
+      queryClient.invalidateQueries(['posts', postId])
+    },
+    onSuccess: (follow: Follow) => {
+      const filtered = userData.following.filter((data) => data._id !== follow._id)
+      setUserData({ ...userData, following: [...filtered] })
+    },
+  })
 
   if (isLoading) {
     return <Loading />
@@ -60,67 +120,36 @@ const PostDetailPage = () => {
         postId: postId,
       })
       refetch()
+      useNotification({
+        postId: postId,
+        userId: response.data.author._id,
+        type: 'COMMENT',
+        typeId: response.data._id,
+      })
       return response
     } else {
       alert('댓글을 입력해주세요!')
     }
   }
 
-  const handleCreateFavorite = async (e: React.MouseEvent<HTMLDivElement>, postId: string) => {
-    e.preventDefault()
-    setLike(true)
-    setAnimate(true)
-    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-    const response = await axiosAPI.post('/likes/create', {
-      postId: postId,
-    })
-    refetch()
-    return response
+  const handleCreateFavorite = (postId: string) => {
+    if (like) return
+    likeMutation.mutate(postId)
   }
-
-  const handleRemoveFavorite = async (e: React.MouseEvent<HTMLDivElement>, id: string) => {
-    e.preventDefault()
-    setLike(false)
-    setAnimate(false)
-    const response = await axiosAPI.delete('/likes/delete', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      data: {
-        id: id,
-      },
-    })
-    refetch()
-    return response
+  const handleRemoveFavorite = () => {
+    const likedPost = userData.likes.filter((data) => data.post === postId)
+    const id = likedPost[0]._id
+    unlikeMutation.mutate(id)
   }
 
   const handleFollow = async (e: React.MouseEvent<HTMLButtonElement>, userId: string) => {
     e.preventDefault()
-    setModal(true)
-    setFollow(true)
-    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-    const response = await axiosAPI.post('/follow/create', {
-      userId: userId,
-    })
-    refetch()
-    setFollowId(response.data?._id)
-    return response
+    followMutation.mutate(userId)
   }
 
   const handleUnFollow = async (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
     e.preventDefault()
-    setModal(false)
-    setFollow(false)
-    const response = await axiosAPI.delete('/follow/delete', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      data: {
-        id: id,
-      },
-    })
-    refetch()
-    return response
+    unfollowMutation.mutate(id)
   }
 
   const deleteComment = async (e: React.MouseEvent<HTMLDivElement>, id: string) => {
@@ -145,7 +174,7 @@ const PostDetailPage = () => {
           {data?.createdAt.slice(0, 10)}
         </Text>
       </Title>
-      {data?.image && <Image src={data?.image} />}
+      {data?.image && <Image imageurl={data?.image} />}
       <ContentContainer>
         <Content>
           <Text typo={'Body_16'} color={'BLACK'}>
@@ -158,9 +187,8 @@ const PostDetailPage = () => {
               fill={like ? 'red' : 'none'}
               onClick={
                 like
-                  ? (e) =>
-                      handleRemoveFavorite(e, data?.likes[data?.likes.length - 1]._id as string)
-                  : (e) => handleCreateFavorite(e, data?._id as string)
+                  ? () => handleRemoveFavorite()
+                  : () => handleCreateFavorite(data?._id as string)
               }
               style={{ cursor: 'pointer' }}
               className={`heart ${animate ? 'is_animating' : ''}`}
@@ -190,31 +218,34 @@ const PostDetailPage = () => {
             )}
           </Interaction>
           <User>
-            <ProfileImage size={50} image={`${userData.image}`} />
+            <ProfileImage size={50} image={data?.author.image as string} updatable={false} />
             <UserDetail>
               <Text typo={'Caption_11'} color={'GRAY600'}>
                 {data?.author.fullName}
               </Text>
               {userData._id === data?.author._id ? (
-                <Button
-                  disabled
-                  buttonType={'Small'}
-                  backgroundColor={modal ? 'GREEN' : 'BEIGE'}
-                  value={follow ? '팔로잉' : '팔로우'}
-                  onClick={
-                    follow
-                      ? (e) => handleUnFollow(e, followId)
-                      : (e) => handleFollow(e, data?.author._id as string)
-                  }
-                />
+                ''
               ) : (
                 <Button
                   buttonType={'Small'}
-                  backgroundColor={modal ? 'GREEN' : 'BEIGE'}
-                  value={follow ? '팔로잉' : '팔로우'}
+                  backgroundColor={
+                    userData.following.find((object) => object.user === data?.author._id)
+                      ? 'GREEN'
+                      : 'BEIGE'
+                  }
+                  value={
+                    userData.following.find((object) => object.user === data?.author._id)
+                      ? '팔로잉'
+                      : '팔로우'
+                  }
                   onClick={
-                    follow
-                      ? (e) => handleUnFollow(e, followId)
+                    userData.following.find((object) => object.user === data?.author._id)
+                      ? (e) =>
+                          handleUnFollow(
+                            e,
+                            userData.following.find((object) => object.user === data?.author._id)
+                              ?._id as string,
+                          )
                       : (e) => handleFollow(e, data?.author._id as string)
                   }
                 />
@@ -295,9 +326,15 @@ const Title = styled.div`
   padding: 30px;
 `
 
-const Image = styled.img`
+const Image = styled.div<{ imageurl: string }>`
+  ${({ imageurl }) => css`
+    background: url(${imageurl});
+  `};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   width: 100%;
-  height: 280px;
+  height: 300px;
   border-radius: 20px;
 `
 
@@ -374,6 +411,13 @@ const WriteComment = styled.form`
   bottom: 4px;
   padding: 10px;
   box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    width: 95%;
+  }
+  @media (min-width: 769px) {
+    width: 460px;
+  }
 `
 
 const StyledTextArea = styled.textarea`

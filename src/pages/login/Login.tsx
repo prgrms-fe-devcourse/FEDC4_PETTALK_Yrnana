@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom'
 
 import Button from '@/components/common/button'
 import Greetings from '@/components/common/greetings'
-import Input from '@/components/common/input'
+import Input from '@/components/common/Input'
 import Loading from '@/components/common/loading'
-import Spacing from '@/components/common/spacing'
+import Spacing from '@/components/common/Spacing'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
 import useModal from '@/libs/hooks/useModal'
@@ -44,11 +44,7 @@ const Login = () => {
       localStorage.setItem('token', data.data.token)
       localStorage.setItem('role', data.data.user.role)
       localStorage.setItem('isLogin', 'true')
-      if (localStorage.getItem('token')) {
-        axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem(
-          'token',
-        )}`
-      }
+
       openModal()
       setTimeout(() => {
         navigate('/')
