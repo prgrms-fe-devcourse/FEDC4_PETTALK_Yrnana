@@ -1,21 +1,54 @@
 import styled from '@emotion/styled'
+import { useMutation } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Button from '@/components/common/button'
 import ProfileImage from '@/components/common/profileImage'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
+import { axiosAPI } from '@/libs/apis/axios'
+import useModal from '@/libs/hooks/useModal'
 import { userAtom } from '@/libs/store/userAtom'
 
 const MyProfile = () => {
   const userData = useAtomValue(userAtom)
   const navigate = useNavigate()
+  const [modalText, setModalText] = useState('')
+  const { isModalOpen, openModal, Modal } = useModal()
+  const logoutMutation = useMutation(async () => await axiosAPI.post('/logout'), {
+    onSuccess: () => {
+      setModalText('로그아웃 완료! 다음에 만나요🙌')
+      openModal()
+      setTimeout(() => {
+        navigate('/login')
+      }, 2000)
+      localStorage.removeItem('isLogin')
+      localStorage.removeItem('token')
+      localStorage.removeItem('role')
+    },
+    onError: () => {
+      setModalText('로그아웃 실패! 다시 시도해주세요🙏')
+      openModal()
+    },
+  })
+  const Logout = () => {
+    //confirm 창 만들면 변경
+    if (window.confirm('로그아웃 하시겠습니까?')) {
+      logoutMutation.mutate()
+    }
+  }
 
   return (
     <>
       <Spacing size={40} />
       <MyPageContainer>
+        {isModalOpen ? (
+          <Modal modalText={modalText} time={2000} active={true} type={'success'} />
+        ) : (
+          ''
+        )}
         <Text typo={'Headline_25'}>{userData.fullName}</Text>
         <ProfileImage size={200} updatable={true} image={userData.image} />
         <Follows>
@@ -44,7 +77,7 @@ const MyProfile = () => {
           position: 'absolute',
           bottom: '20px',
         }}
-        onClick={() => navigate('/login')}
+        onClick={Logout}
       />
     </>
   )
