@@ -39,7 +39,6 @@ const Login = () => {
 
   const loginMutation = useMutation((body: object) => loginPost(body), {
     onSuccess: (data) => {
-      console.log(data)
       setIsLoading(false)
       localStorage.setItem('token', data.data.token)
       localStorage.setItem('role', data.data.user.role)
@@ -83,7 +82,11 @@ const Login = () => {
   ) : (
     <>
       <StyleRegisterWrapper>
-        {isModalOpen ? <Modal modalText={'로그인 성공'} time={2000} /> : ''}
+        {isModalOpen ? (
+          <Modal modalText={'로그인 성공'} time={2000} active={true} type={'success'} />
+        ) : (
+          ''
+        )}
         {loading ? <Greetings className={animation ? '' : 'fade-out'} /> : ''}
         <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
         <Spacing size={50} />
