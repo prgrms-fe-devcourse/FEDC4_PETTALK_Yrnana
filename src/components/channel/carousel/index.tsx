@@ -42,7 +42,7 @@ const Carousel = ({
       const imageWidth = sliderRef.current.offsetWidth
       sliderRef.current.style.transform = `translateX(-${activeIndex * imageWidth}px)`
     }
-  }, [activeIndex, images])
+  }, [activeIndex])
 
   const addDefaultImg = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     e.currentTarget.src = picture1
@@ -86,14 +86,12 @@ const Carousel = ({
 const CarouselContainer = styled(FlexBox)`
   overflow: hidden;
   width: 100%;
-  transition: transform 0.3s ease-in-out;
   position: relative;
 `
 
 const CarouselItem = styled.div`
   flex: 0 0 auto;
   width: 100%;
-  transition: transform 0.3s ease-in-out;
   position: relative;
 `
 const SpanWrapper = styled.div`
