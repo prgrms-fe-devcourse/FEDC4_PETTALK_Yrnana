@@ -41,7 +41,7 @@ const EditPostPage = () => {
   if (isLoading) {
     return <Loading />
   }
-
+  console.log(curImage)
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }
@@ -83,7 +83,7 @@ const EditPostPage = () => {
           }}
         />
         <ImageBoxWrapper>
-          {curImage === null || '' ? (
+          {!curImage || '' ? (
             <ImageUploader
               uploadFileHandler={uploadHandler}
               fileTypeErrorHandler={() => {
