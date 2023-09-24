@@ -1,7 +1,8 @@
 import styled from '@emotion/styled'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
+import { Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import BackArrow from '@/assets/icons/BackArrow'
@@ -14,15 +15,17 @@ import { userAtom } from '@/libs/store/userAtom'
 import { palette } from '@/styles/palette'
 import { theme } from '@/styles/theme'
 
-interface MainPage {
+interface AppBarProps {
   mainPage: boolean
   title?: string
+  backurl?: string
 }
 
-const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
-  const userData = useAtom(userAtom)[0]
-  const [notifyList, setNotifyList] = useState([])
+const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBarProps) => {
   const navigate = useNavigate()
+  const userData = useAtomValue(userAtom)
+  const [notifyList, setNotifyList] = useState([])
+
   const [isSeen, setIsSeen] = useState(true)
   const getNotification = async () => {
     return await axiosAPI.get('/notifications')
