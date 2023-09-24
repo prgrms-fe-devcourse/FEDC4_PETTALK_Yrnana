@@ -8,10 +8,11 @@ interface TextAreaProps extends ComponentProps<'textarea'> {
   width?: number
   height?: number
   placeholder?: string
+  value?: string
 }
 
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function Textarea(
-  { width, height, placeholder = '메세지를 입력해주세요.' }: TextAreaProps,
+  { width, height, placeholder = '메세지를 입력해주세요.', value, ...props }: TextAreaProps,
   textareaRef,
 ) {
   return (
@@ -21,6 +22,8 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(function Textare
         heightProps={height}
         ref={textareaRef}
         placeholder={placeholder}
+        value={value}
+        {...props}
       />
     </FlexBox>
   )

@@ -241,9 +241,9 @@ const PostDetailPage = () => {
               ''
             )}
           </FlexBox>
-          <User>
+          <FlexBox gap={5}>
             <ProfileImage size={50} image={data?.author.image as string} updatable={false} />
-            <UserDetail>
+            <FlexBox direction={'column'} justify={'space-around'} align={'center'} gap={5}>
               <Text typo={'Caption_11'} color={'GRAY600'}>
                 {data?.author.fullName}
               </Text>
@@ -274,14 +274,14 @@ const PostDetailPage = () => {
                   }
                 />
               )}
-            </UserDetail>
-          </User>
+            </FlexBox>
+          </FlexBox>
         </Info>
         <VerticalLine />
         <Comments>
           {data?.comments.map((comment, index) => (
             <FlexBox direction={'column'} key={index} style={{ maxHeight: '250px' }}>
-              <CommentContainer>
+              <FlexBox justify={'space-around'} align={'center'} fullWidth={true}>
                 <SingleComment>
                   <ProfileImage
                     size={30}
@@ -311,13 +311,13 @@ const PostDetailPage = () => {
                 >
                   {comment.createdAt.slice(0, 10)}
                 </Text>
-              </CommentContainer>
+              </FlexBox>
               <VerticalLine key={comment._id} />
             </FlexBox>
           ))}
         </Comments>
         <WriteComment>
-          <TextArea height={100} placeholder={'댓글을 입력해주세요.'} ref={commentRef}></TextArea>
+          <TextArea placeholder={'댓글을 입력해주세요.'} ref={commentRef}></TextArea>
           <Button
             buttonType={'Medium'}
             value={'작성하기'}
@@ -362,18 +362,6 @@ const Info = styled.div`
   justify-content: space-between;
 `
 
-const User = styled.div`
-  display: flex;
-  gap: 5px;
-`
-
-const UserDetail = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-`
-
 const Comments = styled.div`
   width: 100%;
   overflow: scroll;
@@ -385,13 +373,6 @@ const Comments = styled.div`
 
 const UserComment = styled.div`
   width: 100%;
-`
-
-const CommentContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
 `
 
 const SingleComment = styled.div`
