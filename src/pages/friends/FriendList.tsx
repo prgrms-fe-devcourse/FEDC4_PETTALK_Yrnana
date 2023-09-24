@@ -11,9 +11,8 @@ import FollowFriend from '@/components/friends/FollowFriend'
 import OnlineFriends from '@/components/friends/OnlineFriends'
 import { FriendListResponse, User } from '@/libs/apis/auth/authType'
 import { UserApi } from '@/libs/apis/user/userApi'
+import { useDebounce } from '@/libs/hooks/useDebounce'
 import { userAtom } from '@/libs/store/userAtom'
-
-import { useDebounce } from '../../hooks/useDebounce'
 
 const FriendList = () => {
   const [keyword, setKeyword] = useState<string>('')

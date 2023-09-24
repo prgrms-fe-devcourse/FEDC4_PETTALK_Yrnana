@@ -1,7 +1,6 @@
 import 'react-toastify/dist/ReactToastify.css'
 
 import styled from '@emotion/styled'
-import { useEffect } from 'react'
 import { toast, ToastContainer } from 'react-toastify'
 
 import { palette } from '@/styles/palette'
@@ -14,25 +13,16 @@ interface ModalProps {
   type?: ToastType
   active: boolean
 }
-const Modal = ({ modalText, time = 3000, type = 'info', active = true }: ModalProps) => {
-  const notify = () => toast(modalText, { type })
-  useEffect(() => {
-    notify()
-  }, [])
-  if (!active) {
-    return null
-  }
+const Modal = () => {
   return (
-    <>
-      <StyleModal
-        position={'top-center'}
-        autoClose={time}
-        hideProgressBar={false}
-        closeOnClick
-        pauseOnHover={false}
-        limit={1}
-      />
-    </>
+    <StyleModal
+      position={'top-center'}
+      autoClose={3000}
+      hideProgressBar={false}
+      closeOnClick
+      pauseOnHover={false}
+      limit={1}
+    />
   )
 }
 const StyleModal = styled(ToastContainer)`

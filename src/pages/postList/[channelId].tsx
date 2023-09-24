@@ -13,10 +13,9 @@ import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import PostApi from '@/libs/apis/post/postApi'
 import { Post } from '@/libs/apis/post/postType'
+import { useDebounce } from '@/libs/hooks/useDebounce'
 import { userAtom } from '@/libs/store/userAtom'
 import { theme } from '@/styles/theme'
-
-import { useDebounce } from '../../hooks/useDebounce'
 
 const PostListPage = () => {
   const userData = useAtomValue(userAtom)
@@ -67,7 +66,7 @@ const PostListPage = () => {
             <>
               <Spacing size={60} />
               <Text typo={'Body_16'} color={'GRAY600'}>
-                {'찾는 포스트가 없습니다.'}
+                {'포스트가 없습니다.'}
               </Text>
             </>
           ) : (

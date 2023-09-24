@@ -23,7 +23,7 @@ const Register = () => {
   const [checkBox2, setCheckBox2] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [modalText, setModalText] = useState('')
-  const { isModalOpen, openModal, Modal } = useModal()
+  const { openModal } = useModal()
 
   useEffect(() => {}, [checkBox1, checkBox2])
 
@@ -78,16 +78,12 @@ const Register = () => {
     onSuccess: (data) => {
       console.log(data)
       setIsLoading(false)
-      setModalText('회원가입 성공!')
-      openModal()
-      setTimeout(() => {
-        navigate('/login')
-      }, 2000)
+      openModal({ content: '회원가입 성공!', type: 'success' })
+      navigate('/login')
     },
     onError: () => {
       setIsLoading(false)
-      setModalText('회원가입 실패! 이미 있는 계정입니다.')
-      openModal()
+      openModal({ content: '회원가입 실패! 이미 있는 계정입니다.', type: 'error' })
     },
   })
 
@@ -106,11 +102,6 @@ const Register = () => {
   ) : (
     <>
       <StyleRegisterWrapper image={BackgroundImage}>
-        {isModalOpen ? (
-          <Modal modalText={modalText} time={2000} active={true} type={'success'} />
-        ) : (
-          ''
-        )}
         <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
         <Spacing size={50} />
         <Input width={200} ref={emailInputRef} placeholder={'email'}></Input>

@@ -13,10 +13,9 @@ import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import { Conversation } from '@/libs/apis/message/conversationType'
 import MessageApi from '@/libs/apis/message/messageApi'
+import { useDebounce } from '@/libs/hooks/useDebounce'
 import { userAtom } from '@/libs/store/userAtom'
 import { palette } from '@/styles/palette'
-
-import { useDebounce } from '../../hooks/useDebounce'
 
 const ChattingList = () => {
   const userData = useAtomValue(userAtom)

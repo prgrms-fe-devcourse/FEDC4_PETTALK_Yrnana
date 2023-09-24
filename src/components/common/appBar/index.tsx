@@ -23,36 +23,34 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBa
   const userData = useAtomValue(userAtom)
 
   return (
-    <Suspense fallback={<Loading />}>
-      <HeadingBar>
-        {mainPage ? (
-          <Text typo={'LogoFont_30'} style={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
-            {'Pet Talk'}
-          </Text>
-        ) : (
-          <HeaderContainer>
-            <BackArrow
-              style={{ cursor: 'pointer' }}
-              onClick={() => {
-                backurl ? navigate(`/${backurl}`) : navigate(-1)
-              }}
-            />
-            <Text typo={'SubHead_18'}>{title}</Text>
-          </HeaderContainer>
-        )}
-        <Functions>
-          <Toggle />
-          <Bell style={{ cursor: 'pointer' }} onClick={() => navigate('/notification')} />
-          {/* <ProfileImage
+    <HeadingBar>
+      {mainPage ? (
+        <Text typo={'LogoFont_30'} style={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
+          {'Pet Talk'}
+        </Text>
+      ) : (
+        <HeaderContainer>
+          <BackArrow
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              backurl ? navigate(`/${backurl}`) : navigate(-1)
+            }}
+          />
+          <Text typo={'SubHead_18'}>{title}</Text>
+        </HeaderContainer>
+      )}
+      <Functions>
+        <Toggle />
+        <Bell style={{ cursor: 'pointer' }} onClick={() => navigate('/notification')} />
+        <ProfileImage
           image={userData.image}
           size={40}
           updatable={false}
           style={{ cursor: 'pointer' }}
           onClick={() => navigate('/myprofile')}
-        /> */}
-        </Functions>
-      </HeadingBar>
-    </Suspense>
+        />
+      </Functions>
+    </HeadingBar>
   )
 }
 
