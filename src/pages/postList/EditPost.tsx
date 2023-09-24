@@ -13,10 +13,12 @@ import ImageUploader from '@/components/posts/ImageUploader'
 import PostApi from '@/libs/apis/post/postApi'
 import { Post } from '@/libs/apis/post/postType'
 import { queryClient } from '@/libs/apis/queryClient'
+import useModal from '@/libs/hooks/useModal'
 import encodeFileToBase64 from '@/libs/utils/encodeFileToBase64'
 import { theme } from '@/styles/theme'
 
 const EditPostPage = () => {
+  const { openModal } = useModal()
   const postMutation = useMutation(PostApi.UPDATE_POST, {
     onSettled: () => {
       queryClient.invalidateQueries(['post', postId])
@@ -66,7 +68,7 @@ const EditPostPage = () => {
       if (uploadFile) formData.append('image', uploadFile, 'myfile')
       postMutation.mutate(formData)
     } else {
-      alert('게시글 내용이 비었습니다!')
+      openModal({ content: '게시글 내용이 비었습니다!', type: 'warning' })
     }
   }
   return (

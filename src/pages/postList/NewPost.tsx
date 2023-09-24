@@ -13,12 +13,14 @@ import ImageUploader from '@/components/posts/ImageUploader'
 import PostApi from '@/libs/apis/post/postApi'
 import { Post } from '@/libs/apis/post/postType'
 import { queryClient } from '@/libs/apis/queryClient'
+import useModal from '@/libs/hooks/useModal'
 import { urlAtom } from '@/libs/store/urlAtom'
 import encodeFileToBase64 from '@/libs/utils/encodeFileToBase64'
 import { theme } from '@/styles/theme'
 
 const NewPostPage = () => {
   const [urlData, setUrlData] = useAtom(urlAtom)
+  const { openModal } = useModal()
   const postMutation = useMutation(PostApi.CREATE_POST, {
     onSuccess: (newPost: Post) => {
       queryClient.setQueryData(['post', newPost._id], newPost)
@@ -60,7 +62,7 @@ const NewPostPage = () => {
       if (uploadFile) formData.append('image', uploadFile, 'myfile')
       postMutation.mutate(formData)
     } else {
-      alert('게시글 내용이 비었습니다!')
+      openModal({ content: '게시글 내용이 비었습니다!', type: 'warning' })
     }
   }
   return (

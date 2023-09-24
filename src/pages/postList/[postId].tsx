@@ -18,6 +18,7 @@ import PostApi from '@/libs/apis/post/postApi'
 import { Like } from '@/libs/apis/post/postType'
 import { queryClient } from '@/libs/apis/queryClient'
 import { UserApi } from '@/libs/apis/user/userApi'
+import useModal from '@/libs/hooks/useModal'
 import { useNotification } from '@/libs/hooks/useNotification'
 import { urlAtom } from '@/libs/store/urlAtom'
 import { userAtom } from '@/libs/store/userAtom'
@@ -27,6 +28,7 @@ const PostDetailPage = () => {
   const [comment, setComment] = useState('')
   const [like, setLike] = useState(false)
   const [animate, setAnimate] = useState(false)
+  const { openModal } = useModal()
   const navigate = useNavigate()
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
@@ -132,7 +134,7 @@ const PostDetailPage = () => {
       })
       return response
     } else {
-      alert('댓글을 입력해주세요!')
+      openModal({ content: '댓글을 입력해주세요!', type: 'warning' })
     }
   }
 
