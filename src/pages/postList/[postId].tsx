@@ -24,6 +24,10 @@ import { userAtom } from '@/libs/store/userAtom'
 const PostDetailPage = () => {
   const [urlData, setUrlData] = useAtom(urlAtom)
   const [userData, setUserData] = useAtom(userAtom)
+  const [comment, setComment] = useState('')
+  const [like, setLike] = useState(false)
+  const [animate, setAnimate] = useState(false)
+  const navigate = useNavigate()
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
   const { data, isLoading, refetch } = useQuery(['post', postId], () => PostApi.DETAIL_POST(postId))
@@ -54,10 +58,6 @@ const PostDetailPage = () => {
       setUserData({ ...userData, likes: [...filtered] })
     },
   })
-  const [comment, setComment] = useState('')
-  const [like, setLike] = useState(false)
-  const [animate, setAnimate] = useState(false)
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (userData.likes.find((data) => data.post === postId)) {
