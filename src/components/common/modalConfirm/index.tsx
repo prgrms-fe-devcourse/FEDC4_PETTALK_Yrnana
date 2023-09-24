@@ -1,45 +1,55 @@
 import styled from '@emotion/styled'
-import { useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 
 import Button from '@/components/common/button'
-import { modalConfirmAtom } from '@/libs/store/modalConfirmAtom'
+import {
+  modalConfirmAtom,
+  modalConfirmFuncAtom,
+  modalConfirmTextAtom,
+} from '@/libs/store/modalConfirmAtom'
 import { palette } from '@/styles/palette'
 
-interface ModalConfirmPropsType {
-  okFunc: () => void
-  confirmText: string
-}
-const ModalConfirm = ({ confirmText, okFunc }: ModalConfirmPropsType) => {
+const ModalConfirm = () => {
   const setModalState = useSetAtom(modalConfirmAtom)
+  const modalState = useAtomValue(modalConfirmAtom)
+  const [okFunc, setOkFunc] = useAtom(modalConfirmFuncAtom)
+  const confirmText = useAtomValue(modalConfirmTextAtom)
 
   const closeModal = () => {
     setModalState(false)
   }
   const OkAndClose = () => {
-    okFunc()
+    okFunc.fn()
     closeModal()
   }
   return (
-    <StyleConfirmWrapper>
-      <StyleConfirm>
-        <StyleConfirmText>{confirmText}</StyleConfirmText>
-        <StyleButtonWrapper>
-          <Button
-            buttonType={'Medium'}
-            value={'확인'}
-            style={{ margin: 20 }}
-            onClick={OkAndClose}
-          />
-          <Button
-            buttonType={'Medium'}
-            value={'취소'}
-            backgroundColor={'BACKGROUND'}
-            style={{ margin: 20 }}
-            onClick={closeModal}
-          />
-        </StyleButtonWrapper>
-      </StyleConfirm>
-    </StyleConfirmWrapper>
+    <>
+      {' '}
+      {modalState ? (
+        <StyleConfirmWrapper>
+          <StyleConfirm>
+            <StyleConfirmText>{confirmText}</StyleConfirmText>
+            <StyleButtonWrapper>
+              <Button
+                buttonType={'Large'}
+                value={'확인'}
+                style={{ margin: 10, width: 100, height: 40 }}
+                onClick={OkAndClose}
+              />
+              <Button
+                buttonType={'Large'}
+                value={'취소'}
+                backgroundColor={'BACKGROUND'}
+                style={{ margin: 10, width: 100, height: 40 }}
+                onClick={closeModal}
+              />
+            </StyleButtonWrapper>
+          </StyleConfirm>
+        </StyleConfirmWrapper>
+      ) : (
+        ''
+      )}
+    </>
   )
 }
 const StyleConfirmWrapper = styled.div`
