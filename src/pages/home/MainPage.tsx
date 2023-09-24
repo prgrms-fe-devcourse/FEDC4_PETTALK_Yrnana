@@ -1,11 +1,13 @@
 import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { ComponentProps } from 'react'
 
 import ChannelList from '@/components/channel/channelList'
 import ChannelSlider from '@/components/channel/channelSlider'
 import InterestHeader from '@/components/channel/interestHeader'
-import Spacing from '@/components/common/Spacing'
+import Loading from '@/components/common/loading'
+import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
 import { Channel } from '@/libs/apis/channel/channelType'
@@ -25,11 +27,22 @@ const MainPage = ({
   interestChannelColor = 'BLACK',
   ...props
 }: MainPageProps) => {
-  const { data: channelListData, isLoading } = useQuery(['channels'], () =>
-    ChannelApi.GET_CHANNEL(),
-  )
+  const { data, isLoading, refetch } = useQuery(['channels'], () => ChannelApi.GET_CHANNEL(), {
+    cacheTime: 0,
+  })
 
-  if (isLoading) return <h2>{'로딩 중...'}</h2>
+  useEffect(() => {
+    refetch()
+  }, [refetch])
+
+  const filterData = (data: Channel[]) => {
+    return data.filter((item) => {
+      if (localStorage.getItem('isLogin')) return true
+      else return !item.authRequired
+    })
+  }
+
+  if (isLoading) return <Loading />
 
   return (
     <MainPageWrapper {...props}>
@@ -38,12 +51,12 @@ const MainPage = ({
           {'오늘의 채널'}
         </Text>
         <Spacing size={15}></Spacing>
-        <ChannelSlider data={channelListData as Channel[]} />
+        {!isLoading && <ChannelSlider data={filterData(data as Channel[])} />}
       </TodayChannel>
       <InterestChannel>
         <InterestHeader typo={interestChannelTypo} color={interestChannelColor} />
         <Spacing size={30}></Spacing>
-        <ChannelList data={channelListData as Channel[]} />
+        {!isLoading && <ChannelList data={filterData(data as Channel[])} />}
       </InterestChannel>
     </MainPageWrapper>
   )
@@ -58,7 +71,9 @@ const MainPageWrapper = styled.div`
   overflow-y: auto;
   padding-bottom: 25%;
 `
+
 const TodayChannel = styled.div``
+
 const InterestChannel = styled.div``
 
 export default MainPage

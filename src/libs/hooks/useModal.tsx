@@ -1,18 +1,25 @@
 import 'react-toastify/dist/ReactToastify.css'
 
-import { useState } from 'react'
+import { toast } from 'react-toastify'
 
 import Modal from '@/components/common/modal'
 
+type ToastType = 'info' | 'success' | 'warning' | 'error'
 export const useModal = () => {
-  const [isModalOpen, setModalState] = useState(false)
-  const openModal = () => {
-    setModalState(!isModalOpen)
-    setTimeout(() => {
-      setModalState(false)
-    }, 5000)
+  const openModal = ({
+    type = 'info',
+    content,
+    ...props
+  }: {
+    type?: ToastType
+    content: string
+  }) => {
+    toast(content, {
+      type: type,
+      ...props,
+    })
   }
-  return { isModalOpen, openModal, Modal }
+  return { openModal, Modal }
 }
 
 export default useModal

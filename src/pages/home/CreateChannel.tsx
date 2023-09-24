@@ -10,10 +10,18 @@ import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
 import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
+import { queryClient } from '@/libs/apis/queryClient'
+import useModal from '@/libs/hooks/useModal'
 const CreateChannel = () => {
   const [openChannel, setOpenChannel] = useState(false)
   const navigate = useNavigate()
-  const ouathRegisterMutation = useMutation(ChannelApi.CREATE_CHANNEL)
+  const { openModal } = useModal()
+  const ouathRegisterMutation = useMutation(ChannelApi.CREATE_CHANNEL, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['channels'])
+      openModal({ content: '채널 생성 성공!', type: 'success' })
+    },
+  })
   const channelTitleRef = useRef<HTMLInputElement>(null)
   const channelDesRef = useRef<HTMLInputElement>(null)
 
@@ -21,14 +29,15 @@ const CreateChannel = () => {
     if (localStorage.getItem('role') === 'SuperAdmin') {
       axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     } else {
-      alert('관리자의 권한이 필요합니다!')
+      openModal({ content: '관리자의 권한이 필요합니다!', type: 'warning' })
       navigate('/')
     }
   }, [])
   const handleCreateChannel = () => {
     if (channelTitleRef.current && channelDesRef.current) {
       if (channelTitleRef?.current.value === '') {
-        return alert('채널명은 공백으로 설정할 수 없습니다!')
+        openModal({ content: '채널명은 공백으로 설정할 수 없습니다!', type: 'warning' })
+        return
       }
       ouathRegisterMutation.mutate({
         authRequired: openChannel,

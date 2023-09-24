@@ -1,4 +1,5 @@
 export type Channel = {
+  authRequired: boolean
   posts: string[]
   _id: string
   name: string

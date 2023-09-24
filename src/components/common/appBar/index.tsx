@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
@@ -7,6 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 import BackArrow from '@/assets/icons/BackArrow'
 import Bell from '@/assets/icons/Bell'
+import Loading from '@/components/common/loading'
 import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import Toggle from '@/components/common/toggle'
@@ -25,6 +27,7 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBa
   const navigate = useNavigate()
   const userData = useAtomValue(userAtom)
   const [notifyList, setNotifyList] = useState([])
+
 
   const [isSeen, setIsSeen] = useState(true)
   const getNotification = async () => {
@@ -61,7 +64,12 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBa
         </Text>
       ) : (
         <HeaderContainer>
-          <BackArrow style={{ cursor: 'pointer' }} onClick={() => navigate(-1)} />
+          <BackArrow
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              backurl ? navigate(`/${backurl}`) : navigate(-1)
+            }}
+          />
           <Text typo={'SubHead_18'}>{title}</Text>
         </HeaderContainer>
       )}
