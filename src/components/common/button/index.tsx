@@ -38,7 +38,9 @@ const Button = ({
         onClick={onClick}
         backgroundColor={backgroundColor}
       >
-        <Text typo={`${BUTTON_SHAPE_TYPE[buttonType].typo}`}>{value}</Text>
+        <Text typo={`${BUTTON_SHAPE_TYPE[buttonType].typo}`} color={'GRAY700'}>
+          {value}
+        </Text>
       </StyleButton>
     </StyleButtonWrapper>
   )

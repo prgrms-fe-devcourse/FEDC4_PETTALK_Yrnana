@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
+import { useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import Comment from '@/assets/icons/Comment'
@@ -22,6 +23,7 @@ import useModal from '@/libs/hooks/useModal'
 import { useNotification } from '@/libs/hooks/useNotification'
 import { urlAtom } from '@/libs/store/urlAtom'
 import { userAtom } from '@/libs/store/userAtom'
+
 const PostDetailPage = () => {
   const [urlData, setUrlData] = useAtom(urlAtom)
   const [userData, setUserData] = useAtom(userAtom)
@@ -32,6 +34,7 @@ const PostDetailPage = () => {
   const navigate = useNavigate()
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
+  const divRef = useRef<HTMLDivElement>(null)
   const { data, isLoading, refetch } = useQuery(['post', postId], () => PostApi.DETAIL_POST(postId))
   const likeMutation = useMutation(PostApi.LIKE_POST, {
     onSettled: () => {
@@ -69,7 +72,18 @@ const PostDetailPage = () => {
       channelId: channelID,
       postId: postId,
     })
+    if (window.visualViewport) {
+      window.visualViewport.onresize = handleVisualViewPortResize
+    }
   }, [])
+
+  const handleVisualViewPortResize = () => {
+    const currentVisualViewport = Number(window.visualViewport?.height)
+    if (divRef) {
+      divRef.current!.style.height = `${currentVisualViewport - 80}px`
+      window.scrollTo(0, 40)
+    }
+  }
 
   const followMutation = useMutation(UserApi.FOLLOW_USER, {
     onSettled: () => {
@@ -173,7 +187,7 @@ const PostDetailPage = () => {
   }
 
   return (
-    <DetailContainer>
+    <DetailContainer ref={divRef}>
       <Title>
         <Text typo={'Headline_25'}>{postData.title}</Text>
         <Text typo={'Caption_11'} color={'GRAY500'}>
@@ -453,7 +467,7 @@ const WriteComment = styled.form`
   align-items: center;
   gap: 10px;
   width: 98%;
-  position: fixed;
+  position: absolute;
   bottom: 4px;
   padding: 10px;
   box-sizing: border-box;

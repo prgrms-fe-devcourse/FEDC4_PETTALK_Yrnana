@@ -1,6 +1,7 @@
 import { css } from '@emotion/react'
 import emotionReset from 'emotion-reset'
 
+import { media } from '@/styles/theme'
 export const globalStyle = css`
   ${emotionReset}
 
@@ -21,7 +22,28 @@ export const globalStyle = css`
   }
 
   body {
+    font-family:
+      'Pretendard',
+      Pretendard,
+      -apple-system,
+      BlinkMacSystemFont,
+      system-ui,
+      Roboto,
+      'Helvetica Neue',
+      'Segoe UI',
+      'Apple SD Gothic Neo',
+      'Noto Sans KR',
+      'Malgun Gothic',
+      'Apple Color Emoji',
+      'Segoe UI Emoji',
+      'Segoe UI Symbol',
+      sans-serif !important;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    ${media.mobile} {
+      -ms-overflow-style: none;
+    }
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
