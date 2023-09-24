@@ -1,3 +1,4 @@
+import styled from '@emotion/styled'
 import { useAtomValue } from 'jotai'
 
 import Datetime from '@/components/chatting/datetime'
@@ -43,29 +44,38 @@ const MessageArea = ({ data }: MessageAreaProps) => {
   const entries = Object.entries(groupedMessages)
 
   return entries.map(([date, messages]) => (
-    <FlexBox direction={'column'} gap={20} key={date}>
+    <FlexBox direction={'column'} gap={20} key={date} fullWidth={true}>
       <Datetime content={date}></Datetime>
       {messages.map((message) =>
         userData._id === message.sender._id ? (
-          <ChattingBubble
-            key={message._id}
-            isMyChat={true}
-            message={message.message}
-            time={message.formattedTime}
-          />
+          <StyledWrapper key={message._id} isMyChat={true}>
+            <ChattingBubble
+              isMyChat={true}
+              message={message.message}
+              time={message.formattedTime}
+            />
+          </StyledWrapper>
         ) : (
-          <ListRow
-            key={message._id}
-            leftImage={message.sender.image}
-            mainText={message.sender.fullName}
-            subElement={<ChattingBubble message={message.message} time={message.formattedTime} />}
-            rightElement={null}
-          />
+          <StyledWrapper key={message._id} isMyChat={false}>
+            <ListRow
+              fullWidth={true}
+              leftImage={message.sender.image}
+              mainText={message.sender.fullName}
+              subElement={<ChattingBubble message={message.message} time={message.formattedTime} />}
+              rightElement={null}
+            />
+          </StyledWrapper>
         ),
       )}
       <Spacing size={20}></Spacing>
     </FlexBox>
   ))
 }
+
+const StyledWrapper = styled.div<{ isMyChat: boolean }>`
+  width: 100%;
+  padding-left: ${(props) => props.isMyChat && '20%'};
+  padding-right: ${(props) => !props.isMyChat && '20%'};
+`
 
 export default MessageArea
