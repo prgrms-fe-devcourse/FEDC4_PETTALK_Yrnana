@@ -21,6 +21,14 @@ const PostApi = {
     const response = await axiosAPI.put('posts/update', payload)
     return response.data
   },
+  DELETE_POST: (id: string): Promise<void> => {
+    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+    return axiosAPI.delete('posts/delete', {
+      data: {
+        id: id,
+      },
+    })
+  },
   SEARCH_POST: async (query: string): Promise<Post[]> => {
     const response = await axiosAPI.get(`/search/all/${query}`)
     return response.data
