@@ -5,7 +5,6 @@ import { useAtomValue } from 'jotai'
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import Search from '@/assets/icons/Search'
 import { FlexBox } from '@/components/common/flexBox'
 import Input from '@/components/common/input'
 import Loading from '@/components/common/loading'
@@ -27,7 +26,7 @@ const PostListPage = () => {
   const { data, isLoading } = useQuery(['posts', channelID], () => PostApi.GET_POSTS(channelID), {
     cacheTime: 0,
   })
-  const debouncedValue = useDebounce(keyword, 400)
+  const debouncedValue = useDebounce(keyword, 200)
   const navigate = useNavigate()
   const handleSearchPost = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {

@@ -9,7 +9,7 @@ const ChattingListRouter = () => {
       <Route
         path={'/'}
         element={
-          <AppBarNavTemplate hasNav={true}>
+          <AppBarNavTemplate hasNav={true} title={'채팅 목록'}>
             <ChattingList />
           </AppBarNavTemplate>
         }

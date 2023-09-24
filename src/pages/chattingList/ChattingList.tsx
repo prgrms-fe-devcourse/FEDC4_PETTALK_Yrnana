@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
-import { useEffect, useRef, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Search from '@/assets/icons/Search'
@@ -16,17 +16,17 @@ import MessageApi from '@/libs/apis/message/messageApi'
 import { userAtom } from '@/libs/store/userAtom'
 import { palette } from '@/styles/palette'
 
+import { useDebounce } from '../../hooks/useDebounce'
+
 const ChattingList = () => {
   const userData = useAtomValue(userAtom)
-  const [chattingList, setChattingList] = useState<Conversation[]>([])
+  const [keyword, setKeyword] = useState<string>('')
   const [filteredChattingList, setFilteredChattingList] = useState<Conversation[]>([])
-  const [searchMode, setSearchMode] = useState<boolean>(false)
   const navigate = useNavigate()
+  const debouncedValue = useDebounce(keyword, 200)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
-  const getChattingList = async () => {
-    return await MessageApi.GET_MESSAGES()
-  }
-  const { data, isLoading } = useQuery(['chattingList'], () => getChattingList(), {
+
+  const { data, isLoading } = useQuery(['chattingList'], MessageApi.GET_MESSAGES, {
     refetchInterval: 2000,
     refetchIntervalInBackground: true,
     retry: 3,
@@ -46,18 +46,32 @@ const ChattingList = () => {
 
     await MessageApi.READ_MESSAGE(selectedChat.sender._id)
   }
-  const searchChattingList = () => {
-    if (searchInputRef.current !== null) {
-      const inputValue = searchInputRef.current.value
-      const sourceList = data?.length !== 0 ? data : chattingList
-      const filteredList = sourceList!.filter(
-        (chat) => chat.sender.fullName.includes(inputValue) || chat.message.includes(inputValue),
-      )
 
-      setFilteredChattingList(filteredList)
-      setSearchMode(true)
+  const fetchSearchData = async (keyword: string) => {
+    const searched = await MessageApi.SEARCH_USER(keyword)
+    const filteredData = searched.filter((data) => 'fullName' in data)
+    const userIdData = filteredData.map((data) => data._id)
+    if (data) {
+      const newUserList = data.filter(
+        (data) => userIdData.includes(data.sender._id) || userIdData.includes(data.receiver._id),
+      )
+      setFilteredChattingList(newUserList)
     }
   }
+
+  const handleSearchChat = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setKeyword(e.target.value)
+      if (e.target.value === '' && data) {
+        setFilteredChattingList(data)
+        return
+      }
+      if (debouncedValue) {
+        fetchSearchData(debouncedValue)
+      }
+    },
+    [debouncedValue],
+  )
 
   const findOpponent = (data: Conversation) => {
     if (data.sender._id === userData._id) return data.receiver
@@ -65,8 +79,7 @@ const ChattingList = () => {
   }
 
   useEffect(() => {
-    if (data !== undefined) {
-      setChattingList(data)
+    if (data) {
       setFilteredChattingList(data)
     }
   }, [data])
@@ -81,20 +94,20 @@ const ChattingList = () => {
         <StyleChattingListWrapper>
           <FlexBox direction={'row'} gap={20} fullWidth={true}>
             <StyleSearchArea align={'center'} fullWidth={true}>
-              <Input placeholder={'대화 목록을 검색해보세요!'} ref={searchInputRef} />
-              <StyleSearchIcon onClick={searchChattingList}>
+              <Input
+                placeholder={'대화 목록을 검색해보세요'}
+                ref={searchInputRef}
+                onChange={handleSearchChat}
+              />
+              {/* <StyleSearchIcon onClick={searchChattingList}>
                 <Search />
-              </StyleSearchIcon>
+              </StyleSearchIcon> */}
             </StyleSearchArea>
           </FlexBox>
           <Spacing size={30} />
           <StyleChattingItem>
-            {(
-              filteredChattingList && searchMode
-                ? filteredChattingList.length !== 0
-                : data?.length !== 0
-            ) ? (
-              (filteredChattingList || data).map((chat) => (
+            {filteredChattingList.length !== 0 ? (
+              filteredChattingList?.map((chat) => (
                 <StyleListRow
                   direction={'column'}
                   fullWidth={true}
@@ -124,7 +137,7 @@ const ChattingList = () => {
                 </StyleListRow>
               ))
             ) : (
-              <StyleNoData>{'검색 결과가 존재하지 않습니다!'}</StyleNoData>
+              <StyleNoData>{'채팅이 존재하지 않습니다!'}</StyleNoData>
             )}
           </StyleChattingItem>
         </StyleChattingListWrapper>
@@ -146,9 +159,6 @@ const Stylehr = styled.hr`
 const StyleSearchArea = styled(FlexBox)`
   text-align: center;
   padding: 0px 20px;
-`
-const StyleSearchIcon = styled.div`
-  cursor: pointer;
 `
 const StyleChattingItem = styled.li`
   padding: 0px 20px;

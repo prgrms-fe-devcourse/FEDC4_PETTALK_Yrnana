@@ -66,8 +66,8 @@ const FollowFriend = ({ data, follow }: FollowFriendProps) => {
                 onClick={() =>
                   navigate('/chatting', {
                     state: {
-                      sender: user._id,
-                      receiver: data._id,
+                      sender: user,
+                      receiver: data,
                     },
                   })
                 }
