@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 
+import { User } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
 import { Conversation } from '@/libs/apis/message/conversationType'
 import { Message } from '@/libs/apis/message/messageType'
@@ -29,6 +30,10 @@ const MessageApi = {
   },
   READ_MESSAGE: async (sender: string): Promise<Message> => {
     const response = await axiosAPI.put('/messages/update-seen', { sender })
+    return response.data
+  },
+  SEARCH_USER: async (query: string): Promise<User[]> => {
+    const response = await axiosAPI.get(`/search/all/${query}`)
     return response.data
   },
 }

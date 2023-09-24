@@ -13,16 +13,18 @@ import ImageUploader from '@/components/posts/ImageUploader'
 import PostApi from '@/libs/apis/post/postApi'
 import { Post } from '@/libs/apis/post/postType'
 import { queryClient } from '@/libs/apis/queryClient'
+import useModal from '@/libs/hooks/useModal'
 import encodeFileToBase64 from '@/libs/utils/encodeFileToBase64'
 import { theme } from '@/styles/theme'
 
 const EditPostPage = () => {
+  const { openModal } = useModal()
   const postMutation = useMutation(PostApi.UPDATE_POST, {
     onSettled: () => {
-      queryClient.invalidateQueries(['posts', postId])
+      queryClient.invalidateQueries(['post', postId])
     },
     onSuccess: (newPost: Post) => {
-      queryClient.setQueryData(['posts', newPost._id], newPost)
+      queryClient.setQueryData(['post', newPost._id], newPost)
       navigate(`/posts/${channelID}/${postId}`, { replace: true })
     },
   })
@@ -30,7 +32,7 @@ const EditPostPage = () => {
   const navigate = useNavigate()
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
-  const { data, isLoading } = useQuery(['posts', postId], () => PostApi.DETAIL_POST(postId))
+  const { data, isLoading } = useQuery(['post', postId], () => PostApi.DETAIL_POST(postId))
   const postData = JSON.parse(data?.title as string)
   const [curImage, setCurImage] = useState<string | null>(data?.image)
   const [title, setTitle] = useState<string | undefined>(postData.title)
@@ -39,7 +41,7 @@ const EditPostPage = () => {
   if (isLoading) {
     return <Loading />
   }
-
+  console.log(curImage)
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
   }
@@ -66,7 +68,7 @@ const EditPostPage = () => {
       if (uploadFile) formData.append('image', uploadFile, 'myfile')
       postMutation.mutate(formData)
     } else {
-      alert('게시글 내용이 비었습니다!')
+      openModal({ content: '게시글 내용이 비었습니다!', type: 'warning' })
     }
   }
   return (
@@ -81,7 +83,7 @@ const EditPostPage = () => {
           }}
         />
         <ImageBoxWrapper>
-          {curImage === null || '' ? (
+          {!curImage || '' ? (
             <ImageUploader
               uploadFileHandler={uploadHandler}
               fileTypeErrorHandler={() => {

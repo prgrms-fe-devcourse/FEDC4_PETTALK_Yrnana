@@ -1,23 +1,26 @@
 import styled from '@emotion/styled'
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtomValue } from 'jotai'
+import { Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import BackArrow from '@/assets/icons/BackArrow'
 import Bell from '@/assets/icons/Bell'
+import Loading from '@/components/common/loading'
 import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import Toggle from '@/components/common/toggle'
 import { userAtom } from '@/libs/store/userAtom'
 import { theme } from '@/styles/theme'
 
-interface MainPage {
+interface AppBarProps {
   mainPage: boolean
   title?: string
+  backurl?: string
 }
 
-const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
-  const userData = useAtom(userAtom)[0]
+const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBarProps) => {
   const navigate = useNavigate()
+  const userData = useAtomValue(userAtom)
 
   return (
     <HeadingBar>
@@ -27,7 +30,12 @@ const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
         </Text>
       ) : (
         <HeaderContainer>
-          <BackArrow style={{ cursor: 'pointer' }} onClick={() => navigate(-1)} />
+          <BackArrow
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              backurl ? navigate(`/${backurl}`) : navigate(-1)
+            }}
+          />
           <Text typo={'SubHead_18'}>{title}</Text>
         </HeaderContainer>
       )}
