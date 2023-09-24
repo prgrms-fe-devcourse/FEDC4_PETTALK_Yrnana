@@ -1,24 +1,61 @@
 import styled from '@emotion/styled'
+
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
+import { useEffect, useState } from 'react'
+import { Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import BackArrow from '@/assets/icons/BackArrow'
 import Bell from '@/assets/icons/Bell'
+import Loading from '@/components/common/loading'
 import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import Toggle from '@/components/common/toggle'
+import { axiosAPI } from '@/libs/apis/axios'
 import { userAtom } from '@/libs/store/userAtom'
+import { palette } from '@/styles/palette'
 import { theme } from '@/styles/theme'
 
-interface MainPage {
+interface AppBarProps {
   mainPage: boolean
   title?: string
+  backurl?: string
 }
 
-const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
-  const userData = useAtom(userAtom)[0]
+const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBarProps) => {
   const navigate = useNavigate()
+  const userData = useAtomValue(userAtom)
+  const [notifyList, setNotifyList] = useState([])
 
+
+  const [isSeen, setIsSeen] = useState(true)
+  const getNotification = async () => {
+    return await axiosAPI.get('/notifications')
+  }
+  const { data } = useQuery(['notificationList'], getNotification, {
+    refetchInterval: 2000,
+    refetchIntervalInBackground: true,
+    retry: 3,
+    onSuccess: (data) => {
+      if (data !== undefined) setNotifyList(data.data)
+      if (notifyList.length && data?.data.length !== notifyList.length) setIsSeen(false)
+    },
+  })
+  const [notifyLength, setNotifyLength] = useState<number>(data?.data.length)
+
+  const handleSeenPost = async () => {
+    return await axiosAPI.put('/notifications/seen')
+  }
+  const seenMutation = useMutation(() => handleSeenPost(), {
+    onSuccess: () => {
+      setIsSeen(true)
+      navigate('/notification')
+    },
+  })
+  useEffect(() => {
+    if (data !== undefined) setNotifyList(data.data)
+  })
   return (
     <HeadingBar>
       {mainPage ? (
@@ -27,13 +64,26 @@ const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
         </Text>
       ) : (
         <HeaderContainer>
-          <BackArrow style={{ cursor: 'pointer' }} onClick={() => navigate(-1)} />
+          <BackArrow
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              backurl ? navigate(`/${backurl}`) : navigate(-1)
+            }}
+          />
           <Text typo={'SubHead_18'}>{title}</Text>
         </HeaderContainer>
       )}
       <Functions>
         <Toggle />
-        <Bell style={{ cursor: 'pointer' }} onClick={() => navigate('/notification')} />
+        {isSeen ? (
+          <Bell style={{ cursor: 'pointer' }} onClick={() => seenMutation.mutate()} />
+        ) : (
+          <>
+            <StyleNotSeenBell />
+            <Bell style={{ cursor: 'pointer' }} onClick={() => seenMutation.mutate()} />
+          </>
+        )}
+
         <ProfileImage
           image={userData.image}
           size={40}
@@ -69,6 +119,16 @@ const Functions = styled.div`
   justify-content: center;
   align-items: center;
   gap: 15px;
+`
+const StyleNotSeenBell = styled.span`
+  z-index: 1;
+  position: absolute;
+  top: 37px;
+  right: 79px;
+  background-color: ${palette.RED};
+  width: 9px;
+  height: 9px;
+  border-radius: 50px;
 `
 
 export default AppBar

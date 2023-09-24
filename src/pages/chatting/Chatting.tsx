@@ -4,24 +4,17 @@ import { useAtomValue } from 'jotai'
 import { MouseEvent, useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 
-import Datetime from '@/components/chatting/datetime'
+import MessageArea from '@/components/chatting/messageArea'
 import Button from '@/components/common/button'
-import ChattingBubble from '@/components/common/chattingBubble'
 import { FlexBox } from '@/components/common/flexBox'
-import ListRow from '@/components/common/listRow'
 import Loading from '@/components/common/loading'
-import Spacing from '@/components/common/spacing'
 import TextArea from '@/components/common/textarea'
 import { User } from '@/libs/apis/auth/authType'
 import MessageApi from '@/libs/apis/message/messageApi'
 import { Message } from '@/libs/apis/message/messageType'
+import { useNotification } from '@/libs/hooks/useNotification'
 import { userAtom } from '@/libs/store/userAtom'
 import { theme } from '@/styles/theme'
-
-interface FormattedMessage extends Message {
-  formattedDate: string
-  formattedTime: string
-}
 
 const Chatting = () => {
   const userData = useAtomValue(userAtom)
@@ -50,13 +43,23 @@ const Chatting = () => {
     retry: 3,
     onSuccess: async (responseData: Message[]) => {
       setMessageData(responseData)
-      await MessageApi.READ_MESSAGE(responseData[responseData.length - 1].sender._id)
+
+      if (responseData.length > 0) {
+        const senderUser = responseData[responseData.length - 1]!.sender as User
+        await MessageApi.READ_MESSAGE(senderUser._id)
+      }
     },
   })
 
   const mutation = useMutation(MessageApi.SEND_MESSAGE, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       if (messageRef.current) messageRef.current.value = ''
+      useNotification({
+        postId: null,
+        userId: opponent,
+        type: 'MESSAGE',
+        typeId: data?._id,
+      })
     },
     onError: (error) => {
       console.error('메시지 전송 중 오류 발생:', error)
@@ -77,28 +80,6 @@ const Chatting = () => {
     }
   }
 
-  const parsedMessages: FormattedMessage[] = data
-    ? data.map((message) => {
-        const parsedDate = new Date(message.createdAt)
-        const formattedDate = `${parsedDate.getFullYear()}년 ${
-          parsedDate.getMonth() + 1
-        }월 ${parsedDate.getDate()}일`
-        const formattedTime = `${String(parsedDate.getHours()).padStart(2, '0')}:${String(
-          parsedDate.getMinutes(),
-        ).padStart(2, '0')}`
-
-        return { ...message, formattedDate, formattedTime }
-      })
-    : []
-
-  const groupedMessages: Record<string, FormattedMessage[]> = {}
-  parsedMessages.forEach((message: FormattedMessage) => {
-    const date = message.formattedDate
-    if (!groupedMessages[date]) groupedMessages[date] = []
-    groupedMessages[date].push(message)
-  })
-  const entries = Object.entries(groupedMessages)
-
   useEffect(() => {
     setOpponent(sender._id === userData._id ? receiver._id : sender._id)
   }, [userData])
@@ -114,37 +95,7 @@ const Chatting = () => {
   return (
     <ChattingWrapper direction={'column'} fullWidth={true} align={'stretch'}>
       <MessageWrapper ref={messageWrapperRef}>
-        {isLoading ? (
-          <Loading></Loading>
-        ) : (
-          data &&
-          entries.map(([date, messages]) => (
-            <FlexBox direction={'column'} gap={20} key={date}>
-              <Datetime content={date}></Datetime>
-              {messages.map((message) =>
-                userData._id === message.sender._id ? (
-                  <ChattingBubble
-                    key={message._id}
-                    isMyChat={true}
-                    message={message.message}
-                    time={message.formattedTime}
-                  />
-                ) : (
-                  <ListRow
-                    key={message._id}
-                    leftImage={message.sender.image}
-                    mainText={message.sender.fullName}
-                    subElement={
-                      <ChattingBubble message={message.message} time={message.formattedTime} />
-                    }
-                    rightElement={null}
-                  />
-                ),
-              )}
-              <Spacing size={20}></Spacing>
-            </FlexBox>
-          ))
-        )}
+        {isLoading ? <Loading></Loading> : data && <MessageArea data={data} />}
       </MessageWrapper>
       <TypingFlexBox gap={10}>
         <TextArea ref={messageRef} height={20} />

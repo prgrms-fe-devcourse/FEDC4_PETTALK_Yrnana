@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
 
+import { FlexBox } from '@/components/common/flexBox'
 import { Text } from '@/components/common/text'
 import { palette } from '@/styles/palette'
 import { type KeyOfPalette, type KeyOfTypo } from '@/styles/theme'
@@ -37,7 +38,13 @@ const ChattingBubble = ({
   ...props
 }: ChattingBubbleProps) => {
   return (
-    <BubbleContainer isMyChat={isMyChat} {...props}>
+    <BubbleContainer
+      justify={'flex-start'}
+      gap={10}
+      fullWidth={true}
+      isMyChat={isMyChat}
+      {...props}
+    >
       <StyledText isMyChat={isMyChat}>
         <MessageText typo={messageTypo} color={messageColor} {...props}>
           {message}
@@ -50,12 +57,8 @@ const ChattingBubble = ({
   )
 }
 
-const BubbleContainer = styled.div<{ isMyChat: boolean }>`
-  display: flex;
-  align-items: center;
+const BubbleContainer = styled(FlexBox)<{ isMyChat: boolean }>`
   justify-content: ${(props) => props.isMyChat && 'flex-end'};
-  gap: 10px;
-  width: 100%;
 `
 
 const StyledText = styled.div<{
