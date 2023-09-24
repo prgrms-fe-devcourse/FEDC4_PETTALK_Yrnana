@@ -11,7 +11,6 @@ import Button from '@/components/common/button'
 import { FlexBox } from '@/components/common/flexBox'
 import Loading from '@/components/common/loading'
 import ProfileImage from '@/components/common/profileImage'
-import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { Follow } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
@@ -76,6 +75,7 @@ const PostDetailPage = () => {
     },
     onSuccess: (follow: Follow) => {
       setUserData({ ...userData, following: [...userData.following, follow] })
+
       useNotification({
         postId: postId,
         userId: follow.user,
@@ -146,7 +146,7 @@ const PostDetailPage = () => {
     unlikeMutation.mutate(id)
   }
 
-  const handleFollow = async (e: React.MouseEvent<HTMLButtonElement>, userId: string) => {
+  const handleFollow = (e: React.MouseEvent<HTMLButtonElement>, userId: string) => {
     e.preventDefault()
     followMutation.mutate(userId)
   }
@@ -261,7 +261,7 @@ const PostDetailPage = () => {
         <Comments>
           {data?.comments.map((comment, index) => (
             <FlexBox direction={'column'} key={index} style={{ maxHeight: '250px' }}>
-              <CommentContainer>
+              <CommentContainer checkUser={userData._id === comment.author._id}>
                 <SingleComment>
                   {userData._id === comment.author._id ? (
                     <ProfileImage
@@ -280,18 +280,8 @@ const PostDetailPage = () => {
                     <Text typo={'Caption_11'}>{comment.author.fullName}</Text>
                     <Text typo={'SubHead_14'}>{comment.comment}</Text>
                   </UserComment>
-                  {userData._id === comment.author._id ? (
-                    <Text
-                      typo={'Body_16'}
-                      onClick={(e) => deleteComment(e, comment._id)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      {'❌'}
-                    </Text>
-                  ) : (
-                    ''
-                  )}
                 </SingleComment>
+
                 <Text
                   typo={'Caption_11'}
                   color={'GRAY500'}
@@ -299,6 +289,18 @@ const PostDetailPage = () => {
                 >
                   {comment.createdAt.slice(0, 10)}
                 </Text>
+                {userData._id === comment.author._id ? (
+                  <Text
+                    typo={'Body_16'}
+                    onClick={(e) => deleteComment(e, comment._id)}
+                    style={{ cursor: 'pointer', position: 'absolute', right: 10 }}
+                    color={'GRAY500'}
+                  >
+                    {'✖'}
+                  </Text>
+                ) : (
+                  ''
+                )}
               </CommentContainer>
               <VerticalLine key={comment._id} />
             </FlexBox>
@@ -317,7 +319,6 @@ const PostDetailPage = () => {
           />
         </WriteComment>
       </ContentContainer>
-      <Spacing size={125} />
     </DetailContainer>
   )
 }
@@ -346,12 +347,19 @@ const Image = styled.div<{ imageurl: string }>`
   background-repeat: no-repeat;
   background-size: cover;
   width: 100%;
-  height: 300px;
+  height: 30%;
   border-radius: 20px;
 `
 
 const ContentContainer = styled.div`
   width: 100%;
+  height: 50%;
+  @media (max-width: 375px) {
+    height: 37%;
+  }
+  @media (max-width: 820px) {
+    height: 55%;
+  }
   display: flex;
   flex-direction: column;
 `
@@ -389,7 +397,15 @@ const UserDetail = styled.div`
 const Comments = styled.div`
   width: 100%;
   overflow: scroll;
-  max-height: 380px;
+  @media (max-width: 375px) {
+    height: 20%;
+  }
+  @media (max-width: 768px) {
+    height: 55%;
+  }
+  @media (min-width: 769px) {
+    height: 60%;
+  }
   ::-webkit-scrollbar {
     display: none;
   }
@@ -397,13 +413,26 @@ const Comments = styled.div`
 
 const UserComment = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 `
 
-const CommentContainer = styled.div`
+const CommentContainer = styled.div<{ checkUser: boolean }>`
   width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  position: relative;
+
+  @media (min-width: 769px) {
+    &:hover {
+      :nth-of-type(1) {
+        transform: ${(props) => (props.checkUser ? 'translateX(-10px)' : '')};
+        transition: transform 0.5s ease-in-out;
+      }
+    }
+  }
 `
 
 const SingleComment = styled.div`
@@ -411,6 +440,9 @@ const SingleComment = styled.div`
   align-items: center;
   width: 100%;
   padding: 10px 20px;
+  @media (max-width: 768px) {
+    padding: 5px 20px;
+  }
 `
 
 const WriteComment = styled.form`
@@ -440,7 +472,7 @@ const StyledTextArea = styled.textarea`
   border-radius: 20px;
   padding: 20px;
   width: 100%;
-  height: 100px;
+  height: 10%;
   line-height: 100%;
 
   ${({ theme }) => theme.typo.Body_16};

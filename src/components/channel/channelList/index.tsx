@@ -5,8 +5,6 @@ import CubeButton from '@/components/common/cubeButton'
 import { FlexBox } from '@/components/common/flexBox'
 import { Channel } from '@/libs/apis/channel/channelType'
 
-import { channelMock } from '../../../mock/channel'
-
 interface ChannelListProps extends ComponentProps<'div'> {
   data: Channel[]
 }

@@ -10,10 +10,16 @@ import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
 import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
+import { Channel } from '@/libs/apis/channel/channelType'
+import { queryClient } from '@/libs/apis/queryClient'
 const CreateChannel = () => {
   const [openChannel, setOpenChannel] = useState(false)
   const navigate = useNavigate()
-  const ouathRegisterMutation = useMutation(ChannelApi.CREATE_CHANNEL)
+  const ouathRegisterMutation = useMutation(ChannelApi.CREATE_CHANNEL, {
+    onSuccess: (newChannel: Channel) => {
+      queryClient.invalidateQueries(['channels'])
+    },
+  })
   const channelTitleRef = useRef<HTMLInputElement>(null)
   const channelDesRef = useRef<HTMLInputElement>(null)
 
