@@ -12,6 +12,7 @@ import TextArea from '@/components/common/textarea'
 import { User } from '@/libs/apis/auth/authType'
 import MessageApi from '@/libs/apis/message/messageApi'
 import { Message } from '@/libs/apis/message/messageType'
+import { useNotification } from '@/libs/hooks/useNotification'
 import { userAtom } from '@/libs/store/userAtom'
 import { theme } from '@/styles/theme'
 
@@ -51,8 +52,14 @@ const Chatting = () => {
   })
 
   const mutation = useMutation(MessageApi.SEND_MESSAGE, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       if (messageRef.current) messageRef.current.value = ''
+      useNotification({
+        postId: null,
+        userId: opponent,
+        type: 'MESSAGE',
+        typeId: data?._id,
+      })
     },
     onError: (error) => {
       console.error('메시지 전송 중 오류 발생:', error)
