@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 import defaultProfileImage from '@/assets/images/defaultProfileImage.png'
 import AppBar from '@/components/common/appBar'
-import ListRow from '@/components/common/ListRow'
+import ListRow from '@/components/common/listRow'
 import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import { axiosAPI } from '@/libs/apis/axios'
@@ -21,24 +21,22 @@ const Notification = () => {
   const getNotification = async () => {
     return await axiosAPI.get('/notifications')
   }
-  const { data, isLoading, refetch } = useQuery(['notificationList'], getNotification)
-  useEffect(() => {
-    if (data !== undefined) setNotifyList(data.data)
-    handleSeenPost()
-    const polling = setInterval(() => {
-      refetch()
-    }, 3000)
-    // 페이지에 벗어날 경우 polling X
-    return () => {
-      clearInterval(polling)
-    }
+  const { data, isLoading } = useQuery(['notificationList'], getNotification, {
+    refetchInterval: 2000,
+    refetchIntervalInBackground: true,
+    retry: 3,
+    onSuccess: (data) => {
+      if (data !== undefined) setNotifyList(data.data)
+    },
   })
+  useEffect(() => {
+    handleSeenPost()
+  }, [])
   const moveChattingPage = () => {
     navigate('/chattinglist')
   }
   const movePostPage = (postId: string | undefined | null) => {
     const channelId = userData.posts.find((v) => v._id === postId)?.channel
-    console.log(channelId)
     navigate(`/posts/${channelId}/${postId}`)
   }
   const handleSeenPost = async () => {

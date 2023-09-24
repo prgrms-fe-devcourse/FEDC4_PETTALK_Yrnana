@@ -27,18 +27,18 @@ const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
   const getNotification = async () => {
     return await axiosAPI.get('/notifications')
   }
-  const { data, refetch } = useQuery(['notificationList'], getNotification)
+  const { data } = useQuery(['notificationList'], getNotification, {
+    refetchInterval: 2000,
+    refetchIntervalInBackground: true,
+    retry: 3,
+    onSuccess: (data) => {
+      if (data !== undefined) setNotifyList(data.data)
+      if (notifyList.length && data?.data.length !== notifyList.length) setIsSeen(false)
+    },
+  })
   const [notifyLength, setNotifyLength] = useState<number>(data?.data.length)
   useEffect(() => {
     if (data !== undefined) setNotifyList(data.data)
-
-    const polling = setInterval(() => {
-      refetch()
-      if (data?.data.length !== notifyLength) setIsSeen(false)
-    }, 3000) // 페이지에 벗어날 경우 polling X
-    return () => {
-      clearInterval(polling)
-    }
   })
   const handleSeenPost = async () => {
     await axiosAPI
