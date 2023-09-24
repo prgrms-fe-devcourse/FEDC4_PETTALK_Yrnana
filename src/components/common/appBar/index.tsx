@@ -63,6 +63,8 @@ const HeadingBar = styled.div`
   align-items: center;
   background-color: ${theme.palette.BACKGROUND};
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 100;
 `
 
 const HeaderContainer = styled.div`
