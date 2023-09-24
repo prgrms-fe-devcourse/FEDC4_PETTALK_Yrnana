@@ -31,10 +31,18 @@ const PostDetailPage = () => {
   const commentRef = useRef<HTMLTextAreaElement>(null)
   const [like, setLike] = useState(false)
   const [animate, setAnimate] = useState(false)
+  const mainElement = document.querySelector('main')
+  const [mainOffsetWidth, setMainOffsetWidth] = useState(mainElement?.offsetWidth)
+  const [mainOffsetHeight, setMainOffsetHeight] = useState(mainElement?.offsetHeight)
   const navigate = useNavigate()
   const { data, isLoading, refetch } = useQuery(['posts', postId], () =>
     PostApi.DETAIL_POST(postId),
   )
+
+  window.addEventListener('resize', () => {
+    setMainOffsetWidth(mainElement!.offsetWidth)
+    setMainOffsetHeight(mainElement!.offsetHeight)
+  })
 
   useEffect(() => {
     if (userData.likes.find((data) => data.post === postId)) {
@@ -187,13 +195,23 @@ const PostDetailPage = () => {
         fullWidth={true}
         style={{ padding: '30px' }}
       >
-        <Text typo={'Headline_25'}>{postData.title}</Text>
+        <Text typo={'Headline_25'}>{`${
+          postData.title.length > 17 ? `${postData.title.slice(0, 17)}...` : postData.title
+        }`}</Text>
         <Text typo={'Caption_11'} color={'GRAY500'}>
           {data?.createdAt.slice(0, 10)}
         </Text>
       </FlexBox>
-      {data?.image && <Image imageurl={data?.image} />}
-      <ContentContainer>
+      {data?.image ? (
+        <Image imageurl={data?.image} />
+      ) : (
+        <Image>
+          <Text typo={'Headline_25'} color={'GRAY500'}>
+            {'이미지가 없습니다.'}
+          </Text>
+        </Image>
+      )}
+      <ContentContainer height={mainOffsetHeight!}>
         <Padding size={20}>
           <Text typo={'Body_16'} color={'BLACK'}>
             {postData.body}
@@ -318,7 +336,7 @@ const PostDetailPage = () => {
             </FlexBox>
           ))}
         </Comments>
-        <WriteComment>
+        <WriteComment width={mainOffsetWidth!}>
           <TextArea placeholder={'댓글을 입력해주세요.'} ref={commentRef}></TextArea>
           <Button
             buttonType={'Medium'}
@@ -339,7 +357,7 @@ const DetailContainer = styled.div`
   height: 100%;
 `
 
-const Image = styled.div<{ imageurl: string }>`
+const Image = styled.div<{ imageurl?: string }>`
   ${({ imageurl }) => css`
     background: url(${imageurl});
   `};
@@ -348,17 +366,23 @@ const Image = styled.div<{ imageurl: string }>`
   background-size: cover;
   width: 100%;
   height: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 20px;
 `
 
-const ContentContainer = styled.div`
+const ContentContainer = styled.div<{ height: number }>`
   width: 100%;
-  height: 50%;
-  @media (max-width: 375px) {
-    height: 37%;
+  height: calc(${(props) => props.height - 510}px);
+  @media (max-height: 667px) {
+    height: calc(${(props) => props.height - 470}px);
   }
-  @media (max-width: 820px) {
-    height: 55%;
+  @media (min-height: 1180px) {
+    height: calc(${(props) => props.height - 525}px);
+  }
+  @media (min-height: 1368px) {
+    height: calc(${(props) => props.height - 578}px);
   }
   display: flex;
   flex-direction: column;
@@ -373,14 +397,12 @@ const Info = styled.div`
 const Comments = styled.div`
   width: 100%;
   overflow: scroll;
-  @media (max-width: 375px) {
-    height: 20%;
+  height: 60%;
+  @media (min-height: 1180px) {
+    height: 65%;
   }
-  @media (max-width: 768px) {
-    height: 55%;
-  }
-  @media (min-width: 769px) {
-    height: 60%;
+  @media (min-height: 1368px) {
+    height: 70%;
   }
   ::-webkit-scrollbar {
     display: none;
@@ -421,23 +443,16 @@ const SingleComment = styled.div`
   }
 `
 
-const WriteComment = styled.form`
+const WriteComment = styled.form<{ width: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  width: 98%;
+  width: ${(props) => props.width - 20}px;
   position: fixed;
   bottom: 4px;
   padding: 10px;
   box-sizing: border-box;
-
-  @media (max-width: 768px) {
-    width: 95%;
-  }
-  @media (min-width: 769px) {
-    width: 460px;
-  }
 `
 
 const VerticalLine = styled.hr`
