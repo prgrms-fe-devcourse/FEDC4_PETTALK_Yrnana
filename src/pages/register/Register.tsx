@@ -106,7 +106,11 @@ const Register = () => {
   ) : (
     <>
       <StyleRegisterWrapper image={BackgroundImage}>
-        {isModalOpen ? <Modal modalText={modalText} time={2000} /> : ''}
+        {isModalOpen ? (
+          <Modal modalText={modalText} time={2000} active={true} type={'success'} />
+        ) : (
+          ''
+        )}
         <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
         <Spacing size={50} />
         <Input width={200} ref={emailInputRef} placeholder={'email'}></Input>
