@@ -1,7 +1,8 @@
 import styled from '@emotion/styled'
-import { ComponentProps, useEffect, useRef, useState } from 'react'
+import { ComponentProps, SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import picture1 from '@/assets/images/pet/picture1.webp'
 import { FlexBox } from '@/components/common/flexBox'
 import { Text } from '@/components/common/text'
 import { Channel } from '@/libs/apis/channel/channelType'
@@ -43,6 +44,10 @@ const Carousel = ({
     }
   }, [activeIndex])
 
+  const addDefaultImg = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = picture1
+  }
+
   const [randomData] = useState<Channel[]>(() => {
     const shuffledData = [...channelListData].sort(() => Math.random() - 0.5).slice(0, 4)
     return shuffledData
@@ -54,7 +59,7 @@ const Carousel = ({
         {randomData.map((channel, index) => (
           <CarouselItem key={channel._id}>
             <Link to={`/posts/${channel._id}`} style={{ textDecoration: 'none' }}>
-              <Image src={images[index]} alt={`Image ${index}`} />
+              <Image src={images[index]} alt={'img test'} onError={addDefaultImg} />
               <SpanWrapper>
                 <Text typo={channelTypo} color={channelColor}>
                   {channel.name}
@@ -81,14 +86,12 @@ const Carousel = ({
 const CarouselContainer = styled(FlexBox)`
   overflow: hidden;
   width: 100%;
-  transition: transform 0.3s ease-in-out;
   position: relative;
 `
 
 const CarouselItem = styled.div`
   flex: 0 0 auto;
   width: 100%;
-  transition: transform 0.3s ease-in-out;
   position: relative;
 `
 const SpanWrapper = styled.div`
@@ -99,7 +102,10 @@ const SpanWrapper = styled.div`
 
 const ImageSlider = styled.div`
   display: flex;
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.3s linear;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 `
 
 const Image = styled.img`
@@ -107,6 +113,7 @@ const Image = styled.img`
   height: 190px;
   object-fit: cover;
   opacity: 0.4;
+  content-visibility: auto;
 `
 
 const PageIndicator = styled(FlexBox)`
