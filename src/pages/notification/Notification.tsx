@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -30,7 +30,7 @@ const Notification = () => {
     },
   })
   useEffect(() => {
-    handleSeenPost()
+    seenMutation.mutate()
   }, [])
   const moveChattingPage = () => {
     navigate('/chattinglist')
@@ -39,15 +39,9 @@ const Notification = () => {
     const channelId = userData.posts.find((v) => v._id === postId)?.channel
     navigate(`/posts/${channelId}/${postId}`)
   }
+  const seenMutation = useMutation(() => handleSeenPost())
   const handleSeenPost = async () => {
-    await axiosAPI
-      .put('/notifications/seen')
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    return await axiosAPI.put('/notifications/seen')
   }
 
   return (

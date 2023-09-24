@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
-import { useQuery } from '@tanstack/react-query'
-import { useAtom, useAtomValue } from 'jotai'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -37,22 +37,19 @@ const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
     },
   })
   const [notifyLength, setNotifyLength] = useState<number>(data?.data.length)
+
+  const handleSeenPost = async () => {
+    return await axiosAPI.put('/notifications/seen')
+  }
+  const seenMutation = useMutation(() => handleSeenPost(), {
+    onSuccess: () => {
+      setIsSeen(true)
+      navigate('/notification')
+    },
+  })
   useEffect(() => {
     if (data !== undefined) setNotifyList(data.data)
   })
-  const handleSeenPost = async () => {
-    await axiosAPI
-      .put('/notifications/seen')
-      .then((response) => {
-        console.log(response)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    setIsSeen(true)
-    navigate('/notification')
-  }
-
   return (
     <HeadingBar>
       {mainPage ? (
@@ -68,11 +65,11 @@ const AppBar = ({ mainPage = false, title = '게시글 보기' }: MainPage) => {
       <Functions>
         <Toggle />
         {isSeen ? (
-          <Bell style={{ cursor: 'pointer' }} onClick={handleSeenPost} />
+          <Bell style={{ cursor: 'pointer' }} onClick={() => seenMutation.mutate()} />
         ) : (
           <>
             <StyleNotSeenBell />
-            <Bell style={{ cursor: 'pointer' }} onClick={handleSeenPost} />
+            <Bell style={{ cursor: 'pointer' }} onClick={() => seenMutation.mutate()} />
           </>
         )}
 
