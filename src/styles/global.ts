@@ -98,9 +98,6 @@ export const globalStyle = css`
     transition: opacity 1s ease-in-out;
   }
 
-  .heart {
-  }
-
   .is_animating {
     animation: like 0.5s 1;
   }
@@ -114,6 +111,12 @@ export const globalStyle = css`
     }
     100% {
       transform: scale(1.1);
+    }
+  }
+
+  .postTitle {
+    @media (max-width: 375px) {
+      font-size: 20px;
     }
   }
 `

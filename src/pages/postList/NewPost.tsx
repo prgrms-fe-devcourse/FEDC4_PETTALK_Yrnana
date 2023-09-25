@@ -52,17 +52,22 @@ const NewPostPage = () => {
 
   const handleCreatePost = () => {
     const formData = new FormData()
-    if (title && contents) {
+    if (!title) {
+      openModal({ content: '제목을 입력해주세요!', type: 'warning' })
+    } else if (!contents) {
+      openModal({ content: '내용을 입력해주세요!', type: 'warning' })
+    } else if (!uploadFile) {
+      openModal({ content: '이미지를 첨부해주세요!', type: 'warning' })
+    } else {
       const json = {
         title: title,
         body: contents,
       }
       formData.append('title', JSON.stringify(json))
       formData.append('channelId', channelID)
+      console.log(uploadFile)
       if (uploadFile) formData.append('image', uploadFile, 'myfile')
       postMutation.mutate(formData)
-    } else {
-      openModal({ content: '게시글 내용이 비었습니다!', type: 'warning' })
     }
   }
   return (
@@ -72,7 +77,10 @@ const NewPostPage = () => {
           placeholder={'제목을 입력해주세요'}
           value={title ? title : ''}
           onChange={(e: { target: { value: string } }) => {
-            if (e.target.value.length > 20) return
+            if (e.target.value.length > 20) {
+              openModal({ content: '게시글 제목은 최대 20자까지 가능합니다.', type: 'warning' })
+              return
+            }
             setTitle(e.target.value)
           }}
         />
@@ -81,10 +89,10 @@ const NewPostPage = () => {
             <ImageUploader
               uploadFileHandler={uploadHandler}
               fileTypeErrorHandler={() => {
-                console.log('file type err')
+                openModal({ content: '이미지 파일 형식은 png, jpg만 가능합니다.', type: 'error' })
               }}
               fileNumErrorHandler={() => {
-                console.log('file num err')
+                openModal({ content: '이미지 파일은 1개만 첨부가 가능합니다.', type: 'error' })
               }}
             />
           ) : (
@@ -102,9 +110,15 @@ const NewPostPage = () => {
           )}
         </ImageBoxWrapper>
         <StyledTextArea
-          placeholder={'내용을 입력해주세요'}
+          placeholder={'내용을 입력해주세요(최대 200자)'}
           value={contents ? contents : ''}
-          onChange={(e: { target: { value: string } }) => setContents(e.target.value)}
+          onChange={(e: { target: { value: string } }) => {
+            if (e.target.value.length > 200) {
+              openModal({ content: '게시글 내용은 최대 200자까지 가능합니다.', type: 'warning' })
+              return
+            }
+            setContents(e.target.value)
+          }}
         />
       </form>
       <ButtonContainer>
@@ -185,7 +199,7 @@ const StyledTextArea = styled.textarea`
   width: 100%;
   height: 200px;
   margin-top: 20px;
-  line-height: 100%;
+  line-height: 130%;
 
   ${({ theme }) => theme.typo.Body_16};
   color: ${({ theme }) => theme.palette.GRAY700};

@@ -11,6 +11,7 @@ import { FriendListResponse } from '@/libs/apis/auth/authType'
 import { Follow } from '@/libs/apis/auth/authType'
 import { queryClient } from '@/libs/apis/queryClient'
 import { UserApi } from '@/libs/apis/user/userApi'
+import { useConfirmModal } from '@/libs/hooks/useConfirmModal'
 import useModal from '@/libs/hooks/useModal'
 import { userAtom } from '@/libs/store/userAtom'
 
@@ -22,6 +23,7 @@ interface FollowFriendProps {
 
 const FollowFriend = ({ data, follow }: FollowFriendProps) => {
   const { openModal } = useModal()
+  const { openConfirmModal } = useConfirmModal()
   const navigate = useNavigate()
   const [user, setUser] = useAtom(userAtom)
   const followMutation = useMutation(UserApi.FOLLOW_USER, {
@@ -29,7 +31,7 @@ const FollowFriend = ({ data, follow }: FollowFriendProps) => {
       queryClient.invalidateQueries(['userList'])
     },
     onSuccess: (follow: Follow) => {
-      openModal({ content: '팔로우 신청 성공!', type: 'success' })
+      openModal({ content: `팔로우 완료!`, type: 'success' })
       setUser({ ...user, following: [...user.following, follow] })
     },
   })
@@ -40,7 +42,7 @@ const FollowFriend = ({ data, follow }: FollowFriendProps) => {
     },
     onSuccess: (follow: Follow) => {
       const filtered = user.following.filter((data) => data._id !== follow._id)
-      openModal({ content: '언팔로우 완료!', type: 'success' })
+      openModal({ content: `언팔로우 완료!`, type: 'success' })
       setUser({ ...user, following: [...filtered] })
     },
   })
@@ -80,7 +82,12 @@ const FollowFriend = ({ data, follow }: FollowFriendProps) => {
                 buttonType={'Medium'}
                 backgroundColor={'MINT'}
                 value={'팔로잉'}
-                onClick={() => handleUnFollow(data.followers)}
+                onClick={() =>
+                  openConfirmModal({
+                    confirmText: `${data.fullName}님을 언팔로우 하겠습니까?`,
+                    okFunc: () => handleUnFollow(data.followers),
+                  })
+                }
               />
             </FlexBox>
           ) : (
