@@ -24,7 +24,7 @@ const Chatting = () => {
   const messageWrapperRef = useRef<HTMLDivElement>(null)
   const [isInitialRender, setIsInitialRender] = useState(true)
   const [messageData, setMessageData] = useState<Message[] | []>([])
-
+  const divRef = useRef<HTMLDivElement>(null)
   const getDetailMessages = async (userId: string) => {
     try {
       if (!userId) return []
@@ -92,8 +92,22 @@ const Chatting = () => {
     }
   }, [isInitialRender, messageData])
 
+  const handleVisualViewPortResize = () => {
+    const currentVisualViewport = Number(window.visualViewport?.height)
+    if (divRef) {
+      divRef.current!.style.height = `${currentVisualViewport - 50}px`
+      window.scrollTo(0, 40)
+    }
+  }
+
+  useEffect(() => {
+    if (window.visualViewport) {
+      window.visualViewport.onresize = handleVisualViewPortResize
+    }
+  }, [])
+
   return (
-    <ChattingWrapper direction={'column'} fullWidth={true} align={'stretch'}>
+    <ChattingWrapper ref={divRef}>
       <MessageWrapper ref={messageWrapperRef}>
         {isLoading ? <Loading></Loading> : data && <MessageArea data={data} />}
       </MessageWrapper>
@@ -110,7 +124,11 @@ const Chatting = () => {
   )
 }
 
-const ChattingWrapper = styled(FlexBox)`
+const ChattingWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: stretch;
   padding: 15px;
   padding-bottom: 0px;
   height: 100%;
@@ -119,7 +137,7 @@ const ChattingWrapper = styled(FlexBox)`
 `
 
 const MessageWrapper = styled.div`
-  max-height: calc(100% - 70px);
+  height: calc(100% - 70px);
   flex: 1;
   overflow-y: auto;
   scroll-behavior: smooth;
