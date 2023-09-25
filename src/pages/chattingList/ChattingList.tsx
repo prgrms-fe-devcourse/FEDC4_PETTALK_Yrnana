@@ -4,7 +4,6 @@ import { useAtomValue } from 'jotai'
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import Search from '@/assets/icons/Search'
 import defaultProfileImage from '@/assets/images/defaultProfileImage.png'
 import { FlexBox } from '@/components/common/flexBox'
 import Input from '@/components/common/input'
@@ -85,6 +84,10 @@ const ChattingList = () => {
     }
   }, [data])
 
+  useEffect(() => {
+    if (debouncedValue) fetchSearchData(debouncedValue)
+  }, [debouncedValue])
+
   if (isLoading) return <Loading></Loading>
 
   return (
@@ -100,9 +103,6 @@ const ChattingList = () => {
                 ref={searchInputRef}
                 onChange={handleSearchChat}
               />
-              {/* <StyleSearchIcon onClick={searchChattingList}>
-                <Search />
-              </StyleSearchIcon> */}
             </StyleSearchArea>
           </FlexBox>
           <Spacing size={30} />
