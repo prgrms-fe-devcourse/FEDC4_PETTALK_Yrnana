@@ -1,4 +1,3 @@
-import { User } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
 import { Like, Post } from '@/libs/apis/post/postType'
 
