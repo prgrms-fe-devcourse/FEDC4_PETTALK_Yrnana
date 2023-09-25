@@ -14,22 +14,16 @@ interface OnlineFriendsProps {
   userFollowing: string[]
 }
 
-//TODO: 온라인 유저 폴링, 변화 있을때만 재랜더링
 const OnlineFriends = ({ userList, userFollowing }: OnlineFriendsProps) => {
   const [myFollowing, setMyFollowing] = useState<FriendListResponse[]>([])
   const [onlineUser, setOnlineUser] = useState<string[]>([])
-  // useEffect(() => {
-  //   const filtered = userList.filter((data) => userFollowing.includes(data._id))
-  //   setMyFollowing([...filtered])
-  // }, [userList])
-  console.log(userFollowing)
 
   useEffect(() => {
     const filtered = userList.filter((data) => userFollowing.includes(data._id))
     setMyFollowing([...filtered])
   }, [userFollowing])
 
-  const { data } = useQuery(['online'], () => UserApi.GET_ONLINE_USERS(), {
+  const { data, isLoading } = useQuery(['online'], () => UserApi.GET_ONLINE_USERS(), {
     refetchInterval: 2000,
     refetchIntervalInBackground: true,
     retry: 3,
@@ -40,6 +34,10 @@ const OnlineFriends = ({ userList, userFollowing }: OnlineFriendsProps) => {
     },
   })
 
+  if (isLoading) {
+    return <Loading />
+  }
+
   return (
     <FlexBox direction={'column'} align={'flex-start'} fullWidth={true} gap={20}>
       <Text typo={'SubHead_18'}>{'활동 중인 친구'}</Text>
@@ -48,8 +46,6 @@ const OnlineFriends = ({ userList, userFollowing }: OnlineFriendsProps) => {
           <Text typo={'Body_16'} color={'GRAY500'}>
             {'팔로잉하고있는 유저가 없습니다.'}
           </Text>
-        ) : myFollowing.length === 0 ? (
-          <Loading />
         ) : (
           myFollowing?.map((data, index) => {
             return (
@@ -80,7 +76,7 @@ const OnlineFriendsProfileWrapper = styled.div<{ length: number | undefined }>`
   overflow-x: scroll;
   height: 80px;
   border-radius: 20px;
-  justify-content: ${({ length }) => (length === 0 ? 'center' : 'flex-start')};
+  justify-content: 'flex-start';
   &::-webkit-scrollbar {
     width: 0px;
     height: 2px;

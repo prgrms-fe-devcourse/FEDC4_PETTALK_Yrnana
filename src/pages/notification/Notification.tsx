@@ -4,7 +4,6 @@ import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import defaultProfileImage from '@/assets/images/defaultProfileImage.png'
 import AppBar from '@/components/common/appBar'
 import ListRow from '@/components/common/listRow'
 import Loading from '@/components/common/loading'
@@ -46,7 +45,7 @@ const Notification = () => {
 
   return (
     <>
-      <AppBar mainPage={false} />
+      <AppBar mainPage={false} title={'알림 목록'} />
       <Spacing size={10} />
       {isLoading ? (
         <Loading />
@@ -69,7 +68,7 @@ const Notification = () => {
                 <ListRow
                   mainText={<div>{`게시글에 댓글이 달렸습니다. "${v.comment?.comment}"`}</div>}
                   rightElement={<div>{}</div>}
-                  leftImage={defaultProfileImage}
+                  leftImage={''}
                 />
               </StyleNotifyList>
             ) : v.message ? (
@@ -87,7 +86,7 @@ const Notification = () => {
                 <ListRow
                   mainText={<div>{'메시지가 도착했습니다!'}</div>}
                   rightElement={<div>{}</div>}
-                  leftImage={defaultProfileImage}
+                  leftImage={''}
                 />
               </StyleNotifyList>
             ) : v.follow ? (
@@ -105,7 +104,7 @@ const Notification = () => {
                 <ListRow
                   mainText={<div>{`${v.user.fullName}님을 팔로우했습니다.`}</div>}
                   rightElement={<div>{}</div>}
-                  leftImage={defaultProfileImage}
+                  leftImage={''}
                 />
               </StyleNotifyList>
             ) : v.post ? (
@@ -123,7 +122,7 @@ const Notification = () => {
                 <ListRow
                   mainText={<div>{`친구가 ${v.user.fullName}님의 게시글을 좋아합니다.`}</div>}
                   rightElement={<div>{}</div>}
-                  leftImage={defaultProfileImage}
+                  leftImage={''}
                 />
               </StyleNotifyList>
             ) : (
@@ -137,12 +136,13 @@ const Notification = () => {
 }
 const StyleNotifyList = styled.div`
   cursor: pointer;
-  margin: 20px 10px;
+  margin: 25px 10px;
 `
 const StyleNotifyWrapper = styled.div`
   overflow-y: scroll;
   height: 100%;
   max-height: calc(100% - 100px);
+  margin: 0px 30px;
 `
 
 export default Notification

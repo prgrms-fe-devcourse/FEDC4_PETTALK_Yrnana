@@ -21,6 +21,7 @@ import PostApi from '@/libs/apis/post/postApi'
 import { Like } from '@/libs/apis/post/postType'
 import { queryClient } from '@/libs/apis/queryClient'
 import { UserApi } from '@/libs/apis/user/userApi'
+import { useConfirmModal } from '@/libs/hooks/useConfirmModal'
 import useModal from '@/libs/hooks/useModal'
 import { useNotification } from '@/libs/hooks/useNotification'
 import { urlAtom } from '@/libs/store/urlAtom'
@@ -38,21 +39,44 @@ const PostDetailPage = () => {
   const postId = useLocation().pathname.split('/')[3]
   const commentRef = useRef<HTMLTextAreaElement>(null)
   const mainElement = document.querySelector('main')
-  const [mainOffsetWidth, setMainOffsetWidth] = useState(mainElement?.offsetWidth)
-  const [mainOffsetHeight, setMainOffsetHeight] = useState(mainElement?.offsetHeight)
+  const [mainOffsetWidth, setMainOffsetWidth] = useState(0)
+  const [mainOffsetHeight, setMainOffsetHeight] = useState(0)
+  const divRef = useRef<HTMLDivElement>(null)
+  const { openConfirmModal } = useConfirmModal()
+  const [resizeFontSize, setResizeFontSize] = useState(
+    window.matchMedia('(max-width: 412px)').matches,
+  )
+  const { data, isLoading, refetch } = useQuery(['post', postId], () => PostApi.DETAIL_POST(postId))
+
   window.addEventListener('resize', () => {
-    setMainOffsetWidth(mainElement!.offsetWidth)
-    setMainOffsetHeight(mainElement!.offsetHeight)
+    if (mainElement) {
+      setMainOffsetWidth(mainElement!.offsetWidth)
+      setMainOffsetHeight(mainElement!.offsetHeight)
+    }
   })
 
   useEffect(() => {
     if (userData.likes.find((data) => data.post === postId)) {
       setLike(true)
     }
-  }, [])
+    if (mainElement) {
+      setMainOffsetWidth(mainElement.offsetWidth)
+      setMainOffsetHeight(mainElement.offsetHeight)
+    }
+    refetch()
+    const mediaQuery = window.matchMedia('(max-width: 412px)')
+    const handleResize = (e) => {
+      setResizeFontSize(e.matches)
+    }
 
-  const divRef = useRef<HTMLDivElement>(null)
-  const { data, isLoading, refetch } = useQuery(['post', postId], () => PostApi.DETAIL_POST(postId))
+    mediaQuery.addEventListener('change', handleResize)
+    setResizeFontSize(mediaQuery.matches)
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleResize)
+    }
+  }, [mainElement])
+
   const likeMutation = useMutation(PostApi.LIKE_POST, {
     onSettled: () => {
       setLike(true)
@@ -110,13 +134,14 @@ const PostDetailPage = () => {
     },
     onSuccess: (follow: Follow) => {
       setUserData({ ...userData, following: [...userData.following, follow] })
-
-      useNotification({
-        postId: postId,
-        userId: follow.user,
-        type: 'FOLLOW',
-        typeId: follow._id,
-      })
+      data?.author._id !== userData._id
+        ? useNotification({
+            postId: postId,
+            userId: follow.user,
+            type: 'FOLLOW',
+            typeId: follow._id,
+          })
+        : ''
     },
   })
 
@@ -134,12 +159,14 @@ const PostDetailPage = () => {
     onSuccess: (comment: CommentType) => {
       if (commentRef.current) commentRef.current.value = ''
       refetch()
-      useNotification({
-        postId: postId,
-        userId: comment.author._id,
-        type: 'COMMENT',
-        typeId: comment._id,
-      })
+      data?.author._id !== userData._id
+        ? useNotification({
+            postId: postId,
+            userId: data !== undefined ? data?.author._id : '',
+            type: 'COMMENT',
+            typeId: comment._id,
+          })
+        : ''
     },
     onError: (error) => {
       console.log('댓글 오류 발생', error)
@@ -220,10 +247,10 @@ const PostDetailPage = () => {
         fullWidth={true}
         style={{ padding: '30px' }}
       >
-        <Text typo={'Headline_25'}>{`${
+        <Text typo={resizeFontSize ? 'Headline_20' : 'Headline_25'}>{`${
           postData.title.length > 17 ? `${postData.title.slice(0, 17)}...` : postData.title
         }`}</Text>
-        <Text typo={'Caption_11'} color={'GRAY500'}>
+        <Text typo={'Caption_11'} color={'GRAY500'} style={{ textAlign: 'center', width: '70px' }}>
           {data?.createdAt.slice(0, 10)}
         </Text>
       </FlexBox>
@@ -238,7 +265,7 @@ const PostDetailPage = () => {
       )}
       <ContentContainer height={mainOffsetHeight!}>
         <Padding size={20}>
-          <Text typo={'Body_16'} color={'BLACK'}>
+          <Text typo={'Body_16'} color={'BLACK'} style={{ lineHeight: '130%' }}>
             {postData.body}
           </Text>
         </Padding>
@@ -277,7 +304,12 @@ const PostDetailPage = () => {
                 <Button
                   buttonType={'Small'}
                   value={'삭제'}
-                  onClick={() => deletePost(data?._id as string)}
+                  onClick={() =>
+                    openConfirmModal({
+                      confirmText: '게시물을 삭제하시겠습니까?',
+                      okFunc: () => deletePost(data?._id as string),
+                    })
+                  }
                 />
               </>
             ) : (
