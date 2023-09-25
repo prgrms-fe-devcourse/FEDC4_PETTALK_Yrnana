@@ -37,16 +37,9 @@ const PostDetailPage = () => {
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
   const commentRef = useRef<HTMLTextAreaElement>(null)
-  const [like, setLike] = useState(false)
-  const [animate, setAnimate] = useState(false)
   const mainElement = document.querySelector('main')
   const [mainOffsetWidth, setMainOffsetWidth] = useState(mainElement?.offsetWidth)
   const [mainOffsetHeight, setMainOffsetHeight] = useState(mainElement?.offsetHeight)
-  const navigate = useNavigate()
-  const { data, isLoading, refetch } = useQuery(['posts', postId], () =>
-    PostApi.DETAIL_POST(postId),
-  )
-
   window.addEventListener('resize', () => {
     setMainOffsetWidth(mainElement!.offsetWidth)
     setMainOffsetHeight(mainElement!.offsetHeight)
