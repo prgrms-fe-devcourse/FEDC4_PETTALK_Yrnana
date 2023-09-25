@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom'
 
 import Button from '@/components/common/button'
 import Greetings from '@/components/common/greetings'
-import Input from '@/components/common/Input'
+import Input from '@/components/common/input'
 import Loading from '@/components/common/loading'
-import Spacing from '@/components/common/Spacing'
+import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
 import useModal from '@/libs/hooks/useModal'
@@ -18,7 +18,7 @@ const Login = () => {
   const emailInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const { isModalOpen, openModal, Modal } = useModal()
+  const { openModal } = useModal()
 
   const submitLogin = (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,7 +28,6 @@ const Login = () => {
         email: emailInputRef.current.value,
         password: passwordInputRef.current.value,
       }
-      console.log(body)
       loginMutation.mutate(body)
     }
   }
@@ -44,14 +43,12 @@ const Login = () => {
       localStorage.setItem('role', data.data.user.role)
       localStorage.setItem('isLogin', 'true')
 
-      openModal()
-      setTimeout(() => {
-        navigate('/')
-      }, 2000)
+      openModal({ content: '로그인 성공!', type: 'success' })
+      navigate('/')
     },
     onError: () => {
       setIsLoading(false)
-      alert('아이디와 비밀번호를 확인해주세요!')
+      openModal({ content: '아이디와 비밀번호를 확인해주세요!', type: 'error' })
     },
   })
 
@@ -82,11 +79,6 @@ const Login = () => {
   ) : (
     <>
       <StyleRegisterWrapper>
-        {isModalOpen ? (
-          <Modal modalText={'로그인 성공'} time={2000} active={true} type={'success'} />
-        ) : (
-          ''
-        )}
         {loading ? <Greetings className={animation ? '' : 'fade-out'} /> : ''}
         <Text typo={'LogoFont_50'}>{'Pet Talk'}</Text>
         <Spacing size={50} />

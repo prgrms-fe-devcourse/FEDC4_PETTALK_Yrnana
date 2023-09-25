@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
+import { useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import Comment from '@/assets/icons/Comment'
@@ -18,56 +19,77 @@ import PostApi from '@/libs/apis/post/postApi'
 import { Like } from '@/libs/apis/post/postType'
 import { queryClient } from '@/libs/apis/queryClient'
 import { UserApi } from '@/libs/apis/user/userApi'
+import useModal from '@/libs/hooks/useModal'
 import { useNotification } from '@/libs/hooks/useNotification'
+import { urlAtom } from '@/libs/store/urlAtom'
 import { userAtom } from '@/libs/store/userAtom'
+
 const PostDetailPage = () => {
+  const [urlData, setUrlData] = useAtom(urlAtom)
   const [userData, setUserData] = useAtom(userAtom)
+  const [comment, setComment] = useState('')
+  const [like, setLike] = useState(false)
+  const [animate, setAnimate] = useState(false)
+  const { openModal } = useModal()
+  const navigate = useNavigate()
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
-  const { data, isLoading, refetch } = useQuery(['posts', postId], () =>
-    PostApi.DETAIL_POST(postId),
-  )
+  const divRef = useRef<HTMLDivElement>(null)
+  const { data, isLoading, refetch } = useQuery(['post', postId], () => PostApi.DETAIL_POST(postId))
   const likeMutation = useMutation(PostApi.LIKE_POST, {
     onSettled: () => {
       setLike(true)
       setAnimate(true)
-      queryClient.invalidateQueries(['posts', postId])
+      queryClient.invalidateQueries(['post', postId])
     },
     onSuccess: (like: Like) => {
       setUserData({ ...userData, likes: [...userData.likes, like] })
-      useNotification({
-        postId: postId,
-        userId: like.user,
-        type: 'LIKE',
-        typeId: like._id,
-      })
+      data?.author._id !== userData._id
+        ? useNotification({
+            postId: postId,
+            userId: data !== undefined ? data?.author._id : '',
+            type: 'LIKE',
+            typeId: like._id,
+          })
+        : ''
     },
   })
   const unlikeMutation = useMutation(PostApi.UNLIKE_POST, {
     onSettled: () => {
       setLike(false)
       setAnimate(false)
-      queryClient.invalidateQueries(['posts', postId])
+      queryClient.invalidateQueries(['post', postId])
     },
     onSuccess: (like: Like) => {
       const filtered = userData.likes.filter((data) => data._id !== like._id)
       setUserData({ ...userData, likes: [...filtered] })
     },
   })
-  const [comment, setComment] = useState('')
-  const [like, setLike] = useState(false)
-  const [animate, setAnimate] = useState(false)
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (userData.likes.find((data) => data.post === postId)) {
       setLike(true)
     }
+    setUrlData({
+      channelId: channelID,
+      postId: postId,
+    })
+    if (window.visualViewport) {
+      window.visualViewport.onresize = handleVisualViewPortResize
+    }
   }, [])
+
+  const handleVisualViewPortResize = () => {
+    const currentVisualViewport = Number(window.visualViewport?.height)
+    if (divRef) {
+      divRef.current!.style.height = `${currentVisualViewport - 80}px`
+      window.scrollTo(0, 40)
+    }
+  }
 
   const followMutation = useMutation(UserApi.FOLLOW_USER, {
     onSettled: () => {
-      queryClient.invalidateQueries(['posts', postId])
+      queryClient.invalidateQueries(['post', postId])
     },
     onSuccess: (follow: Follow) => {
       setUserData({ ...userData, following: [...userData.following, follow] })
@@ -83,7 +105,7 @@ const PostDetailPage = () => {
 
   const unfollowMutation = useMutation(UserApi.UNFOLLOW_USER, {
     onSettled: () => {
-      queryClient.invalidateQueries(['posts', postId])
+      queryClient.invalidateQueries(['post', postId])
     },
     onSuccess: (follow: Follow) => {
       const filtered = userData.following.filter((data) => data._id !== follow._id)
@@ -120,15 +142,17 @@ const PostDetailPage = () => {
         postId: postId,
       })
       refetch()
-      useNotification({
-        postId: postId,
-        userId: response.data.author._id,
-        type: 'COMMENT',
-        typeId: response.data._id,
-      })
+      data?.author._id !== userData._id
+        ? useNotification({
+            postId: postId,
+            userId: data !== undefined ? data?.author._id : '',
+            type: 'COMMENT',
+            typeId: response.data._id,
+          })
+        : ''
       return response
     } else {
-      alert('댓글을 입력해주세요!')
+      openModal({ content: '댓글을 입력해주세요!', type: 'warning' })
     }
   }
 
@@ -167,7 +191,7 @@ const PostDetailPage = () => {
   }
 
   return (
-    <DetailContainer>
+    <DetailContainer ref={divRef}>
       <Title>
         <Text typo={'Headline_25'}>{postData.title}</Text>
         <Text typo={'Caption_11'} color={'GRAY500'}>
@@ -259,11 +283,19 @@ const PostDetailPage = () => {
             <FlexBox direction={'column'} key={index} style={{ maxHeight: '250px' }}>
               <CommentContainer checkUser={userData._id === comment.author._id}>
                 <SingleComment>
-                  <ProfileImage
-                    size={30}
-                    style={{ marginRight: '10px' }}
-                    image={comment.author.image}
-                  />
+                  {userData._id === comment.author._id ? (
+                    <ProfileImage
+                      size={30}
+                      style={{ marginRight: '10px' }}
+                      image={userData.image}
+                    />
+                  ) : (
+                    <ProfileImage
+                      size={30}
+                      style={{ marginRight: '10px' }}
+                      image={comment.author.image}
+                    />
+                  )}
                   <UserComment>
                     <Text typo={'Caption_11'}>{comment.author.fullName}</Text>
                     <Text typo={'SubHead_14'}>{comment.comment}</Text>
@@ -439,7 +471,7 @@ const WriteComment = styled.form`
   align-items: center;
   gap: 10px;
   width: 98%;
-  position: fixed;
+  position: absolute;
   bottom: 4px;
   padding: 10px;
   box-sizing: border-box;
