@@ -42,7 +42,12 @@ const MyProfile = () => {
       <Spacing size={40} />
       <MyPageContainer>
         <Text typo={'Headline_25'}>{userData.fullName}</Text>
-        <ProfileImage size={200} updatable={true} image={userData.image} />
+        <ProfileImage
+          size={200}
+          updatable={true}
+          image={userData.image}
+          style={{ cursor: 'pointer' }}
+        />
         <Follows>
           <Follower>
             <Text typo={'Headline_25'}>{'팔로워'}</Text>
