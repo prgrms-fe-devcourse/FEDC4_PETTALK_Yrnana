@@ -52,7 +52,13 @@ const NewPostPage = () => {
 
   const handleCreatePost = () => {
     const formData = new FormData()
-    if (title && contents) {
+    if (!title) {
+      openModal({ content: '제목을 입력해주세요!', type: 'warning' })
+    } else if (!contents) {
+      openModal({ content: '내용을 입력해주세요!', type: 'warning' })
+    } else if (!uploadFile) {
+      openModal({ content: '이미지를 첨부해주세요!', type: 'warning' })
+    } else {
       const json = {
         title: title,
         body: contents,
@@ -61,8 +67,6 @@ const NewPostPage = () => {
       formData.append('channelId', channelID)
       if (uploadFile) formData.append('image', uploadFile, 'myfile')
       postMutation.mutate(formData)
-    } else {
-      openModal({ content: '제목과 내용을 빠짐없이 입력해주세요!', type: 'warning' })
     }
   }
   return (
@@ -84,10 +88,10 @@ const NewPostPage = () => {
             <ImageUploader
               uploadFileHandler={uploadHandler}
               fileTypeErrorHandler={() => {
-                console.log('file type err')
+                openModal({ content: '이미지 파일 형식은 png, jpg만 가능합니다.', type: 'error' })
               }}
               fileNumErrorHandler={() => {
-                console.log('file num err')
+                openModal({ content: '이미지 파일은 1개만 첨부가 가능합니다.', type: 'error' })
               }}
             />
           ) : (
