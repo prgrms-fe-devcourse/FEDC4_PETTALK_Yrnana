@@ -262,7 +262,7 @@ const PostDetailPage = () => {
       )}
       <ContentContainer height={mainOffsetHeight!}>
         <Padding size={20}>
-          <Text typo={'Body_16'} color={'BLACK'}>
+          <Text typo={'Body_16'} color={'BLACK'} style={{ lineHeight: '130%' }}>
             {postData.body}
           </Text>
         </Padding>
