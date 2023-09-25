@@ -75,6 +75,9 @@ const Chatting = () => {
         message: messageRef.current.value,
         receiver: opponent,
       })
+      if (messageWrapperRef.current) {
+        messageWrapperRef.current.scrollTop = messageWrapperRef.current.scrollHeight
+      }
     } catch (error) {
       console.error('메시지 전송 중 오류 발생:', error)
     }
