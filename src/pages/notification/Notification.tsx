@@ -45,7 +45,7 @@ const Notification = () => {
 
   return (
     <>
-      <AppBar mainPage={false} />
+      <AppBar mainPage={false} title={'알림 목록'} />
       <Spacing size={10} />
       {isLoading ? (
         <Loading />
