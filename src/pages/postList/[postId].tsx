@@ -2,8 +2,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
-import { useEffect, useState } from 'react'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import Comment from '@/assets/icons/Comment'
@@ -11,10 +10,13 @@ import Favorite from '@/assets/icons/Favorite'
 import Button from '@/components/common/button'
 import { FlexBox } from '@/components/common/flexBox'
 import Loading from '@/components/common/loading'
+import Padding from '@/components/common/Padding'
 import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
+import TextArea from '@/components/common/textarea'
 import { Follow } from '@/libs/apis/auth/authType'
-import { axiosAPI } from '@/libs/apis/axios'
+import CommentApi from '@/libs/apis/comment/CommentApi'
+import { CommentType } from '@/libs/apis/comment/commentType'
 import PostApi from '@/libs/apis/post/postApi'
 import { Like } from '@/libs/apis/post/postType'
 import { queryClient } from '@/libs/apis/queryClient'
@@ -34,6 +36,28 @@ const PostDetailPage = () => {
   const navigate = useNavigate()
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
+  const commentRef = useRef<HTMLTextAreaElement>(null)
+  const [like, setLike] = useState(false)
+  const [animate, setAnimate] = useState(false)
+  const mainElement = document.querySelector('main')
+  const [mainOffsetWidth, setMainOffsetWidth] = useState(mainElement?.offsetWidth)
+  const [mainOffsetHeight, setMainOffsetHeight] = useState(mainElement?.offsetHeight)
+  const navigate = useNavigate()
+  const { data, isLoading, refetch } = useQuery(['posts', postId], () =>
+    PostApi.DETAIL_POST(postId),
+  )
+
+  window.addEventListener('resize', () => {
+    setMainOffsetWidth(mainElement!.offsetWidth)
+    setMainOffsetHeight(mainElement!.offsetHeight)
+  })
+
+  useEffect(() => {
+    if (userData.likes.find((data) => data.post === postId)) {
+      setLike(true)
+    }
+  }, [])
+
   const divRef = useRef<HTMLDivElement>(null)
   const { data, isLoading, refetch } = useQuery(['post', postId], () => PostApi.DETAIL_POST(postId))
   const likeMutation = useMutation(PostApi.LIKE_POST, {
@@ -54,6 +78,7 @@ const PostDetailPage = () => {
         : ''
     },
   })
+
   const unlikeMutation = useMutation(PostApi.UNLIKE_POST, {
     onSettled: () => {
       setLike(false)
@@ -65,7 +90,6 @@ const PostDetailPage = () => {
       setUserData({ ...userData, likes: [...filtered] })
     },
   })
-
   useEffect(() => {
     if (userData.likes.find((data) => data.post === postId)) {
       setLike(true)
@@ -113,6 +137,40 @@ const PostDetailPage = () => {
     },
   })
 
+  const commentCreateMutation = useMutation(CommentApi.CREATE_COMMENT, {
+    onSuccess: (comment: CommentType) => {
+      if (commentRef.current) commentRef.current.value = ''
+      refetch()
+      useNotification({
+        postId: postId,
+        userId: comment.author._id,
+        type: 'COMMENT',
+        typeId: comment._id,
+      })
+    },
+    onError: (error) => {
+      console.log('댓글 오류 발생', error)
+    },
+  })
+
+  const commentDeleteMutation = useMutation(CommentApi.DELETE_COMMENT, {
+    onSuccess: () => {
+      refetch()
+    },
+    onError: (error) => {
+      console.log('댓글 삭제 오류 발생', error)
+    },
+  })
+
+  const deletePostMutation = useMutation(PostApi.DELETE_POST, {
+    onSuccess: () => {
+      navigate(`/posts/${channelID}`, { replace: true })
+    },
+    onError: (error) => {
+      console.log('게시글 삭제 오류 발생', error)
+    },
+  })
+
   if (isLoading) {
     return <Loading />
   }
@@ -120,40 +178,24 @@ const PostDetailPage = () => {
   const postData = JSON.parse(data?.title as string)
 
   const deletePost = async (postId: string) => {
-    const response = await axiosAPI.delete('/posts/delete', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      data: {
-        id: postId,
-      },
-    })
-    navigate(`/posts/${channelID}`, { replace: true })
-    return response
+    deletePostMutation.mutate(postId)
   }
 
   const handleCreateComment = async (e: React.MouseEvent<HTMLButtonElement>, postId: string) => {
     e.preventDefault()
-    setComment('')
-    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
-    if (comment) {
-      const response = await axiosAPI.post('/comments/create', {
-        comment: comment,
+    if (commentRef.current?.value) {
+      commentCreateMutation.mutateAsync({
+        comment: commentRef.current?.value as string,
         postId: postId,
       })
-      refetch()
-      data?.author._id !== userData._id
-        ? useNotification({
-            postId: postId,
-            userId: data !== undefined ? data?.author._id : '',
-            type: 'COMMENT',
-            typeId: response.data._id,
-          })
-        : ''
-      return response
     } else {
       openModal({ content: '댓글을 입력해주세요!', type: 'warning' })
     }
+  }
+
+  const handleDeleteComment = async (e: React.MouseEvent<HTMLDivElement>, id: string) => {
+    e.preventDefault()
+    commentDeleteMutation.mutateAsync(id)
   }
 
   const handleCreateFavorite = (postId: string) => {
@@ -176,37 +218,45 @@ const PostDetailPage = () => {
     unfollowMutation.mutate(id)
   }
 
-  const deleteComment = async (e: React.MouseEvent<HTMLDivElement>, id: string) => {
-    e.preventDefault()
-    const response = await axiosAPI.delete('/comments/delete', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      data: {
-        id: id,
-      },
-    })
-    refetch()
-    return response
-  }
-
   return (
-    <DetailContainer ref={divRef}>
-      <Title>
-        <Text typo={'Headline_25'}>{postData.title}</Text>
+    <DetailContainer>
+      <FlexBox
+        direction={'row'}
+        justify={'space-between'}
+        align={'center'}
+        fullWidth={true}
+        style={{ padding: '30px' }}
+      >
+        <Text typo={'Headline_25'}>{`${
+          postData.title.length > 17 ? `${postData.title.slice(0, 17)}...` : postData.title
+        }`}</Text>
         <Text typo={'Caption_11'} color={'GRAY500'}>
           {data?.createdAt.slice(0, 10)}
         </Text>
-      </Title>
-      {data?.image && <Image imageurl={data?.image} />}
-      <ContentContainer>
-        <Content>
+      </FlexBox>
+      {data?.image ? (
+        <Image imageurl={data?.image} />
+      ) : (
+        <Image>
+          <Text typo={'Headline_25'} color={'GRAY500'}>
+            {'이미지가 없습니다.'}
+          </Text>
+        </Image>
+      )}
+      <ContentContainer height={mainOffsetHeight!}>
+        <Padding size={20}>
           <Text typo={'Body_16'} color={'BLACK'}>
             {postData.body}
           </Text>
-        </Content>
+        </Padding>
         <Info>
-          <Interaction>
+          <FlexBox
+            direction={'row'}
+            justify={'center'}
+            align={'center'}
+            gap={5}
+            style={{ alignSelf: 'flex-end' }}
+          >
             <Favorite
               fill={like ? 'red' : 'none'}
               onClick={
@@ -240,10 +290,10 @@ const PostDetailPage = () => {
             ) : (
               ''
             )}
-          </Interaction>
-          <User>
+          </FlexBox>
+          <FlexBox gap={5}>
             <ProfileImage size={50} image={data?.author.image as string} updatable={false} />
-            <UserDetail>
+            <FlexBox direction={'column'} justify={'space-around'} align={'center'} gap={5}>
               <Text typo={'Caption_11'} color={'GRAY600'}>
                 {data?.author.fullName}
               </Text>
@@ -274,8 +324,8 @@ const PostDetailPage = () => {
                   }
                 />
               )}
-            </UserDetail>
-          </User>
+            </FlexBox>
+          </FlexBox>
         </Info>
         <VerticalLine />
         <Comments>
@@ -312,7 +362,7 @@ const PostDetailPage = () => {
                 {userData._id === comment.author._id ? (
                   <Text
                     typo={'Body_16'}
-                    onClick={(e) => deleteComment(e, comment._id)}
+                    onClick={(e) => handleDeleteComment(e, comment._id)}
                     style={{ cursor: 'pointer', position: 'absolute', right: 10 }}
                     color={'GRAY500'}
                   >
@@ -326,12 +376,8 @@ const PostDetailPage = () => {
             </FlexBox>
           ))}
         </Comments>
-        <WriteComment>
-          <StyledTextArea
-            placeholder={'댓글을 입력해주세요.'}
-            value={comment ? comment : ''}
-            onChange={(e: { target: { value: string } }) => setComment(e.target.value)}
-          />
+        <WriteComment width={mainOffsetWidth!}>
+          <TextArea placeholder={'댓글을 입력해주세요.'} ref={commentRef}></TextArea>
           <Button
             buttonType={'Medium'}
             value={'작성하기'}
@@ -351,15 +397,7 @@ const DetailContainer = styled.div`
   height: 100%;
 `
 
-const Title = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 30px;
-`
-
-const Image = styled.div<{ imageurl: string }>`
+const Image = styled.div<{ imageurl?: string }>`
   ${({ imageurl }) => css`
     background: url(${imageurl});
   `};
@@ -368,24 +406,26 @@ const Image = styled.div<{ imageurl: string }>`
   background-size: cover;
   width: 100%;
   height: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 20px;
 `
 
-const ContentContainer = styled.div`
+const ContentContainer = styled.div<{ height: number }>`
   width: 100%;
-  height: 50%;
-  @media (max-width: 375px) {
-    height: 37%;
+  height: calc(${(props) => props.height - 510}px);
+  @media (max-height: 667px) {
+    height: calc(${(props) => props.height - 470}px);
   }
-  @media (max-width: 820px) {
-    height: 55%;
+  @media (min-height: 1180px) {
+    height: calc(${(props) => props.height - 525}px);
+  }
+  @media (min-height: 1368px) {
+    height: calc(${(props) => props.height - 578}px);
   }
   display: flex;
   flex-direction: column;
-`
-
-const Content = styled.div`
-  padding: 20px;
 `
 
 const Info = styled.div`
@@ -394,37 +434,15 @@ const Info = styled.div`
   justify-content: space-between;
 `
 
-const Interaction = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  align-self: flex-end;
-  gap: 5px;
-`
-
-const User = styled.div`
-  display: flex;
-  gap: 5px;
-`
-
-const UserDetail = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-`
-
 const Comments = styled.div`
   width: 100%;
   overflow: scroll;
-  @media (max-width: 375px) {
-    height: 20%;
+  height: 60%;
+  @media (min-height: 1180px) {
+    height: 65%;
   }
-  @media (max-width: 768px) {
-    height: 55%;
-  }
-  @media (min-width: 769px) {
-    height: 60%;
+  @media (min-height: 1368px) {
+    height: 70%;
   }
   ::-webkit-scrollbar {
     display: none;
@@ -465,43 +483,16 @@ const SingleComment = styled.div`
   }
 `
 
-const WriteComment = styled.form`
+const WriteComment = styled.form<{ width: number }>`
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-  width: 98%;
-  position: absolute;
+  width: ${(props) => props.width - 20}px;
+  position: fixed;
   bottom: 4px;
   padding: 10px;
   box-sizing: border-box;
-
-  @media (max-width: 768px) {
-    width: 95%;
-  }
-  @media (min-width: 769px) {
-    width: 460px;
-  }
-`
-
-const StyledTextArea = styled.textarea`
-  box-sizing: border-box;
-  border: none;
-  resize: none;
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
-  width: 100%;
-  height: 10%;
-  line-height: 100%;
-
-  ${({ theme }) => theme.typo.Body_16};
-  color: ${({ theme }) => theme.palette.GRAY700};
-
-  ::placeholder {
-    ${({ theme }) => theme.typo.Body_16}
-    color: ${({ theme }) => theme.palette.GRAY400};
-  }
 `
 
 const VerticalLine = styled.hr`
