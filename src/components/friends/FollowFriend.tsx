@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
+import { useNavigate } from 'react-router-dom'
 
 import Send from '@/assets/icons/Send'
 import Button from '@/components/common/button'
@@ -10,6 +11,7 @@ import { FriendListResponse } from '@/libs/apis/auth/authType'
 import { Follow } from '@/libs/apis/auth/authType'
 import { queryClient } from '@/libs/apis/queryClient'
 import { UserApi } from '@/libs/apis/user/userApi'
+import useModal from '@/libs/hooks/useModal'
 import { userAtom } from '@/libs/store/userAtom'
 
 interface FollowFriendProps {
@@ -19,14 +21,16 @@ interface FollowFriendProps {
 }
 
 const FollowFriend = ({ data, follow }: FollowFriendProps) => {
+  const { openModal } = useModal()
+  const navigate = useNavigate()
   const [user, setUser] = useAtom(userAtom)
   const followMutation = useMutation(UserApi.FOLLOW_USER, {
     onSettled: () => {
       queryClient.invalidateQueries(['userList'])
     },
     onSuccess: (follow: Follow) => {
+      openModal({ content: '팔로우 신청 성공!', type: 'success' })
       setUser({ ...user, following: [...user.following, follow] })
-      console.log(user)
     },
   })
 
@@ -36,6 +40,7 @@ const FollowFriend = ({ data, follow }: FollowFriendProps) => {
     },
     onSuccess: (follow: Follow) => {
       const filtered = user.following.filter((data) => data._id !== follow._id)
+      openModal({ content: '언팔로우 완료!', type: 'success' })
       setUser({ ...user, following: [...filtered] })
     },
   })
@@ -60,7 +65,17 @@ const FollowFriend = ({ data, follow }: FollowFriendProps) => {
         rightElement={
           follow ? (
             <FlexBox direction={'row'} align={'center'} gap={20}>
-              <Send />
+              <Send
+                style={{ cursor: 'pointer' }}
+                onClick={() =>
+                  navigate('/chatting', {
+                    state: {
+                      sender: user,
+                      receiver: data,
+                    },
+                  })
+                }
+              />
               <Button
                 buttonType={'Medium'}
                 backgroundColor={'MINT'}

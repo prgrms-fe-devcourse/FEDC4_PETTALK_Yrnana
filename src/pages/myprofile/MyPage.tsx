@@ -15,22 +15,17 @@ import { userAtom } from '@/libs/store/userAtom'
 const MyProfile = () => {
   const userData = useAtomValue(userAtom)
   const navigate = useNavigate()
-  const [modalText, setModalText] = useState('')
-  const { isModalOpen, openModal, Modal } = useModal()
+  const { openModal } = useModal()
   const logoutMutation = useMutation(async () => await axiosAPI.post('/logout'), {
     onSuccess: () => {
-      setModalText('로그아웃 완료! 다음에 만나요🙌')
-      openModal()
-      setTimeout(() => {
-        navigate('/login')
-      }, 2000)
+      openModal({ content: '로그아웃 완료! 다음에 만나요 🙌', type: 'success' })
+      navigate('/login')
       localStorage.removeItem('isLogin')
       localStorage.removeItem('token')
       localStorage.removeItem('role')
     },
     onError: () => {
-      setModalText('로그아웃 실패! 다시 시도해주세요🙏')
-      openModal()
+      openModal({ content: '로그아웃 실패! 다시 시도해주세요🙏', type: 'error' })
     },
   })
   const Logout = () => {
@@ -44,11 +39,6 @@ const MyProfile = () => {
     <>
       <Spacing size={40} />
       <MyPageContainer>
-        {isModalOpen ? (
-          <Modal modalText={modalText} time={2000} active={true} type={'success'} />
-        ) : (
-          ''
-        )}
         <Text typo={'Headline_25'}>{userData.fullName}</Text>
         <ProfileImage size={200} updatable={true} image={userData.image} />
         <Follows>
