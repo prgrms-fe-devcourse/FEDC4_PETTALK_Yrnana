@@ -41,6 +41,10 @@ const AppBarNavTemplateWrapper = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+  background-image: url('../src/assets/images/Background-simple.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `
 
 const ChildrenWrapper = styled.div<Pick<AppBarTemplateProps, 'hasSpacing' | 'hasPadding'>>`
