@@ -112,7 +112,7 @@ const Image = styled.img`
   width: 100%;
   height: 190px;
   object-fit: cover;
-  opacity: 0.4;
+  opacity: 0.7;
   content-visibility: auto;
 `
 
