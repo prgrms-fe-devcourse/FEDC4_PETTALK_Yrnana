@@ -1,6 +1,4 @@
 import styled from '@emotion/styled'
-import { useAtomValue } from 'jotai'
-
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
@@ -28,7 +26,6 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBa
   const navigate = useNavigate()
   const userData = useAtomValue(userAtom)
   const [notifyList, setNotifyList] = useState([])
-
 
   const [isSeen, setIsSeen] = useState(true)
   const getNotification = async () => {
