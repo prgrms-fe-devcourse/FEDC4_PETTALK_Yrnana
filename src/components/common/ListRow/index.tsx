@@ -7,7 +7,7 @@ import { type KeyOfPalette, type KeyOfTypo } from '@/styles/theme'
 
 interface ListRowProps extends ComponentProps<'div'> {
   rightElement: ReactNode
-  leftImage: string
+  leftImage?: string | undefined
   mainText: ReactNode
   textTypo?: KeyOfTypo
   textColor?: KeyOfPalette
@@ -45,7 +45,7 @@ const ListRow = ({
     // TODO: Padding 컴포넌트 생성되면 추후 Padding도 추가할 예정입니다.
     <MainFlexBox fullWidth={fullWidth} {...props}>
       <SubFlexBox gap={imageGap}>
-        <ProfileImage size={35} image={leftImage} updatable={false} />
+        {leftImage ? <ProfileImage size={35} image={leftImage} updatable={false} /> : ''}
         <TextFlexBox gap={gap}>
           <StyledText text={mainText} typo={textTypo} color={textColor} />
           {subElement && subElement}
