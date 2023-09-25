@@ -65,6 +65,7 @@ const NewPostPage = () => {
       }
       formData.append('title', JSON.stringify(json))
       formData.append('channelId', channelID)
+      console.log(uploadFile)
       if (uploadFile) formData.append('image', uploadFile, 'myfile')
       postMutation.mutate(formData)
     }
@@ -198,7 +199,7 @@ const StyledTextArea = styled.textarea`
   width: 100%;
   height: 200px;
   margin-top: 20px;
-  line-height: 100%;
+  line-height: 130%;
 
   ${({ theme }) => theme.typo.Body_16};
   color: ${({ theme }) => theme.palette.GRAY700};
