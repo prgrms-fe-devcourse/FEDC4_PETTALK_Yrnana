@@ -44,7 +44,7 @@ const NavigationBar = () => {
             <StyleIcon clickMenu={clickMenu == 'friends'}>
               <Follow height={25} />
             </StyleIcon>
-            <StyleNavigationText>{'팔로우목록'}</StyleNavigationText>
+            <StyleNavigationText>{'친구목록'}</StyleNavigationText>
           </FlexBox>
         </StyleNavigationItem>
       </StyleNavigation>

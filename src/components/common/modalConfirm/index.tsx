@@ -53,7 +53,7 @@ const ModalConfirm = () => {
   )
 }
 const StyleConfirmWrapper = styled.div`
-  z-index: 1;
+  z-index: 999;
   display: flex;
   position: absolute;
   justify-content: center;
