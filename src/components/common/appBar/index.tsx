@@ -1,4 +1,5 @@
 import styled from '@emotion/styled'
+import { useAtomValue } from 'jotai'
 
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
@@ -8,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 
 import BackArrow from '@/assets/icons/BackArrow'
 import Bell from '@/assets/icons/Bell'
-import Loading from '@/components/common/loading'
+import { FlexBox } from '@/components/common/flexBox'
 import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import Toggle from '@/components/common/toggle'
@@ -57,13 +58,13 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBa
     if (data !== undefined) setNotifyList(data.data)
   })
   return (
-    <HeadingBar>
+    <HeadingBar justify={'space-between'} fullWidth={true}>
       {mainPage ? (
         <Text typo={'LogoFont_30'} style={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
           {'Pet Talk'}
         </Text>
       ) : (
-        <HeaderContainer>
+        <FlexBox gap={15}>
           <BackArrow
             style={{ cursor: 'pointer' }}
             onClick={() => {
@@ -71,9 +72,9 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBa
             }}
           />
           <Text typo={'SubHead_18'}>{title}</Text>
-        </HeaderContainer>
+        </FlexBox>
       )}
-      <Functions>
+      <FlexBox gap={15}>
         <Toggle />
         {isSeen ? (
           <Bell style={{ cursor: 'pointer' }} onClick={() => seenMutation.mutate()} />
@@ -91,34 +92,18 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBa
           style={{ cursor: 'pointer' }}
           onClick={() => navigate('/myprofile')}
         />
-      </Functions>
+      </FlexBox>
     </HeadingBar>
   )
 }
 
-const HeadingBar = styled.div`
-  width: 100%;
+const HeadingBar = styled(FlexBox)`
   height: 90px;
   padding: 10px 20px 0 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   background-color: ${theme.palette.BACKGROUND};
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.4);
-`
-
-const HeaderContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
-`
-
-const Functions = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 15px;
+  position: relative;
+  z-index: 100;
 `
 const StyleNotSeenBell = styled.span`
   z-index: 1;
