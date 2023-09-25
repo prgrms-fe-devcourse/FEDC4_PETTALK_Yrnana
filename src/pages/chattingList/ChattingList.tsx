@@ -113,7 +113,7 @@ const ChattingList = () => {
                   direction={'column'}
                   fullWidth={true}
                   gap={10}
-                  key={chat._id[1]}
+                  key={findOpponent(chat)._id}
                   onClick={() => {
                     moveChattingRoom(chat)
                   }}
