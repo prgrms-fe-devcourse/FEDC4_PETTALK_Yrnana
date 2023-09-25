@@ -30,7 +30,9 @@ const ChattingList = () => {
     refetchIntervalInBackground: true,
     retry: 3,
     onSuccess: async (responseData: Conversation[]) => {
-      await MessageApi.READ_MESSAGE(responseData[responseData.length - 1].sender._id)
+      if (responseData.length > 0) {
+        await MessageApi.READ_MESSAGE(responseData[responseData.length - 1].sender._id)
+      }
     },
     cacheTime: 0,
   })
