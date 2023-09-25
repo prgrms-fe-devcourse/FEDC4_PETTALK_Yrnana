@@ -152,7 +152,7 @@ const StyleListRow = styled(FlexBox)`
   margin: 10px 0px;
 `
 const Stylehr = styled.hr`
-  border: 1px solid ${palette.GRAY300};
+  border: 1px solid ${palette.GRAY400};
   width: 100%;
 `
 const StyleSearchArea = styled(FlexBox)`
