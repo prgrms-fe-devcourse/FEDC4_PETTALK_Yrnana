@@ -4,7 +4,6 @@ import { useAtomValue } from 'jotai'
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import Search from '@/assets/icons/Search'
 import defaultProfileImage from '@/assets/images/defaultProfileImage.png'
 import { FlexBox } from '@/components/common/flexBox'
 import Input from '@/components/common/input'
@@ -30,7 +29,9 @@ const ChattingList = () => {
     refetchIntervalInBackground: true,
     retry: 3,
     onSuccess: async (responseData: Conversation[]) => {
-      await MessageApi.READ_MESSAGE(responseData[responseData.length - 1].sender._id)
+      if (responseData.length > 0) {
+        await MessageApi.READ_MESSAGE(responseData[responseData.length - 1].sender._id)
+      }
     },
     cacheTime: 0,
   })
@@ -83,6 +84,10 @@ const ChattingList = () => {
     }
   }, [data])
 
+  useEffect(() => {
+    if (debouncedValue) fetchSearchData(debouncedValue)
+  }, [debouncedValue])
+
   if (isLoading) return <Loading></Loading>
 
   return (
@@ -98,9 +103,6 @@ const ChattingList = () => {
                 ref={searchInputRef}
                 onChange={handleSearchChat}
               />
-              {/* <StyleSearchIcon onClick={searchChattingList}>
-                <Search />
-              </StyleSearchIcon> */}
             </StyleSearchArea>
           </FlexBox>
           <Spacing size={30} />
@@ -111,7 +113,7 @@ const ChattingList = () => {
                   direction={'column'}
                   fullWidth={true}
                   gap={10}
-                  key={chat._id[1]}
+                  key={findOpponent(chat)._id}
                   onClick={() => {
                     moveChattingRoom(chat)
                   }}
@@ -146,22 +148,26 @@ const ChattingList = () => {
 }
 const StyleChattingListWrapper = styled.div`
   width: 100%;
+  height: 100%;
 `
 const StyleListRow = styled(FlexBox)`
   cursor: pointer;
   margin: 10px 0px;
 `
 const Stylehr = styled.hr`
-  border: 1px solid ${palette.GRAY300};
+  border: 1px solid ${palette.GRAY400};
   width: 100%;
 `
 const StyleSearchArea = styled(FlexBox)`
   text-align: center;
+  height: 100%;
   padding: 0px 20px;
 `
 const StyleChattingItem = styled.li`
   padding: 0px 20px;
   list-style: none;
+  max-height: calc(100% - 100px);
+  overflow-y: auto;
 `
 const StyleNoData = styled.div`
   text-align: center;
