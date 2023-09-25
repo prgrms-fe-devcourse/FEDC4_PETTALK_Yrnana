@@ -7,6 +7,7 @@ import { ChangeEvent,useCallback, useEffect, useState } from 'react'
 import { FlexBox } from '@/components/common/flexBox'
 import Input from '@/components/common/input'
 import Loading from '@/components/common/loading'
+import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import FollowFriend from '@/components/friends/FollowFriend'
 import OnlineFriends from '@/components/friends/OnlineFriends'
@@ -71,6 +72,7 @@ const FriendList = () => {
               <FollowFriend key={index} data={data} follow={false}/>
             ),
           )}
+          <Spacing size={60}/>
       </FlexBox>
     </FriendListWrapper>
   )
