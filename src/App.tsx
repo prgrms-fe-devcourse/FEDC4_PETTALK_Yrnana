@@ -28,7 +28,7 @@ const App = () => {
             <Route
               path={'/friends'}
               element={
-                <AppBarNavTemplate hasNav={true} title={'팔로우 목록'}>
+                <AppBarNavTemplate hasNav={true} title={'친구 목록'}>
                   <FriendList />
                 </AppBarNavTemplate>
               }

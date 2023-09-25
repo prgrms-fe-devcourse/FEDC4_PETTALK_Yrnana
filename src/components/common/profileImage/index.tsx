@@ -59,9 +59,9 @@ const ProfileImage = ({
   }
 
   return (
-    <span {...props}>
+    <span>
       <label htmlFor={'fileInput'} style={{ position: 'relative' }}>
-        <Image src={selectedImage} size={size} alt={''} />
+        <Image src={selectedImage} size={size} alt={''} {...props} />
         {online && <OnlineStatus />}
       </label>
       {updatable ? (
