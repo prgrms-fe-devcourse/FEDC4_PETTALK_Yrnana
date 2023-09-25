@@ -146,6 +146,7 @@ const ChattingList = () => {
 }
 const StyleChattingListWrapper = styled.div`
   width: 100%;
+  height: 100%;
 `
 const StyleListRow = styled(FlexBox)`
   cursor: pointer;
@@ -157,11 +158,14 @@ const Stylehr = styled.hr`
 `
 const StyleSearchArea = styled(FlexBox)`
   text-align: center;
+  height: 100%;
   padding: 0px 20px;
 `
 const StyleChattingItem = styled.li`
   padding: 0px 20px;
   list-style: none;
+  max-height: calc(100% - 100px);
+  overflow-y: auto;
 `
 const StyleNoData = styled.div`
   text-align: center;
