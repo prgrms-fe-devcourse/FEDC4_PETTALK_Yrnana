@@ -57,6 +57,7 @@ const CarouselWrapper = styled.div`
   height: 190px;
   overflow: hidden;
   border-radius: 10px;
+  background-color: ${({ theme }) => theme.palette.WHITE};
 `
 
 export default ChannelSlider

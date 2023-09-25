@@ -9,6 +9,7 @@ import ProfileImage from '@/components/common/profileImage'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
+import { useConfirmModal } from '@/libs/hooks/useConfirmModal'
 import useModal from '@/libs/hooks/useModal'
 import { userAtom } from '@/libs/store/userAtom'
 
@@ -16,6 +17,7 @@ const MyProfile = () => {
   const userData = useAtomValue(userAtom)
   const navigate = useNavigate()
   const { openModal } = useModal()
+  const { openConfirmModal } = useConfirmModal()
   const logoutMutation = useMutation(async () => await axiosAPI.post('/logout'), {
     onSuccess: () => {
       openModal({ content: '로그아웃 완료! 다음에 만나요 🙌', type: 'success' })
@@ -67,7 +69,12 @@ const MyProfile = () => {
           position: 'absolute',
           bottom: '20px',
         }}
-        onClick={Logout}
+        onClick={() =>
+          openConfirmModal({
+            confirmText: '로그아웃 하시겠습니까?',
+            okFunc: () => logoutMutation.mutate(),
+          })
+        }
       />
     </>
   )

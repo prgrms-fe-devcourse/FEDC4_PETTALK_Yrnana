@@ -134,13 +134,14 @@ const PostDetailPage = () => {
     },
     onSuccess: (follow: Follow) => {
       setUserData({ ...userData, following: [...userData.following, follow] })
-
-      useNotification({
-        postId: postId,
-        userId: follow.user,
-        type: 'FOLLOW',
-        typeId: follow._id,
-      })
+      data?.author._id !== userData._id
+        ? useNotification({
+            postId: postId,
+            userId: follow.user,
+            type: 'FOLLOW',
+            typeId: follow._id,
+          })
+        : ''
     },
   })
 
@@ -158,12 +159,14 @@ const PostDetailPage = () => {
     onSuccess: (comment: CommentType) => {
       if (commentRef.current) commentRef.current.value = ''
       refetch()
-      useNotification({
-        postId: postId,
-        userId: comment.author._id,
-        type: 'COMMENT',
-        typeId: comment._id,
-      })
+      data?.author._id !== userData._id
+        ? useNotification({
+            postId: postId,
+            userId: data !== undefined ? data?.author._id : '',
+            type: 'COMMENT',
+            typeId: comment._id,
+          })
+        : ''
     },
     onError: (error) => {
       console.log('댓글 오류 발생', error)

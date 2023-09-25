@@ -1,15 +1,13 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { FormEvent, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
+import { FormEvent, useEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import Button from '@/components/common/button'
 import { FlexBox } from '@/components/common/flexBox'
 import Loading from '@/components/common/loading'
 import { Text } from '@/components/common/text'
-import TextArea from '@/components/common/textarea'
 import ImageUploader from '@/components/posts/ImageUploader'
 import PostApi from '@/libs/apis/post/postApi'
 import { Post } from '@/libs/apis/post/postType'
@@ -25,20 +23,28 @@ const EditPostPage = () => {
   const channelID = useLocation().pathname.split('/')[2]
   const postId = useLocation().pathname.split('/')[3]
   const { data, isLoading } = useQuery(['post', postId], () => PostApi.DETAIL_POST(postId))
-  const postData = JSON.parse(data?.title as string)
-  const [curImage, setCurImage] = useState<string | null>(data?.image)
-  const [title, setTitle] = useState<string | undefined>(postData.title)
-  const [contents, setContents] = useState<string | undefined>(postData.body)
+  const [curImage, setCurImage] = useState<string | null>('')
+  const [title, setTitle] = useState<string | undefined>('')
+  const [contents, setContents] = useState<string | undefined>('')
   const contentsRef = useRef<HTMLTextAreaElement>(null)
   const postMutation = useMutation(PostApi.UPDATE_POST, {
     onSettled: () => {
-      queryClient.invalidateQueries(['posts', postId])
+      queryClient.invalidateQueries(['post', postId])
     },
     onSuccess: (newPost: Post) => {
-      queryClient.setQueryData(['posts', newPost._id], newPost)
+      queryClient.setQueryData(['post', newPost._id], newPost)
       navigate(`/posts/${channelID}/${postId}`, { replace: true })
     },
   })
+
+  useEffect(() => {
+    if (data) {
+      const postData = JSON.parse(data?.title as string)
+      setCurImage(data?.image)
+      setTitle(postData.title)
+      setContents(postData.body)
+    }
+  }, [data])
 
   if (isLoading) {
     return <Loading />
@@ -59,20 +65,25 @@ const EditPostPage = () => {
 
   const handleEditPost = () => {
     const formData = new FormData()
-    if (title && contentsRef.current!.value) {
+    if (!title) {
+      openModal({ content: '제목을 입력해주세요!', type: 'warning' })
+    } else if (!contents) {
+      openModal({ content: '내용을 입력해주세요!', type: 'warning' })
+    } else if (!curImage) {
+      openModal({ content: '이미지를 첨부해주세요!', type: 'warning' })
+    } else {
       const json = {
         title: title,
-        body: contentsRef.current!.value,
+        body: contents,
       }
       formData.append('title', JSON.stringify(json))
       formData.append('channelId', channelID)
       formData.append('postId', postId)
-      if (uploadFile) formData.append('image', uploadFile, 'myfile')
+      if (uploadFile) formData.append('image', uploadFile)
       postMutation.mutate(formData)
-    } else {
-      openModal({ content: '게시글 내용이 비었습니다!', type: 'warning' })
     }
   }
+
   return (
     <NewPostContainer>
       <form onSubmit={handleSubmit}>
@@ -80,7 +91,10 @@ const EditPostPage = () => {
           placeholder={'제목을 입력해주세요'}
           value={title ? title : ''}
           onChange={(e: { target: { value: string } }) => {
-            if (e.target.value.length > 20) return
+            if (e.target.value.length > 20) {
+              openModal({ content: '게시글 제목은 최대 20자까지 가능합니다.', type: 'warning' })
+              return
+            }
             setTitle(e.target.value)
           }}
         />
@@ -89,10 +103,10 @@ const EditPostPage = () => {
             <ImageUploader
               uploadFileHandler={uploadHandler}
               fileTypeErrorHandler={() => {
-                console.log('file type err')
+                openModal({ content: '이미지 파일 형식은 png, jpg만 가능합니다.', type: 'error' })
               }}
               fileNumErrorHandler={() => {
-                console.log('file num err')
+                openModal({ content: '이미지 파일은 1개만 첨부가 가능합니다.', type: 'error' })
               }}
             />
           ) : (
@@ -109,13 +123,18 @@ const EditPostPage = () => {
             </FlexBox>
           )}
         </ImageBoxWrapper>
-        <TextArea
-          height={200}
-          placeholder={'내용을 입력해주세요'}
+        <StyledTextArea
+          placeholder={'내용을 입력해주세요(최대 200자)'}
           ref={contentsRef}
           value={contents}
-          onChange={(e: { target: { value: string } }) => setContents(e.target.value)}
-        ></TextArea>
+          onChange={(e: { target: { value: string } }) => {
+            if (e.target.value.length > 200) {
+              openModal({ content: '게시글 내용은 최대 200자까지 가능합니다.', type: 'warning' })
+              return
+            }
+            setContents(e.target.value)
+          }}
+        />
       </form>
       <ButtonContainer>
         <Button buttonType={'ExtraLarge'} value={'수정하기'} onClick={handleEditPost} />
@@ -184,4 +203,23 @@ const ImageContainer = styled.div<{ imageurl: string }>`
   align-items: flex-start;
   width: 100%;
   height: 250px;
+`
+const StyledTextArea = styled.textarea`
+  box-sizing: border-box;
+  border: none;
+  resize: none;
+  background: transparent;
+  padding: 0px 10px;
+  width: 100%;
+  height: 200px;
+  margin-top: 20px;
+  line-height: 130%;
+
+  ${({ theme }) => theme.typo.Body_16};
+  color: ${({ theme }) => theme.palette.GRAY700};
+
+  ::placeholder {
+    ${({ theme }) => theme.typo.Body_16}
+    color: ${({ theme }) => theme.palette.GRAY400};
+  }
 `
