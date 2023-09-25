@@ -7,6 +7,7 @@ import { ChangeEvent,useCallback, useEffect, useState } from 'react'
 import { FlexBox } from '@/components/common/flexBox'
 import Input from '@/components/common/input'
 import Loading from '@/components/common/loading'
+import { Text } from '@/components/common/text'
 import FollowFriend from '@/components/friends/FollowFriend'
 import OnlineFriends from '@/components/friends/OnlineFriends'
 import { FriendListResponse, User } from '@/libs/apis/auth/authType'
@@ -17,7 +18,7 @@ import { userAtom } from '@/libs/store/userAtom'
 const FriendList = () => {
   const [keyword, setKeyword] = useState<string>('')
   const [friendList, setFriendList] = useState<FriendListResponse[]>([])
-  const { data } = useQuery(['userList'], () => UserApi.GET_USERS())
+  const { data, isLoading } = useQuery(['userList'], () => UserApi.GET_USERS())
   const mydata = useAtomValue<User>(userAtom)
   const debouncedValue = useDebounce(keyword, 200)
   const [followingList, setFollowingList] = useState<string[]>([])
@@ -31,7 +32,6 @@ const FriendList = () => {
   useEffect(() => {
     if(data){
       setFriendList(data)
-
     }
   },[data])
 
@@ -52,6 +52,9 @@ const FriendList = () => {
     if (data) setFriendList(data)
   }
 
+  if(isLoading)
+    return <Loading/>
+    
   return (
     <FriendListWrapper>
       <FlexBox direction={'row'} gap={10} fullWidth={true}>
@@ -59,8 +62,8 @@ const FriendList = () => {
       </FlexBox>
       {data && <OnlineFriends userList ={data} userFollowing={followingList} />}
       <FlexBox direction={'column'} fullWidth={true} gap={10}>
-        {followingList.length === 0 || friendList.length === 0
-          ? <Loading/>
+        {friendList.length === 0
+          ? <Text typo={'Body_16'} color={"GRAY500"}>{"유저가 없습니다"}</Text>
           : friendList?.map((data, index) =>
             followingList.includes(data._id) ? (
               <FollowFriend key={index} data={data} follow={true} />
