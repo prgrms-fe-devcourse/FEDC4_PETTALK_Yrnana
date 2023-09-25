@@ -94,4 +94,9 @@ export const globalStyle = css`
       transform: scale(1.1);
     }
   }
+
+  .dark-mode {
+    background-color: black;
+    color: white;
+  }
 `

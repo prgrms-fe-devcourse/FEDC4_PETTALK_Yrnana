@@ -1,10 +1,12 @@
 import styled from '@emotion/styled'
+import { useAtom } from 'jotai'
 import { ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import AppBar from '@/components/common/appBar'
 import NavigationBar from '@/components/common/navigationBar'
 import Spacing from '@/components/common/spacing'
+import { darkModeAtom } from '@/libs/store/darkModeAtom'
 
 interface AppBarTemplateProps {
   children: ReactNode
@@ -23,9 +25,10 @@ const AppBarNavTemplate = ({
   backurl,
   hasPadding = true,
 }: AppBarTemplateProps) => {
+  const [isDarkMode] = useAtom(darkModeAtom)
   const location = useLocation()
   return (
-    <AppBarNavTemplateWrapper>
+    <AppBarNavTemplateWrapper className={isDarkMode ? 'dark-mode' : ''}>
       <AppBar mainPage={location.pathname === '/' ? true : false} title={title} backurl={backurl} />
       {hasSpacing && <Spacing size={30} />}
       <ChildrenWrapper hasPadding={hasPadding} hasSpacing={hasSpacing}>

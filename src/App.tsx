@@ -37,6 +37,7 @@ const App = () => {
             <Route path={'/chatting'} element={<ChattingRouter />}></Route>
             <Route path={'/chattinglist'} element={<ChattingListRouter />}></Route>
             <Route path={'/notification/*'} element={<NotificationRouter />}></Route>
+            <Route path={'*'} element={<NotFoundPage />}></Route>
           </Route>
         </Route>
         <Route element={<PrivateRoute auth={false} />}>
