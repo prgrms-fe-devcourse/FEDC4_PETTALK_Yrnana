@@ -177,7 +177,6 @@ const StyleNotifyWrapper = styled.div`
   overflow-y: scroll;
   height: 100%;
   max-height: calc(100% - 100px);
-  margin: 0px 30px;
 `
 const StyleNoData = styled.div`
   margin: 50px;
@@ -185,7 +184,7 @@ const StyleNoData = styled.div`
   color: ${palette.GRAY500};
 `
 const StyleTime = styled.div`
-  color: ${palette.GRAY500};
+  color: ${palette.GRAY700};
   font-size: ${typo.Caption_11};
 `
 
