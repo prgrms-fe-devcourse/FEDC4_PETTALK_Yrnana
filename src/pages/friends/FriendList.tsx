@@ -2,7 +2,7 @@
 import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
-import { ChangeEvent,useCallback, useEffect, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 
 import { FlexBox } from '@/components/common/flexBox'
 import Input from '@/components/common/input'
@@ -31,50 +31,57 @@ const FriendList = () => {
   }, [mydata])
 
   useEffect(() => {
-    if(data){
+    if (data) {
       setFriendList(data)
       const followData = mydata.following.map((value) => value.user)
       setFollowingList(followData)
     }
-  },[data])
+  }, [data])
 
-
-  const handleSearchFriend = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setKeyword(e.target.value)
-    if (e.target.value === '' && data) {
-      setFriendList(data)
-      return
-    }
-    if (debouncedValue) fetchSearchData(debouncedValue)
-  },
-  [debouncedValue])
-
+  const handleSearchFriend = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setKeyword(e.target.value)
+      if (e.target.value === '' && data) {
+        setFriendList(data)
+        return
+      }
+      if (debouncedValue) fetchSearchData(debouncedValue)
+    },
+    [debouncedValue],
+  )
 
   const fetchSearchData = async (keyword: string) => {
     const data = await UserApi.SERACH_USER(keyword)
     if (data) setFriendList(data)
   }
 
-  if(isLoading)
-    return <Loading/>
-    
+  useEffect(() => {
+    if (debouncedValue) fetchSearchData(debouncedValue)
+  }, [debouncedValue])
+
+  if (isLoading) return <Loading />
+
   return (
     <FriendListWrapper>
       <FlexBox direction={'row'} gap={10} fullWidth={true}>
-        <Input placeholder={'유저명을 검색해보세요.'} onChange={handleSearchFriend}  />
+        <Input placeholder={'유저명을 검색해보세요.'} onChange={handleSearchFriend} />
       </FlexBox>
-      {data && <OnlineFriends userList ={data} userFollowing={followingList} />}
+      {data && <OnlineFriends userList={data} userFollowing={followingList} />}
       <FlexBox direction={'column'} fullWidth={true} gap={10}>
-        {friendList.length === 0
-          ? <Text typo={'Body_16'} color={"GRAY500"}>{"유저가 없습니다"}</Text>
-          : friendList?.map((data, index) =>
+        {friendList.length === 0 ? (
+          <Text typo={'Body_16'} color={'GRAY500'}>
+            {'유저가 없습니다'}
+          </Text>
+        ) : (
+          friendList?.map((data, index) =>
             followingList.includes(data._id) ? (
               <FollowFriend key={index} data={data} follow={true} />
             ) : (
-              <FollowFriend key={index} data={data} follow={false}/>
+              <FollowFriend key={index} data={data} follow={false} />
             ),
-          )}
-          <Spacing size={60}/>
+          )
+        )}
+        <Spacing size={60} />
       </FlexBox>
     </FriendListWrapper>
   )
