@@ -48,6 +48,11 @@ const PostListPage = () => {
   useEffect(() => {
     if (data) setPost(data)
   }, [data])
+
+  useEffect(() => {
+    if (debouncedValue) fetchSearchData(debouncedValue)
+  }, [debouncedValue])
+
   return (
     <PostListPageWrapper>
       <FlexBox direction={'row'} gap={8} fullWidth={true}>
