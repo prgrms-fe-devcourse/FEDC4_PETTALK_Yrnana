@@ -118,7 +118,7 @@ const Chatting = () => {
         <TextArea ref={messageRef} height={20} />
         <Button
           buttonType={'Medium'}
-          value={'작성하기'}
+          value={'전송하기'}
           backgroundColor={'MAINYELLOW'}
           onClick={sendMessage}
         ></Button>
