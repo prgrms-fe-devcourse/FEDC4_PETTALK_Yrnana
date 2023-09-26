@@ -1,6 +1,5 @@
 import { atom } from 'jotai'
 
-import defaultProfileImage from '@/assets/images/defaultProfileImage.png'
 import { User } from '@/libs/apis/auth/authType'
 export const initialUser: User = {
   coverImage: '', // 커버 이미지
