@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { type ComponentProps, type ReactNode } from 'react'
 
+import defaultProfileImage from '@/assets/images/defaultProfileImage.png'
 import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import { type KeyOfPalette, type KeyOfTypo } from '@/styles/theme'
@@ -31,7 +32,7 @@ interface ListRowProps extends ComponentProps<'div'> {
 
 const ListRow = ({
   rightElement,
-  leftImage,
+  leftImage = defaultProfileImage,
   mainText,
   textTypo = 'Body_13',
   textColor = 'BLACK',
