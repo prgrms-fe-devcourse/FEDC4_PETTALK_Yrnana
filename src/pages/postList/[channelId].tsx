@@ -22,9 +22,13 @@ const PostListPage = () => {
   const [keyword, setKeyword] = useState<string>('')
   const [post, setPost] = useState<Post[]>([])
   const channelID = useLocation().pathname.split('/')[2]
-  const { data, isLoading } = useQuery(['posts', channelID], () => PostApi.GET_POSTS(channelID), {
-    cacheTime: 0,
-  })
+  const { data, isLoading, isError } = useQuery(
+    ['posts', channelID],
+    () => PostApi.GET_POSTS(channelID),
+    {
+      cacheTime: 0,
+    },
+  )
   const debouncedValue = useDebounce(keyword, 200)
   const navigate = useNavigate()
   const handleSearchPost = useCallback(
@@ -48,6 +52,11 @@ const PostListPage = () => {
   useEffect(() => {
     if (data) setPost(data)
   }, [data])
+
+  useEffect(() => {
+    if (debouncedValue) fetchSearchData(debouncedValue)
+  }, [debouncedValue])
+
   return (
     <PostListPageWrapper>
       <FlexBox direction={'row'} gap={8} fullWidth={true}>

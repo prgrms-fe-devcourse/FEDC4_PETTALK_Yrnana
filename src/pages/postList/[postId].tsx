@@ -26,6 +26,7 @@ import useModal from '@/libs/hooks/useModal'
 import { useNotification } from '@/libs/hooks/useNotification'
 import { urlAtom } from '@/libs/store/urlAtom'
 import { userAtom } from '@/libs/store/userAtom'
+import { theme } from '@/styles/theme'
 
 const PostDetailPage = () => {
   const [urlData, setUrlData] = useAtom(urlAtom)
@@ -264,8 +265,12 @@ const PostDetailPage = () => {
         </Image>
       )}
       <ContentContainer height={mainOffsetHeight!}>
-        <Padding size={20}>
-          <Text typo={'Body_16'} color={'BLACK'} style={{ lineHeight: '130%' }}>
+        <Padding size={[20, 20, 0, 20]}>
+          <Text
+            typo={resizeFontSize ? 'Body_12' : 'Body_16'}
+            color={'BLACK'}
+            style={{ lineHeight: '130%' }}
+          >
             {postData.body}
           </Text>
         </Padding>
@@ -406,7 +411,11 @@ const PostDetailPage = () => {
           ))}
         </Comments>
         <WriteComment width={mainOffsetWidth!}>
-          <TextArea placeholder={'댓글을 입력해주세요.'} ref={commentRef}></TextArea>
+          <TextArea
+            height={mainOffsetHeight! < 1000 && mainOffsetHeight! - 1000}
+            placeholder={'댓글을 입력해주세요.'}
+            ref={commentRef}
+          ></TextArea>
           <Button
             buttonType={'Medium'}
             value={'작성하기'}
@@ -443,15 +452,30 @@ const Image = styled.div<{ imageurl?: string }>`
 
 const ContentContainer = styled.div<{ height: number }>`
   width: 100%;
-  height: calc(${(props) => props.height - 510}px);
+  height: calc(${(props) => props.height - 450}px);
   @media (max-height: 667px) {
+    height: calc(${(props) => props.height - 370}px);
+  }
+  @media (min-height: 720px) {
+    height: calc(${(props) => props.height - 480}px);
+  }
+  @media (min-height: 740px) {
     height: calc(${(props) => props.height - 470}px);
   }
+  @media (min-height: 844px) {
+    height: calc(${(props) => props.height - 510}px);
+  }
+  @media (min-height: 851px) {
+    height: calc(${(props) => props.height - 480}px);
+  }
+  @media (min-height: 915px) {
+    height: calc(${(props) => props.height - 450}px);
+  }
   @media (min-height: 1180px) {
-    height: calc(${(props) => props.height - 525}px);
+    height: calc(${(props) => props.height - 600}px);
   }
   @media (min-height: 1368px) {
-    height: calc(${(props) => props.height - 578}px);
+    height: calc(${(props) => props.height - 650}px);
   }
   display: flex;
   flex-direction: column;
@@ -466,7 +490,7 @@ const Info = styled.div`
 const Comments = styled.div`
   width: 100%;
   overflow: scroll;
-  height: 60%;
+  height: 43%;
   @media (min-height: 1180px) {
     height: 65%;
   }
@@ -522,6 +546,8 @@ const WriteComment = styled.form<{ width: number }>`
   bottom: 4px;
   padding: 10px;
   box-sizing: border-box;
+  background-color: ${theme.palette.BACKGROUND};
+  border-radius: 20px;
 `
 
 const VerticalLine = styled.hr`
