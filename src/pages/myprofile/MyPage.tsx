@@ -42,16 +42,21 @@ const MyProfile = () => {
       <Spacing size={40} />
       <MyPageContainer>
         <Text typo={'Headline_25'}>{userData.fullName}</Text>
-        <ProfileImage size={200} updatable={true} image={userData.image} />
+        <ProfileImage
+          size={200}
+          updatable={true}
+          image={userData.image}
+          style={{ cursor: 'pointer' }}
+        />
         <Follows>
-          <Follower>
+          <Follower onClick={() => navigate('/friends')}>
             <Text typo={'Headline_25'}>{'팔로워'}</Text>
             <Spacing size={10} />
             <Text typo={'Headline_25'} color={'MAINBLUE'}>
               {userData.followers.length}
             </Text>
           </Follower>
-          <Following>
+          <Following onClick={() => navigate('/friends')}>
             <Text typo={'Headline_25'}>{'팔로잉'}</Text>
             <Spacing size={10} />
             <Text typo={'Headline_25'} color={'MAINBLUE'}>
@@ -100,6 +105,7 @@ const Follower = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `
 
 const Following = styled.div`
@@ -107,6 +113,7 @@ const Following = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `
 
 export default MyProfile
