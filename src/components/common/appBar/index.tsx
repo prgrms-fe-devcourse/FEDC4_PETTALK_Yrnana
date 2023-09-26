@@ -12,6 +12,7 @@ import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import Toggle from '@/components/common/toggle'
 import { axiosAPI } from '@/libs/apis/axios'
+import { darkModeAtom } from '@/libs/store/darkModeAtom'
 import { userAtom } from '@/libs/store/userAtom'
 import { palette } from '@/styles/palette'
 import { theme } from '@/styles/theme'
@@ -25,6 +26,7 @@ interface AppBarProps {
 const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBarProps) => {
   const navigate = useNavigate()
   const userData = useAtomValue(userAtom)
+  const [isDarkMode] = useAtom(darkModeAtom)
   const [notifyList, setNotifyList] = useState([])
 
   const [isSeen, setIsSeen] = useState(true)
@@ -55,7 +57,7 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBa
     if (data !== undefined) setNotifyList(data.data)
   })
   return (
-    <HeadingBar justify={'space-between'} fullWidth={true}>
+    <HeadingBar justify={'space-between'} fullWidth={true} darkmode={isDarkMode}>
       {mainPage ? (
         <Text typo={'LogoFont_30'} style={{ cursor: 'pointer' }} onClick={() => navigate('/')}>
           {'Pet Talk'}
@@ -68,17 +70,27 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBa
               backurl ? navigate(`/${backurl}`) : navigate(-1)
             }}
           />
-          <Text typo={'SubHead_18'}>{title}</Text>
+          <Text typo={'SubHead_18'} color={isDarkMode ? 'WHITE' : 'BLACK'}>
+            {title}
+          </Text>
         </FlexBox>
       )}
       <FlexBox gap={15}>
         <Toggle />
         {isSeen ? (
-          <Bell style={{ cursor: 'pointer' }} onClick={() => seenMutation.mutate()} />
+          <Bell
+            style={{ cursor: 'pointer' }}
+            onClick={() => seenMutation.mutate()}
+            stroke={isDarkMode ? 'white' : 'black'}
+          />
         ) : (
           <>
             <StyleNotSeenBell />
-            <Bell style={{ cursor: 'pointer' }} onClick={() => seenMutation.mutate()} />
+            <Bell
+              style={{ cursor: 'pointer' }}
+              onClick={() => seenMutation.mutate()}
+              stroke={isDarkMode ? 'white' : 'black'}
+            />
           </>
         )}
 
@@ -94,10 +106,11 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBa
   )
 }
 
-const HeadingBar = styled(FlexBox)`
+const HeadingBar = styled(FlexBox)<{ darkmode: boolean }>`
   height: 90px;
   padding: 10px 20px 0 20px;
-  background-color: ${theme.palette.BACKGROUND};
+  background-color: ${(props) =>
+    props.darkmode ? `${theme.palette.GRAY700}` : `${theme.palette.BACKGROUND}`};
   box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.4);
   position: relative;
   z-index: 100;

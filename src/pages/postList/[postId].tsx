@@ -248,7 +248,7 @@ const PostDetailPage = () => {
         fullWidth={true}
         style={{ padding: '30px' }}
       >
-        <Text typo={resizeFontSize ? 'Headline_20' : 'Headline_25'} style={{ width: '80%' }}>{`${
+        <Text typo={resizeFontSize ? 'Headline_20' : 'Headline_25'} color={'BLACK'}>{`${
           postData.title.length > 17 ? `${postData.title.slice(0, 17)}...` : postData.title
         }`}</Text>
         <Text typo={'Caption_11'} color={'GRAY500'} style={{ textAlign: 'center', width: '70px' }}>
@@ -377,8 +377,12 @@ const PostDetailPage = () => {
                     />
                   )}
                   <UserComment>
-                    <Text typo={'Caption_11'}>{comment.author.fullName}</Text>
-                    <Text typo={'SubHead_14'}>{comment.comment}</Text>
+                    <Text typo={'Caption_11'} color={'BLACK'}>
+                      {comment.author.fullName}
+                    </Text>
+                    <Text typo={'SubHead_14'} color={'BLACK'}>
+                      {comment.comment}
+                    </Text>
                   </UserComment>
                 </SingleComment>
 

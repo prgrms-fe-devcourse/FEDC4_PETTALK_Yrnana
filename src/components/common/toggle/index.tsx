@@ -1,20 +1,25 @@
 import styled from '@emotion/styled'
-import { useState } from 'react'
+import { useAtom } from 'jotai'
 
 import moon from '@/assets/Group 28.svg'
 import Sun from '@/assets/icons/Sun'
+import { darkModeAtom, toggleDarkModeAtom } from '@/libs/store/darkModeAtom'
 import { theme } from '@/styles/theme'
 
 const Toggle = () => {
-  const [state, setState] = useState(false)
-  const onToggle = () => {
-    setState(!state)
+  const [isDarkMode] = useAtom(darkModeAtom)
+  const [, toggleDarkMode] = useAtom(toggleDarkModeAtom)
+
+  const handleToggle = () => {
+    toggleDarkMode()
+    sessionStorage.setItem('darkMode', JSON.stringify(!isDarkMode))
   }
+
   return (
     <>
-      <Input type={'checkbox'} readOnly checked={state} />
-      <Label onClick={onToggle}>
-        {state ? <Sun width={21} height={21} /> : <Moon src={moon} />}
+      <Input type={'checkbox'} readOnly checked={isDarkMode} />
+      <Label onClick={handleToggle}>
+        {isDarkMode ? <Sun width={21} height={21} /> : <Moon src={moon} />}
       </Label>
     </>
   )
