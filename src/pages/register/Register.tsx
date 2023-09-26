@@ -74,11 +74,7 @@ const Register = () => {
 
   const submitRegister = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formValidation()) {
-      openModal({ content: '입력이 올바르지 않습니다.', type: 'warning' })
-      return
-    }
-
+    if (!formValidation()) return
     if (checkBox1 == false || checkBox2 == false) {
       openModal({ content: '약관 동의에 체크해주세요.', type: 'warning' })
       return
