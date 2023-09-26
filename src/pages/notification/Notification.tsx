@@ -72,14 +72,26 @@ const Notification = () => {
                   <hr
                     style={{
                       marginBottom: 20,
-                      border: `1px solid ${palette.GRAY300}`,
+                      border: `1px solid ${palette.GRAY400}`,
                     }}
                   />
                 )}
 
                 <ListRow
-                  mainText={<div>{`게시글에 댓글이 달렸습니다. "${v.comment?.comment}"`}</div>}
-                  rightElement={<div>{}</div>}
+                  mainText={
+                    <div>{`게시글에 댓글이 달렸습니다. "${v.comment?.comment.slice(
+                      0,
+                      8,
+                    )}"...`}</div>
+                  }
+                  rightElement={
+                    <StyleTime>{`${v.createdAt.slice(0, 10)}  ${String(
+                      new Date(v.createdAt).getHours(),
+                    ).padStart(2, '0')}:${String(new Date(v.createdAt).getMinutes()).padStart(
+                      2,
+                      '0',
+                    )}`}</StyleTime>
+                  }
                   leftImage={''}
                 />
               </StyleNotifyList>
@@ -91,7 +103,7 @@ const Notification = () => {
                   <hr
                     style={{
                       marginBottom: 20,
-                      border: `1px solid ${palette.GRAY300}`,
+                      border: `1px solid ${palette.GRAY400}`,
                     }}
                   />
                 )}
@@ -116,13 +128,20 @@ const Notification = () => {
                   <hr
                     style={{
                       marginBottom: 20,
-                      border: `1px solid ${palette.GRAY300}`,
+                      border: `1px solid ${palette.GRAY400}`,
                     }}
                   />
                 )}
                 <ListRow
                   mainText={<div>{`${v.user.fullName}님을 팔로우했습니다.`}</div>}
-                  rightElement={<div>{}</div>}
+                  rightElement={
+                    <StyleTime>{`${v.createdAt.slice(0, 10)}  ${String(
+                      new Date(v.createdAt).getHours(),
+                    ).padStart(2, '0')}:${String(new Date(v.createdAt).getMinutes()).padStart(
+                      2,
+                      '0',
+                    )}`}</StyleTime>
+                  }
                   leftImage={''}
                 />
               </StyleNotifyList>
@@ -134,13 +153,20 @@ const Notification = () => {
                   <hr
                     style={{
                       marginBottom: 20,
-                      border: `1px solid ${palette.GRAY300}`,
+                      border: `1px solid ${palette.GRAY400}`,
                     }}
                   />
                 )}
                 <ListRow
                   mainText={<div>{`친구가 ${v.user.fullName}님의 게시글을 좋아합니다.`}</div>}
-                  rightElement={<div>{}</div>}
+                  rightElement={
+                    <StyleTime>{`${v.createdAt.slice(0, 10)}  ${String(
+                      new Date(v.createdAt).getHours(),
+                    ).padStart(2, '0')}:${String(new Date(v.createdAt).getMinutes()).padStart(
+                      2,
+                      '0',
+                    )}`}</StyleTime>
+                  }
                   leftImage={''}
                 />
               </StyleNotifyList>
