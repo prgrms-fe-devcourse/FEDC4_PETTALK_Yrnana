@@ -24,7 +24,7 @@ const FriendList = () => {
   const debouncedValue = useDebounce(keyword, 200)
   const [followingList, setFollowingList] = useState<string[]>([])
   useEffect(() => {
-    if (mydata.followers.length) {
+    if (mydata.following.length) {
       const followData = mydata.following.map((value) => value.user)
       setFollowingList(followData)
     }
@@ -33,6 +33,8 @@ const FriendList = () => {
   useEffect(() => {
     if (data) {
       setFriendList(data)
+      const followData = mydata.following.map((value) => value.user)
+      setFollowingList(followData)
     }
   }, [data])
 

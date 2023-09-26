@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useAtom } from 'jotai'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Send from '@/assets/icons/Send'
@@ -36,6 +37,11 @@ const FollowFriend = ({ data, follow }: FollowFriendProps) => {
     },
   })
 
+  useEffect(() => {
+    console.log(data)
+    console.log(follow)
+  }, [data])
+
   const unfollowMutation = useMutation(UserApi.UNFOLLOW_USER, {
     onSettled: () => {
       queryClient.invalidateQueries(['userList'])
@@ -49,6 +55,7 @@ const FollowFriend = ({ data, follow }: FollowFriendProps) => {
 
   const handleFollow = (userId: string) => {
     followMutation.mutate(userId)
+    console.log(user.following)
   }
 
   const handleUnFollow = (followerList: string[]) => {
