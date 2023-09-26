@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 
 import ModalConfirm from '@/components/common/modalConfirm'
 import {
@@ -13,7 +13,7 @@ interface ModalConfirmPropsType {
 export const useConfirmModal = () => {
   const setModalState = useSetAtom(modalConfirmAtom)
   const setModalText = useSetAtom(modalConfirmTextAtom)
-  const [modalFunc, setModalFunc] = useAtom(modalConfirmFuncAtom)
+  const setModalFunc = useSetAtom(modalConfirmFuncAtom)
 
   const openConfirmModal = ({ confirmText, okFunc }: ModalConfirmPropsType) => {
     setModalState(true)

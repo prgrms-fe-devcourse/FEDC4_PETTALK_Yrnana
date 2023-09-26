@@ -4,7 +4,6 @@ import { ComponentProps } from 'react'
 
 import Comment from '@/assets/icons/Comment'
 import Favorite from '@/assets/icons/Favorite'
-import defaultImage from '@/assets/images/defaultProfileImage.png'
 import { FlexBox } from '@/components/common/flexBox'
 import ListRow from '@/components/common/listRow'
 import SvgWithText from '@/components/common/svgWithText'

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
-import { type GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { type GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 const Loading = () => {
   const mount = useRef<HTMLDivElement | null>(null)

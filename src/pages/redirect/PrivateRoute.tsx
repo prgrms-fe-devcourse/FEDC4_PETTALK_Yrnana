@@ -4,7 +4,7 @@ type PrivateRouteProps = {
   superAuth?: boolean
 }
 
-const PrivateRoute = ({ auth, superAuth }: PrivateRouteProps) => {
+const PrivateRoute = ({ auth }: PrivateRouteProps) => {
   const isLogin = localStorage.getItem('isLogin')
 
   if (auth) {

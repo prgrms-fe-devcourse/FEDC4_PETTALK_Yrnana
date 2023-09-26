@@ -5,7 +5,6 @@ import AppBarNavTemplate from '@/components/layouts/AppBarNavTemplate'
 import Layout from '@/components/layouts/Layout'
 import ChattingRouter from '@/pages/chatting'
 import ChattingListRouter from '@/pages/chattingList'
-import ExamplePage from '@/pages/Example'
 import FriendList from '@/pages/friends/FriendList'
 import ChannelsRouter from '@/pages/home'
 import CreateChannel from '@/pages/home/CreateChannel'
@@ -49,7 +48,6 @@ const App = () => {
           <Route path={'/create'} element={<CreateChannel />} />
           <Route path={'*'} element={<NotFoundPage />}></Route>
         </Route>
-        <Route path={'/example'} element={<ExamplePage />}></Route>
         <Route path={'*'} element={<NotFoundPage />}></Route>
       </Route>
     </Routes>

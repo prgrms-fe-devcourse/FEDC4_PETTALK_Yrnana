@@ -6,7 +6,7 @@ import defaultImage from '@/assets/images/defaultProfileImage.png'
 import { axiosAPI } from '@/libs/apis/axios'
 import { userAtom } from '@/libs/store/userAtom'
 
-interface ProfileImageProps extends ComponentProps<'div'> {
+interface ProfileImageProps extends ComponentProps<'label'> {
   size: number
   image: string
   updatable?: boolean
@@ -60,8 +60,8 @@ const ProfileImage = ({
 
   return (
     <span>
-      <label htmlFor={'fileInput'} style={{ position: 'relative' }}>
-        <Image src={selectedImage} size={size} alt={''} {...props} />
+      <label htmlFor={'fileInput'} style={{ position: 'relative' }} {...props}>
+        <Image src={selectedImage} size={size} alt={''} />
         {online && <OnlineStatus />}
       </label>
       {updatable ? (

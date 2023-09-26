@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
@@ -10,12 +10,12 @@ import Favorite from '@/assets/icons/Favorite'
 import Button from '@/components/common/button'
 import { FlexBox } from '@/components/common/flexBox'
 import Loading from '@/components/common/loading'
-import Padding from '@/components/common/Padding'
+import Padding from '@/components/common/padding'
 import ProfileImage from '@/components/common/profileImage'
 import { Text } from '@/components/common/text'
 import TextArea from '@/components/common/textarea'
 import { Follow } from '@/libs/apis/auth/authType'
-import CommentApi from '@/libs/apis/comment/CommentApi'
+import CommentApi from '@/libs/apis/comment/commentApi'
 import { CommentType } from '@/libs/apis/comment/commentType'
 import PostApi from '@/libs/apis/post/postApi'
 import { Like } from '@/libs/apis/post/postType'
@@ -29,9 +29,8 @@ import { userAtom } from '@/libs/store/userAtom'
 import { theme } from '@/styles/theme'
 
 const PostDetailPage = () => {
-  const [urlData, setUrlData] = useAtom(urlAtom)
+  const setUrlData = useSetAtom(urlAtom)
   const [userData, setUserData] = useAtom(userAtom)
-  const [comment, setComment] = useState('')
   const [like, setLike] = useState(false)
   const [animate, setAnimate] = useState(false)
   const { openModal } = useModal()
@@ -66,7 +65,7 @@ const PostDetailPage = () => {
     }
     refetch()
     const mediaQuery = window.matchMedia('(max-width: 412px)')
-    const handleResize = (e) => {
+    const handleResize = (e: MediaQueryListEvent) => {
       setResizeFontSize(e.matches)
     }
 
@@ -412,7 +411,7 @@ const PostDetailPage = () => {
         </Comments>
         <WriteComment width={mainOffsetWidth!}>
           <TextArea
-            height={mainOffsetHeight! < 1000 && mainOffsetHeight! - 1000}
+            height={mainOffsetHeight! < 1000 ? mainOffsetHeight! - 1000 : 50}
             placeholder={'댓글을 입력해주세요.'}
             ref={commentRef}
           ></TextArea>

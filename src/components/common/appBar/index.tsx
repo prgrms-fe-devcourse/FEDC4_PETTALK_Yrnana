@@ -2,7 +2,6 @@ import styled from '@emotion/styled'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
-import { Suspense } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import BackArrow from '@/assets/icons/BackArrow'
@@ -42,7 +41,6 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBa
       if (notifyList.length && data?.data.length !== notifyList.length) setIsSeen(false)
     },
   })
-  const [notifyLength, setNotifyLength] = useState<number>(data?.data.length)
 
   const handleSeenPost = async () => {
     return await axiosAPI.put('/notifications/seen')

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 
 import Button from '@/components/common/button'
 import {
@@ -12,7 +12,7 @@ import { palette } from '@/styles/palette'
 const ModalConfirm = () => {
   const setModalState = useSetAtom(modalConfirmAtom)
   const modalState = useAtomValue(modalConfirmAtom)
-  const [okFunc, setOkFunc] = useAtom(modalConfirmFuncAtom)
+  const okFunc = useAtomValue(modalConfirmFuncAtom)
   const confirmText = useAtomValue(modalConfirmTextAtom)
 
   const closeModal = () => {

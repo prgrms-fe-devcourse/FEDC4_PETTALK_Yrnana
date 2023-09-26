@@ -16,7 +16,6 @@ const PostApi = {
     return response.data
   },
   UPDATE_POST: async (payload: FormData): Promise<Post> => {
-    //axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     const response = await axiosAPI.put('posts/update', payload)
     return response.data
   },

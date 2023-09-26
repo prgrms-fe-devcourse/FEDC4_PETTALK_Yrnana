@@ -1,7 +1,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useMutation } from '@tanstack/react-query'
-import { useAtom } from 'jotai'
+import { useSetAtom } from 'jotai'
 import { FormEvent, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
@@ -19,7 +19,7 @@ import encodeFileToBase64 from '@/libs/utils/encodeFileToBase64'
 import { theme } from '@/styles/theme'
 
 const NewPostPage = () => {
-  const [urlData, setUrlData] = useAtom(urlAtom)
+  const setUrlData = useSetAtom(urlAtom)
   const { openModal } = useModal()
   const postMutation = useMutation(PostApi.CREATE_POST, {
     onSuccess: (newPost: Post) => {

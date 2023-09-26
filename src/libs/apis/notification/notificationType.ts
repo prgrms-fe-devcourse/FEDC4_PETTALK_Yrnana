@@ -4,7 +4,7 @@ export type Notification = {
   seen: boolean
   _id: string
   author: User
-  user: User | string
+  user: User
   post?: string | null // 포스트 id
   follow?: string // 사용자 id
   comment?: Comment

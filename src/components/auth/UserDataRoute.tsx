@@ -11,13 +11,13 @@ const userDataRoute = () => {
 
   const getUserData = async (): Promise<User> => {
     const response = await axiosAPI.get('/auth-user')
+    setUserData(response.data)
     return response.data
   }
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      const response = getUserData()
-      setUserData(response)
+      getUserData()
     }
   }, [localStorage.getItem('token')])
 

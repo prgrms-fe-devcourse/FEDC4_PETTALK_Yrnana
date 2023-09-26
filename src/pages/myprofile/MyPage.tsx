@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { useMutation } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Button from '@/components/common/button'
@@ -30,12 +29,6 @@ const MyProfile = () => {
       openModal({ content: '로그아웃 실패! 다시 시도해주세요🙏', type: 'error' })
     },
   })
-  const Logout = () => {
-    //confirm 창 만들면 변경
-    if (window.confirm('로그아웃 하시겠습니까?')) {
-      logoutMutation.mutate()
-    }
-  }
 
   return (
     <>

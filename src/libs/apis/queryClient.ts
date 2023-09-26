@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query'
 import { QueryCache } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+
 /**
  * 전역 QueryClientProvider에서 사용되는 QueryClient입니다.
  */

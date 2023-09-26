@@ -3,6 +3,8 @@ import { useAtom } from 'jotai'
 import { ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
 
+import BackgroundSimple from '@/assets/images/Background-simple.svg'
+import DarkmodeImg from '@/assets/images/Darkmode.png'
 import AppBar from '@/components/common/appBar'
 import NavigationBar from '@/components/common/navigationBar'
 import Spacing from '@/components/common/spacing'
@@ -44,10 +46,7 @@ const AppBarNavTemplateWrapper = styled.div<{ darkmode: boolean }>`
   width: 100%;
   height: 100%;
   position: relative;
-  background-image: url(${(props) =>
-    props.darkmode
-      ? '/src/assets/images/Darkmode.png'
-      : '/src/assets/images/Background-simple.svg'});
+  background-image: url(${({ darkmode }) => (darkmode ? DarkmodeImg : BackgroundSimple)});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

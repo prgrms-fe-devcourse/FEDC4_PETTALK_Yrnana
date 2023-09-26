@@ -1,8 +1,5 @@
-import axios, { AxiosError } from 'axios'
-import { AxiosResponse } from 'axios'
+import axios from 'axios'
 
-import ApiException from '@/libs/apis/ApiExceptions'
-import { ApiErrorScheme } from '@/libs/apis/ApiExceptions'
 export const axiosAPI = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
 })

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { ComponentProps, forwardRef, MutableRefObject } from 'react'
+import { ComponentProps, forwardRef } from 'react'
 
 import InputValueDelete from '@/assets/icons/InputValueDelete'
 import { palette } from '@/styles/palette'
@@ -10,7 +10,6 @@ interface InputProps extends ComponentProps<'input'> {
   height?: number
   placeholder: string
   type?: string
-  //inputRef: MutableRefObject<HTMLInputElement | null>
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(function Input(

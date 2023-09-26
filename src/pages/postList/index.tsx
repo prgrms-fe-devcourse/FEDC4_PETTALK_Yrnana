@@ -1,4 +1,4 @@
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
@@ -11,7 +11,7 @@ import EditPostPage from '@/pages/postList/EditPost'
 import NewPostPage from '@/pages/postList/NewPost'
 
 const PostRouter = () => {
-  const [urlData, setUrlData] = useAtom(urlAtom)
+  const urlData = useAtomValue(urlAtom)
   return (
     <Suspense fallback={<Loading />}>
       <Routes>

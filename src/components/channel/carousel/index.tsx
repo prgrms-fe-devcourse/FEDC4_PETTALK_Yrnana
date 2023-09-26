@@ -7,7 +7,7 @@ import { FlexBox } from '@/components/common/flexBox'
 import { Text } from '@/components/common/text'
 import { Channel } from '@/libs/apis/channel/channelType'
 import { palette } from '@/styles/palette'
-import { KeyOfPalette, KeyOfTypo, theme } from '@/styles/theme'
+import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'
 
 interface CarouselProps extends ComponentProps<'div'> {
   images: string[]
