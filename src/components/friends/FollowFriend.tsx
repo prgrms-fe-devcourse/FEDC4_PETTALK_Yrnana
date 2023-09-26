@@ -14,6 +14,7 @@ import { queryClient } from '@/libs/apis/queryClient'
 import { UserApi } from '@/libs/apis/user/userApi'
 import { useConfirmModal } from '@/libs/hooks/useConfirmModal'
 import useModal from '@/libs/hooks/useModal'
+import { darkModeAtom } from '@/libs/store/darkModeAtom'
 import { userAtom } from '@/libs/store/userAtom'
 
 interface FollowFriendProps {
@@ -24,6 +25,7 @@ interface FollowFriendProps {
 
 const FollowFriend = ({ data, follow }: FollowFriendProps) => {
   const { openModal } = useModal()
+  const [isDarkMode] = useAtom(darkModeAtom)
   const { openConfirmModal } = useConfirmModal()
   const navigate = useNavigate()
   const [user, setUser] = useAtom(userAtom)
@@ -71,10 +73,12 @@ const FollowFriend = ({ data, follow }: FollowFriendProps) => {
       <ListRow
         leftImage={data.image}
         mainText={data.fullName}
+        textColor={isDarkMode ? 'WHITE' : 'BLACK'}
         rightElement={
           follow ? (
             <FlexBox direction={'row'} align={'center'} gap={20}>
               <Send
+                fill={isDarkMode ? 'white' : 'black'}
                 style={{ cursor: 'pointer' }}
                 onClick={() =>
                   navigate('/chatting', {

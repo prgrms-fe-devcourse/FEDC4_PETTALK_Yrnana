@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,11 +13,13 @@ import Spacing from '@/components/common/Spacing'
 import { Conversation } from '@/libs/apis/message/conversationType'
 import MessageApi from '@/libs/apis/message/messageApi'
 import { useDebounce } from '@/libs/hooks/useDebounce'
+import { darkModeAtom } from '@/libs/store/darkModeAtom'
 import { userAtom } from '@/libs/store/userAtom'
 import { palette } from '@/styles/palette'
 
 const ChattingList = () => {
   const userData = useAtomValue(userAtom)
+  const [isDarkMode] = useAtom(darkModeAtom)
   const [keyword, setKeyword] = useState<string>('')
   const [filteredChattingList, setFilteredChattingList] = useState<Conversation[]>([])
   const navigate = useNavigate()
@@ -131,7 +133,7 @@ const ChattingList = () => {
                     subElement={chat.message}
                     gap={10}
                     imageGap={10}
-                    textColor={'GRAY600'}
+                    textColor={isDarkMode ? 'WHITE' : 'GRAY600'}
                     textTypo={'Body_13'}
                   />
                   <Stylehr />
