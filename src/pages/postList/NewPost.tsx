@@ -48,6 +48,7 @@ const NewPostPage = () => {
 
   const deleteImageHandler = () => {
     setCurImage(null)
+    setUploadFile(null)
   }
 
   const handleCreatePost = () => {
@@ -65,7 +66,6 @@ const NewPostPage = () => {
       }
       formData.append('title', JSON.stringify(json))
       formData.append('channelId', channelID)
-      console.log(uploadFile)
       if (uploadFile) formData.append('image', uploadFile, 'myfile')
       postMutation.mutate(formData)
     }
@@ -110,11 +110,11 @@ const NewPostPage = () => {
           )}
         </ImageBoxWrapper>
         <StyledTextArea
-          placeholder={'내용을 입력해주세요(최대 200자)'}
+          placeholder={'내용을 입력해주세요(최대 100자)'}
           value={contents ? contents : ''}
           onChange={(e: { target: { value: string } }) => {
-            if (e.target.value.length > 200) {
-              openModal({ content: '게시글 내용은 최대 200자까지 가능합니다.', type: 'warning' })
+            if (e.target.value.length > 100) {
+              openModal({ content: '게시글 내용은 최대 100자까지 가능합니다.', type: 'warning' })
               return
             }
             setContents(e.target.value)
