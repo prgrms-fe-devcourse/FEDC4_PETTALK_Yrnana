@@ -28,7 +28,7 @@ const AppBarNavTemplate = ({
   const [isDarkMode] = useAtom(darkModeAtom)
   const location = useLocation()
   return (
-    <AppBarNavTemplateWrapper className={isDarkMode ? 'dark-mode' : ''}>
+    <AppBarNavTemplateWrapper darkmode={isDarkMode} className={isDarkMode ? 'dark-mode' : ''}>
       <AppBar mainPage={location.pathname === '/' ? true : false} title={title} backurl={backurl} />
       {hasSpacing && <Spacing size={30} />}
       <ChildrenWrapper hasPadding={hasPadding} hasSpacing={hasSpacing}>
@@ -40,11 +40,14 @@ const AppBarNavTemplate = ({
 }
 export default AppBarNavTemplate
 
-const AppBarNavTemplateWrapper = styled.div`
+const AppBarNavTemplateWrapper = styled.div<{ darkmode: boolean }>`
   width: 100%;
   height: 100%;
   position: relative;
-  background-image: url('/src/assets/images/Background-simple.svg');
+  background-image: url(${(props) =>
+    props.darkmode
+      ? '/src/assets/images/Darkmode.png'
+      : '/src/assets/images/Background-simple.svg'});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

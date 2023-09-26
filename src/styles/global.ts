@@ -117,7 +117,6 @@ export const globalStyle = css`
   .dark-mode {
     color: white;
   }
-
   .postTitle {
     @media (max-width: 375px) {
       font-size: 20px;
