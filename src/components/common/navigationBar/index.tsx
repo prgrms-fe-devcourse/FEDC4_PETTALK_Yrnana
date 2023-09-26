@@ -7,6 +7,7 @@ import Follow from '@/assets/icons/Follow'
 import Shop from '@/assets/icons/Shop'
 import { FlexBox } from '@/components/common/flexBox'
 import { palette } from '@/styles/palette'
+import { theme } from '@/styles/theme'
 import { typo } from '@/styles/typo'
 
 const NavigationBar = () => {
@@ -43,7 +44,7 @@ const NavigationBar = () => {
             <StyleIcon clickMenu={clickMenu == 'friends'}>
               <Follow height={25} />
             </StyleIcon>
-            <StyleNavigationText>{'팔로우목록'}</StyleNavigationText>
+            <StyleNavigationText>{'친구목록'}</StyleNavigationText>
           </FlexBox>
         </StyleNavigationItem>
       </StyleNavigation>
@@ -70,6 +71,7 @@ const StyleNavigationItem = styled.button``
 
 const StyleNavigationText = styled.span`
   font-size: ${typo.Caption_9};
+  color: ${theme.palette.GRAY700};
 `
 
 const StyleIcon = styled(FlexBox)<{ clickMenu: boolean }>`
