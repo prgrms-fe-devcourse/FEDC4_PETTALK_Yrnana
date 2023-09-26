@@ -70,7 +70,9 @@ const AppBar = ({ mainPage = false, title = '게시글 보기', backurl }: AppBa
               backurl ? navigate(`/${backurl}`) : navigate(-1)
             }}
           />
-          <Text typo={'SubHead_18'}>{title}</Text>
+          <Text typo={'SubHead_18'} color={isDarkMode ? 'WHITE' : 'BLACK'}>
+            {title}
+          </Text>
         </FlexBox>
       )}
       <FlexBox gap={15}>

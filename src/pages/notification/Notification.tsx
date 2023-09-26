@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useAtomValue } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,11 +10,13 @@ import Loading from '@/components/common/loading'
 import Spacing from '@/components/common/spacing'
 import { axiosAPI } from '@/libs/apis/axios'
 import { Notification } from '@/libs/apis/notification/notificationType'
+import { darkModeAtom } from '@/libs/store/darkModeAtom'
 import { userAtom } from '@/libs/store/userAtom'
 import { palette } from '@/styles/palette'
 
 const Notification = () => {
   const [notifyList, setNotifyList] = useState([])
+  const [isDarkMode] = useAtom(darkModeAtom)
   const navigate = useNavigate()
   const userData = useAtomValue(userAtom)
   const getNotification = async () => {

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { useQuery } from '@tanstack/react-query'
+import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 import { ComponentProps } from 'react'
 
@@ -11,6 +12,7 @@ import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { ChannelApi } from '@/libs/apis/channel/ChannelApi'
 import { Channel } from '@/libs/apis/channel/channelType'
+import { darkModeAtom } from '@/libs/store/darkModeAtom'
 import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'
 
 interface MainPageProps extends ComponentProps<'div'> {
@@ -27,6 +29,7 @@ const MainPage = ({
   interestChannelColor = 'BLACK',
   ...props
 }: MainPageProps) => {
+  const [isDarkMode] = useAtom(darkModeAtom)
   const { data, isLoading, refetch } = useQuery(['channels'], () => ChannelApi.GET_CHANNEL(), {
     cacheTime: 0,
   })
@@ -47,14 +50,17 @@ const MainPage = ({
   return (
     <MainPageWrapper {...props}>
       <TodayChannel>
-        <Text typo={todayChannelTypo} color={todayChannelColor}>
+        <Text typo={todayChannelTypo} color={isDarkMode ? 'WHITE' : todayChannelColor}>
           {'오늘의 채널'}
         </Text>
         <Spacing size={15}></Spacing>
         {!isLoading && <ChannelSlider data={filterData(data as Channel[])} />}
       </TodayChannel>
       <InterestChannel>
-        <InterestHeader typo={interestChannelTypo} color={interestChannelColor} />
+        <InterestHeader
+          typo={interestChannelTypo}
+          color={isDarkMode ? 'WHITE' : interestChannelColor}
+        />
         <Spacing size={30}></Spacing>
         {!isLoading && <ChannelList data={filterData(data as Channel[])} />}
       </InterestChannel>
