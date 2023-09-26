@@ -15,6 +15,7 @@ interface ChannelSliderProps extends ComponentProps<'div'> {
 
 const ChannelSlider = ({ data: channelListData }: ChannelSliderProps) => {
   const [imagesLoaded, setImagesLoaded] = useState(false)
+  const imgSliceIndex = channelListData.length >= 4 ? 4 : channelListData.length
 
   // 이미지 프리로딩
   useEffect(() => {
@@ -44,7 +45,10 @@ const ChannelSlider = ({ data: channelListData }: ChannelSliderProps) => {
   return (
     <CarouselWrapper>
       {imagesLoaded ? (
-        <Carousel images={[pic1, pic2, pic3, pic4]} data={channelListData} />
+        <Carousel
+          images={[pic1, pic2, pic3, pic4].slice(0, imgSliceIndex)}
+          data={channelListData}
+        />
       ) : (
         <Skeleton></Skeleton>
       )}

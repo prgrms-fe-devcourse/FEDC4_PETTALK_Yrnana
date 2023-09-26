@@ -1,4 +1,3 @@
-import { User } from '@/libs/apis/auth/authType'
 import { axiosAPI } from '@/libs/apis/axios'
 import { Like, Post } from '@/libs/apis/post/postType'
 
@@ -17,9 +16,17 @@ const PostApi = {
     return response.data
   },
   UPDATE_POST: async (payload: FormData): Promise<Post> => {
-    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+    //axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     const response = await axiosAPI.put('posts/update', payload)
     return response.data
+  },
+  DELETE_POST: (id: string): Promise<void> => {
+    axiosAPI.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
+    return axiosAPI.delete('posts/delete', {
+      data: {
+        id: id,
+      },
+    })
   },
   SEARCH_POST: async (query: string): Promise<Post[]> => {
     const response = await axiosAPI.get(`/search/all/${query}`)

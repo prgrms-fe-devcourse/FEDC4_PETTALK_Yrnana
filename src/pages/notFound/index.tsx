@@ -35,6 +35,10 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-image: url('../src/assets/images/Background-nofootPrint.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `
 
 const Image = styled.img``

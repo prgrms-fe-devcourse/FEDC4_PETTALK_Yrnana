@@ -45,16 +45,29 @@ const Register = () => {
         type: 'warning',
       })
       return false
-    } else if (passwordInputRef.current && checkPassword(passwordInputRef.current.value)) {
+    } else if (passwordInputRef.current && !checkPassword(passwordInputRef.current.value)) {
       openModal({
         content: '비밀번호는 영문자, 숫자, 특수문자를 포함한 8자리 이상이어야 합니다.',
         type: 'warning',
       })
       return false
+    } else if (emailInputRef.current && !checkEmail(emailInputRef.current.value)) {
+      openModal({
+        content: '유효한 이메일을 입력해주세요!',
+        type: 'warning',
+      })
+      return false
     } else return true
   }
+
+  const checkEmail = (emailValue: string) => {
+    const regexpEmail =
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/
+    return regexpEmail.test(emailValue)
+  }
+
   const checkPassword = (passwordValue: string): boolean => {
-    const regexpPassword = /^(?=.*[A-Za-z])(?=.*d)(?=.*[@$!%*#?&])[A-Za-zd@$!%*#?&]{8,16}$/
+    const regexpPassword = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/
     if (regexpPassword.test(passwordValue)) return true
     return false
   }

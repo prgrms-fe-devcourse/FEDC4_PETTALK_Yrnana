@@ -9,6 +9,7 @@ import ProfileImage from '@/components/common/profileImage'
 import Spacing from '@/components/common/spacing'
 import { Text } from '@/components/common/text'
 import { axiosAPI } from '@/libs/apis/axios'
+import { useConfirmModal } from '@/libs/hooks/useConfirmModal'
 import useModal from '@/libs/hooks/useModal'
 import { userAtom } from '@/libs/store/userAtom'
 
@@ -16,6 +17,7 @@ const MyProfile = () => {
   const userData = useAtomValue(userAtom)
   const navigate = useNavigate()
   const { openModal } = useModal()
+  const { openConfirmModal } = useConfirmModal()
   const logoutMutation = useMutation(async () => await axiosAPI.post('/logout'), {
     onSuccess: () => {
       openModal({ content: '로그아웃 완료! 다음에 만나요 🙌', type: 'success' })
@@ -40,16 +42,21 @@ const MyProfile = () => {
       <Spacing size={40} />
       <MyPageContainer>
         <Text typo={'Headline_25'}>{userData.fullName}</Text>
-        <ProfileImage size={200} updatable={true} image={userData.image} />
+        <ProfileImage
+          size={200}
+          updatable={true}
+          image={userData.image}
+          style={{ cursor: 'pointer' }}
+        />
         <Follows>
-          <Follower>
+          <Follower onClick={() => navigate('/friends')}>
             <Text typo={'Headline_25'}>{'팔로워'}</Text>
             <Spacing size={10} />
             <Text typo={'Headline_25'} color={'MAINBLUE'}>
               {userData.followers.length}
             </Text>
           </Follower>
-          <Following>
+          <Following onClick={() => navigate('/friends')}>
             <Text typo={'Headline_25'}>{'팔로잉'}</Text>
             <Spacing size={10} />
             <Text typo={'Headline_25'} color={'MAINBLUE'}>
@@ -67,7 +74,12 @@ const MyProfile = () => {
           position: 'absolute',
           bottom: '20px',
         }}
-        onClick={Logout}
+        onClick={() =>
+          openConfirmModal({
+            confirmText: '로그아웃 하시겠습니까?',
+            okFunc: () => logoutMutation.mutate(),
+          })
+        }
       />
     </>
   )
@@ -93,6 +105,7 @@ const Follower = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `
 
 const Following = styled.div`
@@ -100,6 +113,7 @@ const Following = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `
 
 export default MyProfile
