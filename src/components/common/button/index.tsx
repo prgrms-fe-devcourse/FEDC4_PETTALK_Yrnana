@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
 
-import { Text } from '@/components/common/text'
+import { Text } from '@/components/common/Text'
 import { KeyOfPalette, KeyOfTypo, theme } from '@/styles/theme'
 
 type ButtonType = 'ExtraLarge' | 'Large' | 'Medium' | 'Small'

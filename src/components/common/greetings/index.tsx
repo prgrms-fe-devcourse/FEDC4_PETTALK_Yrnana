@@ -4,7 +4,7 @@ import * as THREE from 'three'
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
 import Progress from '@/components/common/greetings/progress'
-import { Text } from '@/components/common/text'
+import { Text } from '@/components/common/Text'
 
 interface ClassName {
   className: string

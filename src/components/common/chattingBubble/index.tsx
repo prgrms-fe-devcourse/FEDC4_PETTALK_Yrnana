@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
 
 import { FlexBox } from '@/components/common/flexBox'
-import { Text } from '@/components/common/text'
+import { Text } from '@/components/common/Text'
 import { palette } from '@/styles/palette'
 import { type KeyOfPalette, type KeyOfTypo } from '@/styles/theme'
 

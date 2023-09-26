@@ -7,7 +7,7 @@ import BackgroundSimple from '@/assets/images/Background-simple.svg'
 import DarkmodeImg from '@/assets/images/Darkmode.png'
 import AppBar from '@/components/common/appBar'
 import NavigationBar from '@/components/common/navigationBar'
-import Spacing from '@/components/common/spacing'
+import Spacing from '@/components/common/Spacing'
 import { darkModeAtom } from '@/libs/store/darkModeAtom'
 
 interface AppBarTemplateProps {

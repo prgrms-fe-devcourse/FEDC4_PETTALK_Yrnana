@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import ListRow from '@/components/common/listRow'
+import ListRow from '@/components/common/ListRow'
 import Loading from '@/components/common/loading'
 import { axiosAPI } from '@/libs/apis/axios'
 import { Notification } from '@/libs/apis/notification/notificationType'

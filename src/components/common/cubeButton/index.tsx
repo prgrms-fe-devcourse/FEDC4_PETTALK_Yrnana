@@ -3,7 +3,7 @@ import { ComponentProps } from 'react'
 import { Link } from 'react-router-dom'
 
 import { FlexBox } from '@/components/common/flexBox'
-import { Text } from '@/components/common/text'
+import { Text } from '@/components/common/Text'
 import { KeyOfPalette, KeyOfTypo, theme } from '@/styles/theme'
 
 interface CubeButtonProps extends ComponentProps<'button'> {

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 import picture1 from '@/assets/images/pet/picture1.webp'
 import { FlexBox } from '@/components/common/flexBox'
-import { Text } from '@/components/common/text'
+import { Text } from '@/components/common/Text'
 import { Channel } from '@/libs/apis/channel/channelType'
 import { palette } from '@/styles/palette'
 import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'

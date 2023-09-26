@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 
 import { FlexBox } from '@/components/common/flexBox'
-import { Text } from '@/components/common/text'
+import { Text } from '@/components/common/Text'
 
 interface SvgWithTextProps {
   svgComponent: ReactElement

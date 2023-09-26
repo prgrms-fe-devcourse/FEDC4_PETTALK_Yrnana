@@ -3,7 +3,7 @@ import { ComponentProps } from 'react'
 
 import Footprint from '@/assets/icons/Footprint'
 import { FlexBox } from '@/components/common/flexBox'
-import { Text } from '@/components/common/text'
+import { Text } from '@/components/common/Text'
 import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'
 
 interface InterestHeaderProps extends ComponentProps<'div'> {

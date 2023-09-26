@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { ComponentProps } from 'react'
 
 import { FlexBox } from '@/components/common/flexBox'
-import { Text } from '@/components/common/text'
+import { Text } from '@/components/common/Text'
 import { KeyOfPalette, KeyOfTypo, theme } from '@/styles/theme'
 
 export interface DateTimeProps extends ComponentProps<'div'> {

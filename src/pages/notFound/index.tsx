@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 
 import NotFoundImage from '@/assets/images/notFound.png'
 import Button from '@/components/common/button'
-import Spacing from '@/components/common/spacing'
-import { Text } from '@/components/common/text'
+import Spacing from '@/components/common/Spacing'
+import { Text } from '@/components/common/Text'
 
 const NotFoundPage = () => {
   const navigate = useNavigate()

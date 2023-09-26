@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { FileUploader } from 'react-drag-drop-files'
 
 import { FlexBox } from '@/components/common/flexBox'
-import { Text } from '@/components/common/text'
+import { Text } from '@/components/common/Text'
 export interface ImageUploaderProps {
   uploadFileHandler: (file: File) => void
   fileTypeErrorHandler: (err: Error) => void
