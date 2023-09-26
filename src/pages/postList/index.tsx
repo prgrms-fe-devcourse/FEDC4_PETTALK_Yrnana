@@ -18,7 +18,7 @@ const PostRouter = () => {
         <Route
           path={':channelId/*'}
           element={
-            <AppBarNavTemplate hasNav={true}>
+            <AppBarNavTemplate hasNav={true} backurl={' '}>
               <PostListPage />
             </AppBarNavTemplate>
           }
