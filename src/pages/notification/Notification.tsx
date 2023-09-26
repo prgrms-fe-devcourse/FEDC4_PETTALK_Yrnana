@@ -7,11 +7,14 @@ import { useNavigate } from 'react-router-dom'
 import AppBar from '@/components/common/appBar'
 import ListRow from '@/components/common/listRow'
 import Loading from '@/components/common/loading'
+import NavigationBar from '@/components/common/navigationBar'
 import Spacing from '@/components/common/spacing'
+import AppBarNavTemplate from '@/components/layouts/AppBarNavTemplate'
 import { axiosAPI } from '@/libs/apis/axios'
 import { Notification } from '@/libs/apis/notification/notificationType'
 import { userAtom } from '@/libs/store/userAtom'
 import { palette } from '@/styles/palette'
+import { typo } from '@/styles/typo'
 
 const Notification = () => {
   const [notifyList, setNotifyList] = useState([])
@@ -42,11 +45,18 @@ const Notification = () => {
   const handleSeenPost = async () => {
     return await axiosAPI.put('/notifications/seen')
   }
-
+  if (data?.data.length == 0)
+    return (
+      <>
+        {/* <AppBar mainPage={false} title={'알림 목록'} />
+        <Spacing size={10} /> */}
+        <StyleNoData>{'알림이 없습니다!'}</StyleNoData>
+      </>
+    )
   return (
     <>
-      <AppBar mainPage={false} title={'알림 목록'} />
-      <Spacing size={10} />
+      {/* <AppBar mainPage={false} title={'알림 목록'} />
+      <Spacing size={10} /> */}
       {isLoading ? (
         <Loading />
       ) : (
@@ -85,7 +95,14 @@ const Notification = () => {
                 )}
                 <ListRow
                   mainText={<div>{'메시지가 도착했습니다!'}</div>}
-                  rightElement={<div>{}</div>}
+                  rightElement={
+                    <StyleTime>{`${v.createdAt.slice(0, 10)}  ${String(
+                      new Date(v.createdAt).getHours(),
+                    ).padStart(2, '0')}:${String(new Date(v.createdAt).getMinutes()).padStart(
+                      2,
+                      '0',
+                    )}`}</StyleTime>
+                  }
                   leftImage={''}
                 />
               </StyleNotifyList>
@@ -143,6 +160,15 @@ const StyleNotifyWrapper = styled.div`
   height: 100%;
   max-height: calc(100% - 100px);
   margin: 0px 30px;
+`
+const StyleNoData = styled.div`
+  margin: 50px;
+  text-align: center;
+  color: ${palette.GRAY500};
+`
+const StyleTime = styled.div`
+  color: ${palette.GRAY500};
+  font-size: ${typo.Caption_11};
 `
 
 export default Notification
