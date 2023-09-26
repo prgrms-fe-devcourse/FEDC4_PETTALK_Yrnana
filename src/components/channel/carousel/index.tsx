@@ -7,7 +7,7 @@ import { FlexBox } from '@/components/common/flexBox'
 import { Text } from '@/components/common/text'
 import { Channel } from '@/libs/apis/channel/channelType'
 import { palette } from '@/styles/palette'
-import { KeyOfPalette, KeyOfTypo } from '@/styles/theme'
+import { KeyOfPalette, KeyOfTypo, theme } from '@/styles/theme'
 
 interface CarouselProps extends ComponentProps<'div'> {
   images: string[]
@@ -56,18 +56,31 @@ const Carousel = ({
   return (
     <CarouselContainer justify={'flex-start'} direction={'column'}>
       <ImageSlider ref={sliderRef}>
-        {randomData.map((channel, index) => (
-          <CarouselItem key={channel._id}>
-            <Link to={`/posts/${channel._id}`} style={{ textDecoration: 'none' }}>
-              <Image src={images[index]} alt={'img test'} onError={addDefaultImg} />
-              <SpanWrapper>
-                <Text typo={channelTypo} color={channelColor}>
-                  {channel.name}
-                </Text>
-              </SpanWrapper>
-            </Link>
-          </CarouselItem>
-        ))}
+        {randomData.length ? (
+          randomData.map((channel, index) => (
+            <CarouselItem key={channel._id}>
+              <Link to={`/posts/${channel._id}`} style={{ textDecoration: 'none' }}>
+                <Image
+                  src={images[index % images.length]}
+                  alt={'이미지 없음'}
+                  onError={addDefaultImg}
+                />
+
+                <SpanWrapper>
+                  <Text typo={channelTypo} color={channelColor}>
+                    {channel.name}
+                  </Text>
+                </SpanWrapper>
+              </Link>
+            </CarouselItem>
+          ))
+        ) : (
+          <NoneImgArea>
+            <Text typo={'Body_20'} color={'GRAY600'}>
+              {'아직 채널이 없습니다. 채널을 생성해주세요!'}
+            </Text>
+          </NoneImgArea>
+        )}
       </ImageSlider>
 
       <PageIndicator>
@@ -87,6 +100,7 @@ const CarouselContainer = styled(FlexBox)`
   overflow: hidden;
   width: 100%;
   position: relative;
+  background-color: ${({ theme }) => theme.palette.GRAY100};
 `
 
 const CarouselItem = styled.div`
@@ -102,6 +116,7 @@ const SpanWrapper = styled.div`
 
 const ImageSlider = styled.div`
   display: flex;
+  width: 100%;
   transition: transform 0.3s linear;
   will-change: transform;
   backface-visibility: hidden;
@@ -114,6 +129,12 @@ const Image = styled.img`
   object-fit: cover;
   opacity: 0.7;
   content-visibility: auto;
+`
+
+const NoneImgArea = styled(FlexBox)`
+  width: 100%;
+  height: 190px;
+  /* background-color: ${({ theme }) => theme.palette.GRAY100}; */
 `
 
 const PageIndicator = styled(FlexBox)`
