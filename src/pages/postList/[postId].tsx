@@ -247,7 +247,7 @@ const PostDetailPage = () => {
         fullWidth={true}
         style={{ padding: '30px' }}
       >
-        <Text typo={resizeFontSize ? 'Headline_20' : 'Headline_25'}>{`${
+        <Text typo={resizeFontSize ? 'Headline_20' : 'Headline_25'} style={{ width: '80%' }}>{`${
           postData.title.length > 17 ? `${postData.title.slice(0, 17)}...` : postData.title
         }`}</Text>
         <Text typo={'Caption_11'} color={'GRAY500'} style={{ textAlign: 'center', width: '70px' }}>
