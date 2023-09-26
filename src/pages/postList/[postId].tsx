@@ -122,7 +122,7 @@ const PostDetailPage = () => {
 
   const handleVisualViewPortResize = () => {
     const currentVisualViewport = Number(window.visualViewport?.height)
-    if (divRef) {
+    if (divRef.current) {
       divRef.current!.style.height = `${currentVisualViewport - 80}px`
       window.scrollTo(0, 40)
     }
