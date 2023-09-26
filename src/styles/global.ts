@@ -115,7 +115,6 @@ export const globalStyle = css`
   }
 
   .dark-mode {
-    background-color: black;
     color: white;
   }
   .postTitle {
