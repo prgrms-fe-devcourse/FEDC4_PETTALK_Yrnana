@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import Background from '@/assets/images/Background.svg'
 import Button from '@/components/common/button'
 import Greetings from '@/components/common/greetings'
 import Input from '@/components/common/Input'
@@ -106,7 +107,7 @@ const StyleRegisterWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   height: 100%;
-  background-image: url('./src/assets/images/Background.svg');
+  background-image: url(${Background});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

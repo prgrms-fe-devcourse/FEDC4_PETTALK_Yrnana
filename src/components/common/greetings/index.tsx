@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
+import BackgroundImage from '@/assets/images/Background.svg'
 import Progress from '@/components/common/greetings/progress'
 import { Text } from '@/components/common/Text'
 
@@ -91,7 +92,7 @@ const Container = styled.div`
   left: 0;
   z-index: 100;
   height: 100%;
-  background-image: url('./src/assets/images/Background.svg');
+  background-image: url(${BackgroundImage});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
