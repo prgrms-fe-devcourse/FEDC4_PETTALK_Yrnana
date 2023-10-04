@@ -67,11 +67,11 @@ const Login = () => {
       sessionStorage.setItem('visited', 'true')
       setTimeout(() => {
         setLoading(false)
-      }, 12000)
+      }, 6200)
 
       setTimeout(() => {
         setAnimation(false)
-      }, 11000)
+      }, 5200)
     }
   }, [])
 

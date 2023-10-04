@@ -57,7 +57,7 @@ const Greetings = ({ className }: ClassName) => {
       setTimeout(() => {
         loading = false
         setProgressLoading(false)
-      }, 6200)
+      }, 3200)
 
       const animate = () => {
         requestAnimationFrame(animate)
