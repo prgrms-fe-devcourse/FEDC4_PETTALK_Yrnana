@@ -11,7 +11,7 @@
 <br><br>
 ### 개발 기간 🕐
  2023.09.01 ~ 2023.09.27
-<br>
+<br><br>
 
 ### 기획안📑
 https://prgrms.notion.site/PetTalk-fcab9acee1964146b155b321737a1ac6?pvs=4
