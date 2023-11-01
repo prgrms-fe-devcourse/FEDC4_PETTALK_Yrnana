@@ -41,7 +41,7 @@ const Progress = ({ loading }: LoadingProp) => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (value < 100) {
-        setValue((prevValue) => prevValue + 10)
+        setValue((prevValue) => prevValue + 20)
       } else {
         clearInterval(interval)
       }
