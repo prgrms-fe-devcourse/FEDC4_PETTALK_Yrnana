@@ -1,5 +1,5 @@
-### Introduction
-- 반려동물 커뮤니티 웹앱
+### Introduction 👐
+- [반려동물 커뮤니티 웹앱, Pet Talk💛](https://pettalk-depoloy.vercel.app)
 <br><br>
 ### Memebers😍 & Role
 
@@ -9,12 +9,22 @@
 |[김유진](https://github.com/eugene028)|[이정욱](https://github.com/JeongWuk)|[주다현](https://github.com/judahhh)|[김정호](https://github.com/cloud0406)|
 
 <br><br>
+### 개발 기간 🕐
+ 2023.09.01 ~ 2023.09.27
+<br>
+
 ### 기획안📑
 https://prgrms.notion.site/PetTalk-fcab9acee1964146b155b321737a1ac6?pvs=4
 <br><br>
-### 기능명세📗
 
-<br><br>
+
+### 기능명세 및 스크린샷 📗
+
+
+
+<br><br> 
+
+
 ### 기술스택⚒️
 <table>
 <tr>
@@ -83,13 +93,18 @@ https://prgrms.notion.site/PetTalk-fcab9acee1964146b155b321737a1ac6?pvs=4
 <br>
 <br>
 
-### 스크린샷📸
 
-<br>
-### 시연영상🎥
+### 시연영상 🎥
+
 https://drive.google.com/file/d/1jY4_xcPX4vKae7GZqe5_8ixGRLvyR1YN/view?usp=drive_link
 
+<br><br>
+
+### 프로젝트 회고 🤩
+- 중간회고
+https://www.notion.so/ec7f9b5a541542c2b643d8ece08d3dd0?pvs=4
 <br>
 
-
-
+- 최종회고
+https://www.notion.so/8a6f8ccc3bae46db86b78295b15a089a?pvs=4
+<br><br>
