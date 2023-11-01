@@ -7,8 +7,9 @@
 |:---:|:---:|:---:|:---:|
 |<img src="https://avatars.githubusercontent.com/u/67894159?v=4" width="150"/>|<img src="https://avatars.githubusercontent.com/u/61570018?v=4" width="150"/>|<img src="https://avatars.githubusercontent.com/u/96521594?v=4" width="150"/>|<img src="https://avatars.githubusercontent.com/u/32586926?v=4" width="150"/>|
 |[김유진](https://github.com/eugene028)|[이정욱](https://github.com/JeongWuk)|[주다현](https://github.com/judahhh)|[김정호](https://github.com/cloud0406)|
+<br>
 
-<br><br>
+
 ### 개발 기간 🕐
  2023.09.01 ~ 2023.09.27
 <br><br>
@@ -19,6 +20,44 @@ https://prgrms.notion.site/PetTalk-fcab9acee1964146b155b321737a1ac6?pvs=4
 
 
 ### 기능명세 및 스크린샷 📗
+
+## 1. Greetings
+
+
+<br> 
+
+## 2. 회원가입 & 로그인
+
+<br> 
+
+## 3. 홈 & 채널 탐색
+
+<br> 
+
+## 4. 각 채널 피드
+
+<br> 
+
+## 5. 게시글 업로드
+
+<br> 
+
+## 6. 친구목록 및 팔로우
+
+<br> 
+
+## 7. 채팅
+
+<br> 
+
+## 8. 알림
+
+<br> 
+
+## 9. 마이페이지
+
+<br> 
+
 
 
 
@@ -107,4 +146,4 @@ https://www.notion.so/ec7f9b5a541542c2b643d8ece08d3dd0?pvs=4
 
 - 최종회고
 https://www.notion.so/8a6f8ccc3bae46db86b78295b15a089a?pvs=4
-<br><br>
+<br><br><br>
