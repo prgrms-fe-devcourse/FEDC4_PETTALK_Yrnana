@@ -26,22 +26,25 @@
 
 #### greetings & 회원가입
 
-![1](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/7cc8bbed-7907-485a-a2fa-7f02a06f776b)    ![2](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/951184f3-8017-46b6-ab6a-a7add79d59b0)
+| <img src="https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/7cc8bbed-7907-485a-a2fa-7f02a06f776b" width="350" height="600"/> | <img src="https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/951184f3-8017-46b6-ab6a-a7add79d59b0" width="350" height="600"/> |
+
 
 #### 게시물 작성
 
-![7](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/870f1a89-2ab4-4064-96e9-1d1d8a0883d8)    ![8](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/2602edc3-fe81-4d85-b5e0-3ea041336171)
+| <img src="https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/870f1a89-2ab4-4064-96e9-1d1d8a0883d8" width="350" height="600"/> | <img src="https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/2602edc3-fe81-4d85-b5e0-3ea041336171" width="350" height="600"/> |
 
 #### 댓글 및 좋아요 기능
 
-![3](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/c8183b57-c70c-466d-aaa6-a0172904a542)
-![4](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/df9d96b9-4898-498a-8460-3439b1331521)
+| <img src="https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/c8183b57-c70c-466d-aaa6-a0172904a542" width="350" height="600"/> | <img src="https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/df9d96b9-4898-498a-8460-3439b1331521" width="350" height="600"/> |
+
 
 #### 채팅 및 채팅 목록
-![RPReplay_Final1695796980 1-min](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/ccc419aa-8cec-4aeb-a89c-bac3c7f30369)
+
+<img src="https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/ccc419aa-8cec-4aeb-a89c-bac3c7f30369" width="350" height="600"/> 
 
 #### 다크모드 & 친구목록 & 로그아웃 
-![RPReplay_Final1695798103 1](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/1113ce89-e10a-481b-999a-d0969c54fedb)
+
+<img src="https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/1113ce89-e10a-481b-999a-d0969c54fedb" width="350" height="600"/> 
 
 
 
