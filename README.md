@@ -1,4 +1,7 @@
 ### Introduction 👐
+![image](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/c0a50032-7c29-4ba5-9c56-4ceeb1de541b)
+
+> 반려동물과의 일상을 공유하고 정보들을 공유하고 싶은가요? **펫톡**을 통해 다양한 사람들과 반려동물의 일상, 정보 등을 공유하며 소통해 보세요!
 - [반려동물 커뮤니티 웹앱, Pet Talk💛](https://pettalk-depoloy.vercel.app)
 <br><br>
 ### Memebers😍 & Role
@@ -15,53 +18,33 @@
 <br><br>
 
 ### 기획안📑
-https://prgrms.notion.site/PetTalk-fcab9acee1964146b155b321737a1ac6?pvs=4
+[기획안 링크](https://prgrms.notion.site/PetTalk-fcab9acee1964146b155b321737a1ac6?pvs=4) 
 <br><br>
 
 
-### 기능명세 및 스크린샷 📗
+### 펫톡의 기능 살펴보기 📗
 
-## 1. Greetings
+#### greetings & 회원가입
 
+![1](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/7cc8bbed-7907-485a-a2fa-7f02a06f776b)    ![2](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/951184f3-8017-46b6-ab6a-a7add79d59b0)
 
-<br> 
+#### 게시물 작성
 
-## 2. 회원가입 & 로그인
+![7](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/870f1a89-2ab4-4064-96e9-1d1d8a0883d8)    ![8](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/2602edc3-fe81-4d85-b5e0-3ea041336171)
 
-<br> 
+#### 댓글 및 좋아요 기능
 
-## 3. 홈 & 채널 탐색
+![3](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/c8183b57-c70c-466d-aaa6-a0172904a542)
+![4](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/df9d96b9-4898-498a-8460-3439b1331521)
 
-<br> 
+#### 채팅 및 채팅 목록
+![RPReplay_Final1695796980 1-min](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/ccc419aa-8cec-4aeb-a89c-bac3c7f30369)
 
-## 4. 각 채널 피드
-
-<br> 
-
-## 5. 게시글 업로드
-
-<br> 
-
-## 6. 친구목록 및 팔로우
-
-<br> 
-
-## 7. 채팅
-
-<br> 
-
-## 8. 알림
-
-<br> 
-
-## 9. 마이페이지
-
-<br> 
+#### 다크모드 & 친구목록 & 로그아웃 
+![RPReplay_Final1695798103 1](https://github.com/prgrms-fe-devcourse/FEDC4_PETTALK_Yrnana/assets/32586926/1113ce89-e10a-481b-999a-d0969c54fedb)
 
 
 
-
-<br><br> 
 
 
 ### 기술스택⚒️
@@ -133,17 +116,13 @@ https://prgrms.notion.site/PetTalk-fcab9acee1964146b155b321737a1ac6?pvs=4
 <br>
 
 
-### 시연영상 🎥
+### 시연영상 🎥 
 
-https://drive.google.com/file/d/1jY4_xcPX4vKae7GZqe5_8ixGRLvyR1YN/view?usp=drive_link
+- [시연 영상](https://drive.google.com/file/d/1jY4_xcPX4vKae7GZqe5_8ixGRLvyR1YN/view?usp=drive_link)
 
-<br><br>
 
 ### 프로젝트 회고 🤩
-- 중간회고
-https://www.notion.so/ec7f9b5a541542c2b643d8ece08d3dd0?pvs=4
-<br>
+- [최종회고](https://www.notion.so/8a6f8ccc3bae46db86b78295b15a089a?pvs=4)
+- [중간회고](https://www.notion.so/ec7f9b5a541542c2b643d8ece08d3dd0?pvs=4)
 
-- 최종회고
-https://www.notion.so/8a6f8ccc3bae46db86b78295b15a089a?pvs=4
 <br><br><br>
