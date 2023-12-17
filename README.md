@@ -48,8 +48,6 @@
 
 
 
-
-
 ### 기술스택⚒️
 <table>
 <tr>
@@ -122,10 +120,3 @@
 ### 시연영상 🎥 
 
 - [시연 영상](https://drive.google.com/file/d/1jY4_xcPX4vKae7GZqe5_8ixGRLvyR1YN/view?usp=drive_link)
-
-
-### 프로젝트 회고 🤩
-- [최종회고](https://www.notion.so/8a6f8ccc3bae46db86b78295b15a089a?pvs=4)
-- [중간회고](https://www.notion.so/ec7f9b5a541542c2b643d8ece08d3dd0?pvs=4)
-
-<br><br><br>
